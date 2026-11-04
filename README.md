@@ -30,10 +30,10 @@
 
 ## الترخيص
 
-التطبيق مجاني للاستعمال الشخصي، وشيفرته المصدرية غير منشورة. التفاصيل في ملف [LICENSE](LICENSE).
+التطبيق مجاني للاستعمال الشخصي. التفاصيل في ملف [LICENSE](LICENSE).
 
 </div>
 
 ---
 
-**SVU One** is an independent Windows app for students of the Syrian Virtual University (not affiliated with or endorsed by the university). It brings the university's sites into one place: one sign-in, today's briefing, courses and assignments, exams and results, calendar, mail, recorded and live lectures, and optional on-device AI sound clean-up and subtitles. Your password and data stay on your device. Free for personal use; the source code is not published — see [LICENSE](LICENSE).
+**SVU One** is an independent Windows app for students of the Syrian Virtual University (not affiliated with or endorsed by the university). It brings the university's sites into one place: one sign-in, today's briefing, courses and assignments, exams and results, calendar, mail, recorded and live lectures, and optional on-device AI sound clean-up and subtitles. Your password and data stay on your device. Free for personal use — see [LICENSE](LICENSE).
