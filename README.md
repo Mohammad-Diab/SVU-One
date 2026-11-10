@@ -21,6 +21,11 @@
 
 - كلمة السر وبياناتك **تبقى على جهازك**، ولا تُرسل إلا إلى مواقع الجامعة نفسها عند الدخول إليها.
 - لا يرسل التطبيق شيئًا باسمك إلا ما تطلبه أنت صراحةً، مثل رسالة بريد، أو رسالة في دردشة المحاضرة المباشرة، أو صوتك إن شغّلت الميكروفون.
+- التفاصيل في [سياسة الخصوصية](PRIVACY.md).
+
+## قناة التطبيق
+
+أخبار الإصدارات الجديدة وطريقة الاستخدام على قناة تيليغرام: [t.me/SVUOne](https://t.me/SVUOne)
 
 ## التنزيل
 
@@ -36,4 +41,4 @@
 
 ---
 
-**SVU One** is an independent Windows app for students of the Syrian Virtual University (not affiliated with or endorsed by the university). It brings the university's sites into one place: one sign-in, today's briefing, courses and assignments, exams and results, calendar, mail, recorded and live lectures, and optional on-device AI sound clean-up and subtitles. Your password and data stay on your device. Free for personal use — see [LICENSE](LICENSE).
+**SVU One** is an independent Windows app for students of the Syrian Virtual University (not affiliated with or endorsed by the university). It brings the university's sites into one place: one sign-in, today's briefing, courses and assignments, exams and results, calendar, mail, recorded and live lectures, and optional on-device AI sound clean-up and subtitles. Your password and data stay on your device. Free for personal use — see [LICENSE](LICENSE). Privacy: [PRIVACY.md](PRIVACY.md). News and releases on Telegram: [t.me/SVUOne](https://t.me/SVUOne).
