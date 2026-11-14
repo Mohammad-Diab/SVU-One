@@ -1,8 +1,8 @@
 # سياسة الخصوصية — SVU One
 
-آخر تحديث: 10 تشرين الثاني 2026
+آخر تحديث: 14 تشرين الثاني 2026
 
-SVU One تطبيق مستقل لنظام Windows، وليس منتجاً رسمياً من الجامعة الافتراضية السورية ولا يتبع لها. يجمع ما يحتاجه الطالب من مواقع الجامعة في مكان واحد على جهازه.
+SVU One تطبيق مستقل، وليس منتجاً رسمياً من الجامعة الافتراضية السورية ولا يتبع لها. يجمع ما يحتاجه الطالب من مواقع الجامعة في مكان واحد على جهازه.
 
 ## الخلاصة
 
@@ -24,6 +24,14 @@ SVU One تطبيق مستقل لنظام Windows، وليس منتجاً رسم�
 - **GitHub**: للتحقق من وجود تحديث للتطبيق وتنزيله، ولقراءة قائمة مجموعات الطلاب العامة. هذه طلبات عادية لا تحمل أي معلومة عنك.
 - **Hugging Face**: لتنزيل نماذج الذكاء الاصطناعي، حين تختار تفعيل ميزة تحتاجها.
 - **Microsoft Store**: نسخة المتجر تتحدّث عن طريقه.
+- **Google Drive**: للمزامنة بين أجهزتك، إن فعّلتها.
+
+## المزامنة عبر Google Drive (اختيارية)
+
+- إن فعّلتها، يحفظ التطبيق ملفاً واحداً مشفّراً في مجلد مخفي خاص به داخل Google Drive الخاص بك، لتبقى أجهزتك متوافقة: مواعيدك، وما سلّمته خارج المنصة، وتغييرات جدولك، والإعدادات.
+- لا يستطيع التطبيق رؤية ملفاتك الأخرى في Drive. كلمات المرور لا تُزامن أبداً، ولا يمر الملف بأي خادم لنا.
+- يمكنك إيقاف المزامنة متى شئت، وحذف الملف من إعدادات Google Drive ← إدارة التطبيقات.
+- يلتزم استخدام SVU One للمعلومات الواردة من Google APIs ونقلها بـ[سياسة بيانات مستخدمي Google API Services](https://developers.google.com/terms/api-services-user-data-policy)، بما فيها متطلبات الاستخدام المحدود (Limited Use).
 
 ## الكاميرا والميكروفون
 
@@ -48,9 +56,9 @@ SVU One تطبيق مستقل لنظام Windows، وليس منتجاً رسم�
 
 # Privacy Policy — SVU One
 
-Last updated: 10 November 2026
+Last updated: 14 November 2026
 
-SVU One is an independent Windows app. It is not an official product of the Syrian Virtual University and is not part of it. It brings what a student needs from the university's sites into one place on their PC.
+SVU One is an independent app. It is not an official product of the Syrian Virtual University and is not part of it. It brings what a student needs from the university's sites into one place on their PC.
 
 ## In short
 
@@ -72,6 +80,14 @@ All of it is kept in the app's folder in your Windows profile (`%LOCALAPPDATA%\S
 - **GitHub**: to check for and download app updates, and to read the public list of students' groups. These are plain requests that carry nothing about you.
 - **Hugging Face**: to download AI models, when you choose to turn on a feature that needs one.
 - **Microsoft Store**: the Store copy is updated through it.
+- **Google Drive**: to sync between your devices, if you turn it on.
+
+## Sync through Google Drive (optional)
+
+- If you turn it on, the app keeps one encrypted file in its own hidden folder inside your Google Drive, so your devices stay in step: your events, what you handed in outside the platform, your timetable changes, and settings.
+- The app cannot see your other files in Drive. Passwords are never synced, and the file never passes through any server of ours.
+- You can turn sync off at any time, and delete the file from Google Drive's settings → Manage apps.
+- SVU One's use and transfer of information received from Google APIs will adhere to the [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), including the Limited Use requirements.
 
 ## Camera and microphone
 
