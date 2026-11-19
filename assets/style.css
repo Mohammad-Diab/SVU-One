@@ -85,7 +85,7 @@ html[lang="en"] h1{font-size:clamp(2.75rem,4.05vw,3.55rem)}html[lang="en"] h1>sp
 .video-thumbnail[hidden]{display:none}
 .video-play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:radial-gradient(circle at 50% 50%,#0f072959,transparent 34%),linear-gradient(transparent 55%,#0f072933);font-size:1rem;font-weight:700;text-shadow:0 1px 2px #000c,0 2px 12px #000b}
 .video-play-icon{display:grid;place-items:center;width:62px;height:62px;border-radius:50%;background:#fff;color:var(--primary);box-shadow:0 2px 8px #0002;transition:transform .35s var(--ins-ease-spring),box-shadow .35s}
-.video-play-icon svg{width:27px;height:27px;fill:currentColor;transform:translateX(1px)}
+.video-play-icon svg{width:27px;height:27px;fill:currentColor;transform:translateX(-1px)}
 .video-poster:hover .video-thumbnail{transform:scale(1.04);filter:brightness(.86)}
 .video-poster:hover .video-play-icon{transform:scale(1.1);box-shadow:0 3px 12px #0003}
 .video-poster:active .video-play-icon{transform:scale(.95)}
