@@ -1,4 +1,4 @@
-# سياسة الخصوصية — SVU One
+# سياسة خصوصية SVU One
 
 آخر تحديث: 18 تشرين الثاني 2026
 
@@ -71,7 +71,7 @@ SVU One تطبيق مستقل لنظامَي Windows وAndroid، وليس منت
 
 ---
 
-# Privacy Policy — SVU One
+# SVU One Privacy Policy
 
 Last updated: 18 November 2026
 
