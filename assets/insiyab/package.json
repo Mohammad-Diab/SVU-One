@@ -1,0 +1,9 @@
+{
+  "name": "insiyab",
+  "version": "0.7.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "url": "git+https://github.com/Mohammad-Diab/insiyab-ui.git",
+    "type": "git"
+  }
+}

@@ -1,0 +1,5357 @@
+/*! Insiyab UI v0.7.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · Apache-2.0 (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/* ==========================================================================
+   Insiyab · insiyab.js
+   ==========================================================================
+
+   One file, one tag, no init call:
+
+     <script src="insiyab-boot.js"></script>
+     <script src="insiyab.js" defer></script>
+
+   The `boot{ … }boot` regions are what must land before first paint (theme, sidebar,
+   brand); build.mjs ships them alone as insiyab-boot.js. Loaded on its own in <head>,
+   this file still runs them itself.
+
+   Events are **delegated** from the document, not bound per element. That is why
+   there is no init call to forget: a `data-ins-*` button added to the page an hour
+   later works with no help. `Insiyab.init()` exists only for the few things that
+   build DOM rather than listen to it.
+
+   No dependencies, no build, no module system. It defines one global, `Insiyab`.
+   ========================================================================== */
+
+(function (window, document) {
+  'use strict';
+
+  /* Stamped by build.mjs from package.json, which is the one place the version is
+     written. It used to be typed here as well, and the two could drift; this file
+     read on its own, unbuilt, reports 'dev'. */
+  /* boot{ */
+  var VERSION = '0.7.0';
+  var root = document.documentElement;
+
+  var KEY_THEME = 'ins-theme';
+  var KEY_SIDEBAR = 'ins-sidebar';
+  /* }boot */
+
+  /* ------------------------------------------------------------- storage */
+  /* Every access is wrapped, and that is not defensive habit: reading
+     localStorage *throws* in a private window with site data blocked, and inside
+     a sandboxed iframe with no allow-same-origin. An uncaught throw up here,
+     before <body> exists, takes the whole library down on page one. */
+
+  /* boot{ */
+  function read(key) {
+    try { return window.localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function write(key, value) {
+    try { window.localStorage.setItem(key, value); } catch (e) { /* not fatal */ }
+  }
+  function drop(key) {
+    try { window.localStorage.removeItem(key); } catch (e) { /* not fatal */ }
+  }
+  /* }boot */
+
+  /* --------------------------------------------------------------- colour */
+  /* The brand derivation, ported from the server that first did it, so one hex in
+     gives the whole tinted set out. Contrast is *measured* here, not guessed —
+     which is the only reason a pale brand colour cannot configure an unreadable
+     button. See the notes on each step. */
+
+  /* boot{ */
+  function hexToRgb(hex) {
+    if (typeof hex !== 'string') return null;
+    var v = hex.trim().replace(/^#/, '');
+    if (v.length === 3) v = v[0] + v[0] + v[1] + v[1] + v[2] + v[2];
+    if (!/^[0-9a-fA-F]{6}$/.test(v)) return null;
+    return [parseInt(v.slice(0, 2), 16), parseInt(v.slice(2, 4), 16), parseInt(v.slice(4, 6), 16)];
+  }
+
+  function toHex(rgb) {
+    return '#' + rgb.map(function (c) {
+      var s = Math.max(0, Math.min(255, c)).toString(16);
+      return s.length === 1 ? '0' + s : s;
+    }).join('');
+  }
+
+  /* Toward black when amount < 0, toward white when amount > 0. */
+  function shift(hex, amount) {
+    var rgb = hexToRgb(hex);
+    if (!rgb) return hex;
+    return toHex(rgb.map(function (c) {
+      return amount < 0 ? Math.round(c * (1 + amount)) : Math.round(c + (255 - c) * amount);
+    }));
+  }
+
+  function luminance(rgb) {
+    var ch = rgb.map(function (raw) {
+      var c = raw / 255;
+      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+  }
+
+  function contrast(a, b) {
+    var la = luminance(a), lb = luminance(b);
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+  }
+
+  var WHITE = [255, 255, 255], NEAR_BLACK = [17, 17, 17];
+
+  /* The label on a primary-filled button: white, or near-black when the fill is
+     pale. Hardcoding white is a real failure for a mid-tone brand — white on a
+     mid gold is about 2.4:1, illegible — so take whichever measures better.
+     Measured against the primary alone, not the gradient's midpoint: "legible on
+     average" is not a standard. Both ends are gradientEnd's problem, below. */
+  function labelFor(hex) {
+    var rgb = hexToRgb(hex);
+    if (!rgb) return '#ffffff';
+    return contrast(rgb, WHITE) >= contrast(rgb, NEAR_BLACK) ? '#ffffff' : '#111111';
+  }
+
+  /* The gradient's second stop: same hue, shifted *away from the label*.
+
+     Why direction rather than a fixed -32%. A pale brand takes a near-black
+     label, and darkening a pale fill walks it straight at that label — 32% darker
+     carries near-black at barely 4.7:1, and pulling the shift in far enough to be
+     safe leaves a gradient too flat to see. Shifting the other way is free:
+     lightening a fill only ever *raises* its contrast with a dark label, so the
+     whole fill carries the label by construction rather than by measurement, and
+     the gradient keeps its depth.
+
+     The invariant that makes this sound: labelFor takes the better of white and
+     near-black, and the worst case for any colour whatsoever is ~4.5:1 (around
+     #767676, where the two are equal). So a primary always carries its own label
+     at AA, and a stop shifted away from that label can only be better. */
+  function gradientEnd(hex, label) {
+    return label === '#ffffff' ? shift(hex, -0.32) : shift(hex, 0.30);
+  }
+
+  // The middle shade small brand accents take, as a shift toward white per theme; big fills keep the primary.
+  var MID_SHIFT = { light: 0.20, dark: 0.45 };
+
+  /* One hex in, the whole set out. `theme` decides which way the readable shade
+     and the page washes go — on dark they move toward white, not toward black,
+     and forgetting that is how a brand-tinted foreground ends up invisible. */
+  function derive(hex, theme) {
+    var dark = theme === 'dark';
+    var onPrimary = labelFor(hex);
+    var primaryDark = gradientEnd(hex, onPrimary);
+    var primaryMid = shift(hex, dark ? MID_SHIFT.dark : MID_SHIFT.light);
+    return {
+      'primary': hex,
+      'primary-dark': primaryDark,
+      'primary-darker': shift(hex, dark ? 0.55 : -0.55),
+      'primary-rgb': hexToRgb(hex).join(', '),
+      'grad-rgb': hexToRgb(primaryDark).join(', '),
+      'accent-rgb': hexToRgb(primaryDark).join(', '),
+      'on-primary': onPrimary,
+      'primary-mid': primaryMid,
+      'on-primary-mid': labelFor(primaryMid),
+      /* Dark gets its depth from the orbs, not from a tinted ground, so the washes
+         are near-black constants rather than a wash of the hue. */
+      'wash-1': dark ? '#0f1115' : shift(hex, 0.93),
+      'wash-2': dark ? '#12141a' : shift(primaryDark, 0.94)
+    };
+  }
+
+  var brandCurrent = null;   /* remembered, so a theme change can re-derive */
+
+  function brand(hex) {
+    if (hex === undefined) return brandCurrent;
+    if (!hexToRgb(hex)) {
+      if (window.console) window.console.warn('[insiyab] brand(): not a hex colour:', hex);
+      return brandCurrent;
+    }
+    brandCurrent = hex;
+    var tokens = derive(hex, effectiveTheme());
+    for (var name in tokens) {
+      if (Object.prototype.hasOwnProperty.call(tokens, name)) {
+        root.style.setProperty('--ins-' + name, tokens[name]);
+      }
+    }
+    return hex;
+  }
+  /* }boot */
+
+  /* ---------------------------------------------------------------- theme */
+  /* Three states, not two. An explicit choice is stored and stamped as
+     `data-ins-theme`; "system" stores nothing and stamps nothing, which leaves the
+     `prefers-color-scheme` block in the stylesheet in charge. That is why the
+     absence of the attribute is meaningful and must not be replaced with
+     `data-ins-theme="light"`. */
+
+  /* boot{ */
+  function systemPrefersDark() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }
+
+  /* What the user is actually looking at, which is the question callers mean. */
+  function effectiveTheme() {
+    var set = root.getAttribute('data-ins-theme');
+    if (set === 'dark' || set === 'light') return set;
+    return systemPrefersDark() ? 'dark' : 'light';
+  }
+
+  function stampTheme(mode) {
+    if (mode === 'system') root.removeAttribute('data-ins-theme');
+    else root.setAttribute('data-ins-theme', mode);
+    /* A brand colour set by hand has per-theme values, so it has to be re-derived
+       when the theme moves under it — otherwise the readable shade keeps pointing
+       the wrong way and the page looks almost right. */
+    if (brandCurrent) brand(brandCurrent);
+  }
+  /* }boot */
+
+  function theme(next) {
+    if (next === undefined) return effectiveTheme();
+    if (next !== 'dark' && next !== 'light' && next !== 'system') {
+      if (window.console) window.console.warn('[insiyab] theme(): expected dark, light or system:', next);
+      return effectiveTheme();
+    }
+    if (next === 'system') drop(KEY_THEME); else write(KEY_THEME, next);
+    stampTheme(next);
+    pressToggles(document);
+    emit('ins:theme', { theme: effectiveTheme(), mode: next });
+    return effectiveTheme();
+  }
+
+  function pressToggles(scope) {
+    var dark = effectiveTheme() === 'dark';
+    var nodes = scope.querySelectorAll('[data-ins-theme-toggle=""], [data-ins-theme-toggle]:not([data-ins-theme-toggle="dark"]):not([data-ins-theme-toggle="light"]):not([data-ins-theme-toggle="system"])');
+    for (var i = 0; i < nodes.length; i++) nodes[i].setAttribute('aria-pressed', String(dark));
+  }
+
+  var DAYNIGHT = '<span class="ins-dn-sky" aria-hidden="true">' +
+    '<span class="ins-dn-star"></span><span class="ins-dn-star"></span><span class="ins-dn-star"></span>' +
+    '<span class="ins-dn-cloud"></span><span class="ins-dn-orb"></span></span>';
+
+  function toggleTheme() {
+    return theme(effectiveTheme() === 'dark' ? 'light' : 'dark');
+  }
+
+  /* Show the repaint, over the whole page.
+
+     Flipping `data-ins-theme` is already the cheapest possible theme change — every
+     colour is a custom property — but it is also invisible as a *change*: one frame,
+     light page, dark page. The usual fix is a blanket `transition: background-color,
+     color` on everything, which pays for a transition on every row of a 200-row table
+     for the one moment in a session anybody switches, and still cannot animate a
+     gradient, a shadow or a mask.
+
+     A View Transition animates the page instead of its properties: the browser
+     snapshots before and after, and 18-motion.css reveals the new snapshot through a
+     circle growing out of the control that was pressed. Two snapshots and one
+     clip-path, whatever is on screen.
+
+     Everything about it is optional. No `startViewTransition`, reduced motion, or
+     `data-ins-fx="off"`, and `apply()` is simply called — the instant flip. The theme
+     change is inside the callback either way, so a failure here never leaves it
+     half-applied. */
+  /* boot{ */
+  function motionless() {
+    if (root.getAttribute('data-ins-fx') === 'off') return true;
+    try {
+      return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    } catch (e) {
+      return false;
+    }
+  }
+  /* }boot */
+
+  function sweep(from, apply) {
+    if (!document.startViewTransition || motionless()) { apply(); return; }
+
+    var box = from && from.getBoundingClientRect ? from.getBoundingClientRect() : null;
+    var x = box ? box.left + box.width / 2 : window.innerWidth / 2;
+    var y = box ? box.top + box.height / 2 : 0;
+    // From where the toggle rests, not where its hover lift or press dip has moved it this instant.
+    if (box && window.DOMMatrix) {
+      try { var m = new window.DOMMatrix(window.getComputedStyle(from).transform); x -= m.m41; y -= m.m42; } catch (e) {}
+    }
+    var w = window.innerWidth, h = window.innerHeight;
+    /* To the furthest corner, or the old palette survives in one corner of the screen
+       for the length of the animation. `sqrt` rather than `Math.hypot`, to stay ES5. */
+    var far = Math.max(
+      Math.sqrt(x * x + y * y),
+      Math.sqrt((w - x) * (w - x) + y * y),
+      Math.sqrt(x * x + (h - y) * (h - y)),
+      Math.sqrt((w - x) * (w - x) + (h - y) * (h - y)));
+
+    root.style.setProperty('--ins-sweep-x', x + 'px');
+    root.style.setProperty('--ins-sweep-y', y + 'px');
+    root.style.setProperty('--ins-sweep-r', Math.ceil(far) + 'px');
+    root.classList.add('ins-theme-sweep');
+
+    var clean = function () {
+      root.classList.remove('ins-theme-sweep');
+      root.classList.remove('ins-theme-sweep--close');
+      root.style.removeProperty('--ins-sweep-x');
+      root.style.removeProperty('--ins-sweep-y');
+      root.style.removeProperty('--ins-sweep-r');
+    };
+    var run;
+    try {
+      // Going dark, the light switches off: the old picture closes onto the switch instead of the new one growing out of it.
+      run = document.startViewTransition(function () {
+        apply();
+        if (effectiveTheme() === 'dark') root.classList.add('ins-theme-sweep--close');
+      });
+    } catch (e) {
+      /* Refused to start — another transition mid-flight, a page being unloaded. The
+         change still has to happen. */
+      clean();
+      apply();
+      return;
+    }
+    /* `finished` rejects on a skipped transition, which is not worth having an opinion
+       about: either way the class and the three properties come back off. */
+    run.finished.then(clean, clean);
+  }
+
+  /* -------------------------------------------------------------- sidebar */
+  /* The same button means two different things at two widths, and that is a
+     property of the layout rather than a shortcut here: above 900px the sidebar is
+     a column and the burger *collapses* it, below 900px it is an off-canvas drawer
+     and the burger *opens* it. One control, because to the person pressing it there
+     is only one sidebar.
+
+     The drawer state is deliberately NOT persisted. A collapsed column is a working
+     preference; a drawer that is still open when you come back is a page with its
+     content covered. */
+
+  function isDrawer() {
+    return !!(window.matchMedia && window.matchMedia('(max-width: 900px)').matches);
+  }
+
+  function drawer() { return document.querySelector('.ins-shell-side'); }
+
+  function sidebar(next) {
+    var panel = drawer();
+
+    if (isDrawer() && panel) {
+      var open = panel.classList.contains('is-open');
+      if (next === undefined) return open ? 'open' : 'closed';
+      var show = next === 'open' || next === true || (next === 'toggle' && !open);
+      panel.classList.toggle('is-open', show);
+      /* `:target` opens it with no script at all, which is the point of building it
+         that way — but a leftover hash would fight the class on the next toggle. */
+      if (!show && location.hash === '#' + panel.id) {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+      emit('ins:sidebar', { state: show ? 'open' : 'closed', drawer: true });
+      return show ? 'open' : 'closed';
+    }
+
+    var collapsed = root.classList.contains('ins-sidebar-collapsed');
+    if (next === undefined) return collapsed ? 'collapsed' : 'open';
+    var want = next === 'collapsed' || next === true ||
+               (next === 'toggle' && !collapsed);
+    root.classList.toggle('ins-sidebar-collapsed', want);
+    if (want) write(KEY_SIDEBAR, 'collapsed'); else drop(KEY_SIDEBAR);
+    emit('ins:sidebar', { state: want ? 'collapsed' : 'open', drawer: false });
+    return want ? 'collapsed' : 'open';
+  }
+
+  /* ---------------------------------------------------- sidebar selection */
+  /* The active marker travels to a new item the way the Windows 10 navigation pane's
+     does: in two beats, like an inchworm. For the first third its far end shoots out
+     to the new item, accelerating, while the near end holds — the bar spans both
+     items for an instant. For the rest, the near end catches up, decelerating, and
+     the bar is its own size again on the new item. The two curves are the ones
+     WinUI's NavigationView uses, and so is the 600ms.
+
+     The marker is a pseudo-element inside each link, clipped by the link's own
+     rounded box, so it cannot leave it. The journey is made by a stand-in: one bar,
+     absolutely placed in the sidebar (positioned, and the scroller, so the bar
+     scrolls and clips with the links), measured from the two real markers, and
+     removed when it lands. The real markers are hidden while it flies.
+
+     A sidebar on a server-rendered site is links, and a click loads the next page,
+     where the old marker no longer exists. So the click writes down which item was
+     selected, and the next page, finding the note, flies the bar from that item to
+     its own. The note lasts one page load and five seconds — a stale one from some
+     earlier visit must not replay a journey nobody just made. */
+  /* boot{ */
+  var NAV_KEY = 'ins-nav-from';
+  var NAV_EASE_OUT = 'cubic-bezier(.9, .1, 1, .2)';
+  var NAV_EASE_IN = 'cubic-bezier(.1, .9, .2, 1)';
+
+  function navActive(side) { return side.querySelector('.ins-shell-link.is-active'); }
+
+  /* The previous page's note, if there is a fresh one: which item was selected
+     (`from`, absent when none was) and how far the sidebar was scrolled (`top`).
+     Read at parse time to hide the markers and place the sidebar before first
+     paint, and again on arrival to fly the marker. */
+  function navNote() {
+    var note = null;
+    try { note = JSON.parse(window.sessionStorage.getItem(NAV_KEY) || 'null'); } catch (e) { return null; }
+    return note && Date.now() - note.t < 5000 ? note : null;
+  }
+
+  function navArrived() { root.classList.remove('ins-nav-arriving'); }
+
+  /* Where the sidebar is scrolled to on arrival — decided before it is ever painted.
+     Scrolling it after the page appeared is what made it flash: painted at the top,
+     then jumped to wherever it belonged.
+
+     Clicked from the sidebar, it stays exactly where it was, so the list does not
+     move under the pointer between pages — and the marker's flight starts from an
+     item that is where the eye left it. Arrived any other way, it is left at the
+     top unless the selected item is out of sight, and then that item is brought to
+     the middle.
+
+     At parse time the sidebar does not exist yet, so this watches the document
+     being built and places the sidebar as its links arrive. Mutation callbacks run
+     before the browser is allowed to paint, so no frame shows it anywhere else.
+     It stops as soon as the position has been reached — it must never fight the
+     person's own scrolling — or when the page is parsed. */
+  function navPlace(side, note, state) {
+    if (state.done) return;
+    if (note && typeof note.top === 'number') {
+      side.scrollTop = note.top;
+      if (Math.abs(side.scrollTop - note.top) < 1) state.done = true;
+      return;
+    }
+    var link = navActive(side);
+    if (!link) return;
+    var bottom = link.offsetTop + link.offsetHeight;
+    if (bottom > side.clientHeight) side.scrollTop = link.offsetTop - side.clientHeight / 2 + link.offsetHeight / 2;
+    state.done = true;
+  }
+
+  function navWatch(note) {
+    var state = { done: false }, side = null;
+    var place = function () {
+      side = side || document.querySelector('.ins-shell-side');
+      if (side) { filterBuild(side); navPlace(side, note, state); }
+    };
+    var finish = function () { place(); state.done = true; if (mo) mo.disconnect(); };
+    var mo = window.MutationObserver ? new MutationObserver(function () {
+      place();
+      if (state.done || (side && side.nextElementSibling)) finish();
+    }) : null;
+    if (mo) mo.observe(root, { childList: true, subtree: true });
+    document.addEventListener('DOMContentLoaded', finish);
+  }
+
+  /* The sidebar's filter field, built before first paint so the links never shift down under it. */
+  var FILTER_WORDS = { ar: ['بحث', 'لا نتائج'], en: ['Search', 'No results'] };
+
+  function filterBuild(side) {
+    if (!side.hasAttribute('data-ins-filter')) return null;
+    var box = side.querySelector('.ins-shell-filter');
+    if (box) return box;
+    var first = side.querySelector('.ins-shell-group, .ins-shell-link');
+    if (!first) return null;
+    var lang = ((side.closest('[lang]') || root).getAttribute('lang') || 'en').slice(0, 2).toLowerCase();
+    var words = FILTER_WORDS[lang] || FILTER_WORDS.en, hint = side.getAttribute('data-ins-filter') || words[0];
+    box = document.createElement('div');
+    box.className = 'ins-shell-filter ins-search';
+    box.innerHTML = '<svg class="ins-search-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">' +
+      '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="ins-input ins-input--sm" type="search" autocomplete="off" spellcheck="false">';
+    var input = box.lastChild;
+    input.placeholder = hint;
+    input.setAttribute('aria-label', hint);
+    var empty = document.createElement('p');
+    empty.className = 'ins-shell-filter-empty';
+    empty.setAttribute('role', 'status');
+    empty.hidden = true;
+    empty.textContent = side.getAttribute('data-ins-filter-empty') || words[1];
+    first.parentNode.insertBefore(box, first);
+    first.parentNode.insertBefore(empty, first);
+    return box;
+  }
+  /* }boot */
+
+  /* Where a link's marker is, in the sidebar's scrolling coordinates. */
+  function navMarker(side, s, link) {
+    var r = link.getBoundingClientRect();
+    var cs = window.getComputedStyle(link, '::before');
+    var top = parseFloat(cs.top) || 0, bottom = parseFloat(cs.bottom) || 0;
+    var w = parseFloat(cs.width) || 3;
+    var rtl = window.getComputedStyle(link).direction === 'rtl';
+    return {
+      x: (rtl ? r.right - w : r.left) - s.left - side.clientLeft,
+      y: r.top + top - s.top - side.clientTop + side.scrollTop,
+      w: w,
+      h: r.height - top - bottom
+    };
+  }
+
+  /* The one marker flight every moving marker shares (sidebar, contents list, tabs and segments, a table's selected row): a stand-in bar stretches along opts.axis until its far edge reaches the new marker, then lets go of the old end; a move in flight carries on from where the bar is. */
+  function flyBar(box, a, b, opts) {
+    var x = opts.axis === 'x', pos = x ? 'left' : 'top', len = x ? 'width' : 'height';
+    var a0 = x ? a.x : a.y, al = x ? a.w : a.h, b0 = x ? b.x : b.y, bl = x ? b.w : b.h;
+    if (al <= 0 || bl <= 0 || motionless()) return false;
+    /* A real move: it replaces the flight in progress, starting where that bar is. */
+    var prev = box.__insFlight;
+    if (prev) {
+      if (prev.bar.parentNode) {
+        var pcs = window.getComputedStyle(prev.bar);
+        var p0 = parseFloat(pcs[pos]), pl = parseFloat(pcs[len]);
+        if (!isNaN(p0) && pl > 0) { a0 = p0; al = pl; }
+      }
+      prev.halt();
+    }
+
+    var bar = el('span', opts.bar);
+    bar.setAttribute('aria-hidden', 'true');
+    if (!bar.animate) return false;
+    if (x) {
+      bar.style.top = b.y + 'px';
+      if (b.h != null) bar.style.height = b.h + 'px';
+    } else {
+      bar.style.left = b.x + 'px';
+      bar.style.width = b.w + 'px';
+    }
+    box.appendChild(bar);
+    box.classList.add(opts.moving);
+
+    var lo = Math.min(a0, b0), hi = Math.max(a0 + al, b0 + bl);
+    var run = null;
+    var flight = {
+      bar: bar,
+      /* Ends this flight: removes its bar and hands the box back unless a newer flight owns it; safe to call twice. */
+      land: function () {
+        if (bar.parentNode) bar.parentNode.removeChild(bar);
+        if (box.__insFlight !== flight) return;
+        box.__insFlight = null;
+        if (opts.landing) opts.landing();
+        box.classList.remove(opts.moving);
+        if (opts.done) opts.done();
+      },
+      halt: function () {
+        if (run) { run.onfinish = run.oncancel = null; try { run.cancel(); } catch (e) {} }
+        flight.land();
+      }
+    };
+    box.__insFlight = flight;
+    var frame = function (p, l, extra) {
+      var f = {};
+      f[pos] = p + 'px';
+      f[len] = l + 'px';
+      for (var k in extra) f[k] = extra[k];
+      return f;
+    };
+    try {
+      run = bar.animate([
+        frame(a0, al, { easing: NAV_EASE_OUT }),
+        frame(lo, hi - lo, { offset: 1 / 3, easing: NAV_EASE_IN }),
+        frame(b0, bl, {})
+      ], { duration: 600, fill: 'both' });
+    } catch (e) {
+      flight.land();
+      return false;
+    }
+    run.onfinish = flight.land;
+    run.oncancel = flight.land;
+    return true;
+  }
+
+  /* A list's marker flight, from one item's ::before bar to another's: the sidebar and the scrollspy plugin's contents list. Returns whether it flew. */
+  function flyMarker(box, from, to, opts) {
+    if (!box) return false;
+    opts = opts || {};
+    /* Not a move, or not one anybody should see: whatever is flying keeps flying. */
+    if (!from || !to || from === to || !box.contains(from) || !to.animate || motionless()) return false;
+    if (window.getComputedStyle(box).position === 'static') return false;
+    var s = box.getBoundingClientRect();
+    /* A collapsed column or a closed drawer: nobody is looking. */
+    if (s.width < 8 || s.right <= 0 || s.left >= window.innerWidth) return false;
+    var a = navMarker(box, s, from), b = navMarker(box, s, to);
+    return flyBar(box, a, b, { bar: opts.bar || 'ins-marker-flight', moving: opts.moving || 'ins-marker-moving', done: opts.done });
+  }
+
+  /* The sidebar's flight. Once it lands, the markers the arrival hid before first
+     paint are shown again; when it does not fly, the caller shows them. */
+  function navFly(side, from, to) {
+    return flyMarker(side, from, to, { bar: 'ins-shell-indicator', moving: 'ins-shell-moving', done: navArrived });
+  }
+
+  /* Select a sidebar item on this page — for a same-page link, or a single-page app
+     that swaps the content itself. A server-rendered page marks its own item. */
+  function sidebarSelect(target) {
+    var link = resolve(target);
+    var side = link && link.closest ? link.closest('.ins-shell-side') : null;
+    if (!side) return null;
+    var old = navActive(side);
+    if (old === link) return link;
+    if (old) {
+      old.classList.remove('is-active');
+      if (old.getAttribute('aria-current') === 'page') old.removeAttribute('aria-current');
+    }
+    link.classList.add('is-active');
+    link.setAttribute('aria-current', 'page');
+    navFly(side, old, link);
+    return link;
+  }
+
+  /* ------------------------------------------------------ sidebar filter */
+  function filterItems(side) {
+    var all = side.querySelectorAll('.ins-shell-group, .ins-shell-link'), out = [];
+    for (var i = 0; i < all.length; i++) if (!all[i].closest('.ins-shell-bottom')) out.push(all[i]);
+    return out;
+  }
+
+  function filterLabel(link) {
+    var text = '';
+    for (var n = link.firstChild; n; n = n.nextSibling) {
+      if (n.nodeType === 3) text += n.nodeValue;
+      else if (n.nodeType === 1 && !n.classList.contains('ins-shell-link-badge')) text += ' ' + n.textContent;
+    }
+    return text;
+  }
+
+  function filterShown(link) {
+    return !link.classList.contains('is-filtered-out') && link.getClientRects().length > 0;
+  }
+
+  /* Hides the links that miss every word typed, and a heading left with none; text, keywords and the heading itself all count. */
+  function filterRun(side) {
+    var box = side.querySelector('.ins-shell-filter'), input = box && box.querySelector('input');
+    if (!input) return 0;
+    var terms = norm(input.value).split(/\s+/).filter(Boolean), items = filterItems(side), heads = [], head = null, i;
+    if (side.__insFlight) side.__insFlight.halt();
+    for (i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (item.classList.contains('ins-shell-group')) { head = { el: item, text: norm(item.textContent), links: [] }; heads.push(head); continue; }
+      var hay = norm(filterLabel(item) + ' ' + (item.getAttribute('data-keywords') || '') + ' ' + (head ? head.text : ''));
+      var hit = true;
+      for (var t = 0; t < terms.length && hit; t++) hit = hay.indexOf(terms[t]) !== -1;
+      item.classList.toggle('is-filtered-out', !hit);
+      if (head) head.links.push(item);
+    }
+    var shown = 0;
+    for (i = 0; i < items.length; i++) if (items[i].classList.contains('ins-shell-link') && filterShown(items[i])) shown++;
+    for (i = 0; i < heads.length; i++) {
+      var any = !terms.length;
+      for (var j = 0; j < heads[i].links.length && !any; j++) any = filterShown(heads[i].links[j]);
+      heads[i].el.classList.toggle('is-filtered-out', !any);
+    }
+    side.classList.toggle('is-filtering', terms.length > 0);
+    var empty = side.querySelector('.ins-shell-filter-empty');
+    if (empty) empty.hidden = !(terms.length && !shown);
+    return shown;
+  }
+
+  function filterFirst(side) {
+    var items = filterItems(side);
+    for (var i = 0; i < items.length; i++) if (items[i].classList.contains('ins-shell-link') && filterShown(items[i])) return items[i];
+    return null;
+  }
+
+  /* `/` belongs to a command palette that claims it; otherwise it focuses the filter. */
+  function slashTaken() {
+    var p = document.querySelectorAll('[data-ins-palette]');
+    for (var i = 0; i < p.length; i++) {
+      var keys = p[i].hasAttribute('data-ins-palette-keys') ? p[i].getAttribute('data-ins-palette-keys') : 'mod+k /';
+      if ((' ' + keys.toLowerCase() + ' ').indexOf(' / ') !== -1) return true;
+    }
+    return false;
+  }
+
+  function typingIn(el) {
+    return !!el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable);
+  }
+
+  function filterKey(event) {
+    var t = event.target, box = t.closest ? t.closest('.ins-shell-filter') : null;
+    if (box && t.tagName === 'INPUT') {
+      var side = box.closest('.ins-shell-side');
+      if (event.key === 'Escape') {
+        if (t.value) { t.value = ''; filterRun(side); event.preventDefault(); } else t.blur();
+        return;
+      }
+      if (event.key !== 'ArrowDown' && event.key !== 'Enter') return;
+      var first = filterFirst(side);
+      if (!first) return;
+      event.preventDefault();
+      if (event.key === 'Enter') first.click(); else first.focus();
+      return;
+    }
+    var slash = (event.key === '/' || (event.code === 'Slash' && !event.shiftKey)) && !event.ctrlKey && !event.metaKey && !event.altKey;
+    if (!slash || typingIn(t) || slashTaken()) return;
+    var input = document.querySelector('.ins-shell-side .ins-shell-filter input');
+    if (!input) return;
+    var panel = input.closest('.ins-shell-side');
+    if (isDrawer()) { if (!panel.classList.contains('is-open')) sidebar('open'); }
+    else if (root.classList.contains('ins-sidebar-collapsed') || !input.getClientRects().length) return;
+    event.preventDefault();
+    input.focus();
+    input.select();
+  }
+
+  /* Is this click about to load another page, in this tab? */
+  function navigates(event, link) {
+    if (event.defaultPrevented || event.button !== 0 ||
+        event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+    if (link.hasAttribute('download')) return false;
+    var target = link.getAttribute('target');
+    if (target && target !== '_self') return false;
+    return link.origin === location.origin;
+  }
+
+  function samePage(link) {
+    return link.pathname === location.pathname && link.search === location.search && !!link.hash;
+  }
+
+  /* --------------------------------------------------------------- events */
+
+  /* Returns the event, so a cancelable one can be asked whether anyone said no. */
+  function emit(name, detail, cancelable) {
+    var event;
+    try {
+      event = new CustomEvent(name, { detail: detail, bubbles: true, cancelable: !!cancelable });
+    } catch (e) {                                  /* very old WebView */
+      event = document.createEvent('CustomEvent');
+      event.initCustomEvent(name, true, !!cancelable, detail);
+    }
+    document.dispatchEvent(event);
+    return event;
+  }
+
+  /* --------------------------------------------------------- the scroller */
+  /* Which element actually scrolls depends on `data-ins-scrollbar="lead"` (see
+     04-reset.css): with it, <body> is the scroll container and its `scroll` event
+     never reaches `window`. Anything measuring scroll has to ask this, not
+     `window.scrollY`. */
+
+  function scroller() {
+    return root.getAttribute('data-ins-scrollbar') === 'lead' ? document.body : window;
+  }
+
+  function scrollTop() {
+    var el = scroller();
+    return el === window ? (window.scrollY || root.scrollTop || 0) : el.scrollTop;
+  }
+
+  /* Stamped past 8px so a bar can go from transparent to frosted. Without JS the
+     bar simply stays transparent, which is a working page, not a broken one. */
+  function watchScroll() {
+    var ticking = false;
+    function measure() {
+      ticking = false;
+      root.toggleAttribute('data-ins-scrolled', scrollTop() > 8);
+    }
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(measure);
+    }
+    var target = scroller();
+    target.addEventListener('scroll', onScroll, { passive: true });
+    measure();
+  }
+
+  /* ==========================================================================
+     PRE-PAINT — runs now, at parse time, with no <body> to speak of
+     ========================================================================== */
+
+  /* boot{ */
+  function earlyPaint(booted) {
+    /* "The script is running." The stylesheet keys every script-dependent state
+       on this — a tab panel that is hidden until chosen, a navbar menu that is
+       folded until opened, a show-password button that does nothing without us —
+       so that a page whose script failed shows all of it instead of hiding it for
+       ever. Stamped here, before first paint, so the folded states never flash
+       open on the way in. */
+    root.setAttribute('data-ins-js', '');
+
+    var stored = read(KEY_THEME);
+    if (stored === 'dark' || stored === 'light') stampTheme(stored);
+
+    if (read(KEY_SIDEBAR) === 'collapsed') root.classList.add('ins-sidebar-collapsed');
+
+    /* A sidebar marker about to fly in from the previous page. This page's own
+       marker must not paint first: the browser paints before `DOMContentLoaded`
+       whenever it can, and the flight cannot start until then, so without this the
+       marker showed at its destination for a frame, vanished, and then arrived.
+       Hidden from the first paint instead, until the flight takes over — and never
+       for longer than two seconds, whatever goes wrong after this line. */
+    var note = booted ? null : navNote();
+    if (note && note.from && !motionless()) {
+      root.classList.add('ins-nav-arriving');
+      window.setTimeout(navArrived, 2000);
+    }
+    /* And the sidebar's scroll, placed before its first paint as well. */
+    if (!booted && document.readyState === 'loading') navWatch(note);
+
+    /* `data-ins-primary` on <html> is the declarative form of brand(): it is read
+       here so a custom brand colour is live for the first paint too, rather than
+       repainting the whole page a moment after it appears. */
+    var declared = root.getAttribute('data-ins-primary');
+    if (declared) brand(declared);
+  }
+  /* }boot */
+
+  (function prePaint() {
+    /* insiyab-boot.js has already done the parse-time half when it is loaded first. */
+    earlyPaint(!!window.InsiyabBoot);
+
+    /* Follow the OS while the user has expressed no preference of their own. */
+    if (window.matchMedia) {
+      var mq = window.matchMedia('(prefers-color-scheme: dark)');
+      var onChange = function () {
+        if (read(KEY_THEME)) return;              /* an explicit choice wins */
+        if (brandCurrent) brand(brandCurrent);    /* re-derive for the new ground */
+        pressToggles(document);
+        emit('ins:theme', { theme: effectiveTheme(), mode: 'system' });
+      };
+      if (mq.addEventListener) mq.addEventListener('change', onChange);
+      else if (mq.addListener) mq.addListener(onChange);
+    }
+  }());
+
+  /* ---------------------------------------------------------------- toast */
+  /* The stylesheet hides a toast on its own, with a delayed second animation, so
+     this does not own a timer and a toast is correct even if the script dies after
+     creating it. All that is left here is inserting it and removing the node once
+     its exit has finished. */
+
+  var TONES = { ok: 'ok', bad: 'bad', warn: 'warn', info: 'info' };
+  var TONE_GLYPH = { ok: '✓', bad: '✕', warn: '!', info: 'i' };
+
+  function toastLayer() {
+    var layer = document.querySelector('.ins-toasts');
+    if (!layer) {
+      layer = document.createElement('div');
+      layer.className = 'ins-toasts';
+      /* Announced without stealing focus. `polite` because a toast is never the
+         only way to learn what happened. */
+      layer.setAttribute('role', 'status');
+      layer.setAttribute('aria-live', 'polite');
+      document.body.appendChild(layer);
+    }
+    layerPrune();
+    toastHost(layer);
+    return layer;
+  }
+
+  // The toasts live in the top layer, inside the top modal when there is one, so a toast raised from a dialog is above its backdrop and can be dismissed.
+  function toastHost(layer) {
+    var host = topModal() || document.body;
+    if (layer.parentNode !== host) host.appendChild(layer);
+    if (hasPopover && !layer.hasAttribute('popover')) layer.setAttribute('popover', 'manual');
+    popShow(layer);
+  }
+
+  function toast(message, tone) {
+    if (!document.body) return null;
+    var kind = TONES[tone] || 'info';
+
+    var el = document.createElement('div');
+    el.className = 'ins-toast ins-alert--' + kind;
+
+    var ico = document.createElement('span');
+    ico.className = 'ins-toast-ico';
+    ico.setAttribute('aria-hidden', 'true');
+    ico.textContent = TONE_GLYPH[kind];
+
+    var text = document.createElement('span');
+    text.className = 'ins-toast-text';
+    /* textContent, not innerHTML: a toast very often carries a server message or a
+       user's own input, and this is the obvious place to hand someone an injection. */
+    text.textContent = message;
+
+    el.appendChild(ico);
+    el.appendChild(text);
+    el.addEventListener('click', function () { el.classList.add('is-going'); });
+    /* Two animations run on entry (in, then the delayed out), so wait for the one
+       that actually ends with the toast gone. */
+    el.addEventListener('animationend', function (e) {
+      if (e.animationName === 'ins-toast-out' && el.parentNode) el.parentNode.removeChild(el);
+    });
+
+    toastLayer().appendChild(el);
+    return el;
+  }
+
+  /* --------------------------------------------------------------- dialog */
+
+  function dialog(target, action, from) {
+    var el = typeof target === 'string' ? document.querySelector(target) : target;
+    if (!el) return null;
+    if (typeof el.showModal !== 'function') {
+      if (window.console) window.console.warn('[insiyab] <dialog> is not supported here:', target);
+      return el;
+    }
+    var wantOpen = action === 'close' ? false : (action === 'open' ? true : !el.open);
+    if (wantOpen && !el.open) {
+      el._insFrom = from || document.activeElement;
+      gutterCheck();
+      el.showModal();
+    }
+    else if (!wantOpen && el.open) el.close();
+    return el;
+  }
+
+  var uidCount = 0;
+  function uid(prefix) { return prefix + '-' + (++uidCount); }
+
+  function resolve(target) {
+    if (typeof target !== 'string') return target || null;
+    try { return document.querySelector(target); } catch (e) { return null; }
+  }
+
+  /* -------------------------------------------------------------- dismiss */
+  /* `data-ins-dismiss` closes whatever the control sits in — the nearest dialog,
+     drawer, popover, menu, open navbar, alert or toast — or the one it names:
+     `data-ins-dismiss="#notice"`. One attribute, so a close button does not need to
+     know what kind of thing it is closing. An alert is hidden rather than removed,
+     so a page that wants it back only has to clear `hidden`. */
+  function dismiss(from) {
+    var el = resolve(from);
+    if (!el) return null;
+    var named = el.getAttribute && el.getAttribute('data-ins-dismiss');
+    var target = named ? resolve(named) : null;
+    if (!target && el.closest) {
+      target = el.closest('dialog, [popover], details, .ins-navbar.is-open, .ins-alert, .ins-toast');
+    }
+    if (!target) return null;
+    // A menu's body is a popover now, but it is the menu that closes; any other open layer closes as its owner closes it.
+    if (target.classList.contains('ins-pop-body') && target.parentNode.matches && target.parentNode.matches(POP)) target = target.parentNode;
+    var at = layerAt(target);
+
+    if (at !== -1 && layers[at].kind === 'popup') layers[at].o.close('dismiss');
+    else if (target.tagName === 'DIALOG') dialog(target, 'close');
+    else if (target.hasAttribute('popover') && target.hidePopover) {
+      try { target.hidePopover(); } catch (e) { /* already hidden */ }
+    } else if (target.tagName === 'DETAILS') target.open = false;
+    else if (target.classList.contains('ins-navbar')) navbar(target, false);
+    else if (target.classList.contains('ins-toast')) target.classList.add('is-going');
+    else if (target.classList.contains('ins-alert') && !target.hidden && !motionless()) alertGo(target);
+    else target.hidden = true;
+
+    emit('ins:dismiss', { target: target });
+    return target;
+  }
+
+  // The alert fades, its space closes, and only then is it hidden.
+  function alertGo(alert) {
+    if (alert.classList.contains('is-going')) return;
+    var done = function (event) {
+      if (event && event.target !== alert) return;
+      alert.removeEventListener('animationend', done);
+      clearTimeout(late);
+      alert.classList.remove('is-going');
+      alert.hidden = true;
+    };
+    var late = setTimeout(done, 1000);
+    alert.addEventListener('animationend', done);
+    alert.classList.add('is-going');
+  }
+
+  /* ----------------------------------------------------------------- tabs */
+  /* A tab is anything carrying `data-ins-tab="#panel"`, or an `.ins-tab` link whose
+     href points at an `.ins-tabpanel` on this page. Any other `.ins-tab` — one
+     pointing at another page, or at a section of this one — is navigation, not a
+     tab, and is left entirely alone. That is what lets one class serve both a panel
+     switcher and a row of section links; and the panel's class is what decides,
+     because "is a fragment" alone would have made every in-page link in a strip
+     into a tab and stamped `role="tabpanel"` on the section it jumps to. */
+  var TAB = '[data-ins-tab], .ins-tab';
+
+  function tabPanel(tab) {
+    var own = tab.getAttribute('data-ins-tab');
+    var ref = own || tab.getAttribute('href') || '';
+    if (ref.length < 2 || ref.charAt(0) !== '#') return null;
+    var panel = resolve(ref);
+    if (panel && !own && !panel.classList.contains('ins-tabpanel')) return null;
+    return panel;
+  }
+
+  function tabList(tab) {
+    return tab.closest('.ins-tablist, [role="tablist"], .ins-seg') || tab.parentNode;
+  }
+
+  function tabsIn(list) {
+    var all = list.querySelectorAll(TAB), out = [];
+    for (var i = 0; i < all.length; i++) {
+      if (tabList(all[i]) === list && tabPanel(all[i])) out.push(all[i]);
+    }
+    return out;
+  }
+
+  function selectTab(target, focus, quiet) {
+    var tab = resolve(target);
+    if (!tab || !tabPanel(tab)) return null;
+    var tabs = tabsIn(tabList(tab));
+    for (var i = 0; i < tabs.length; i++) {
+      var on = tabs[i] === tab;
+      var panel = tabPanel(tabs[i]);
+      tabs[i].classList.toggle('is-active', on);
+      tabs[i].setAttribute('aria-selected', String(on));
+      /* The roving tab stop: one tab in the tab order, the arrows for the rest. A
+         strip of eight tabs is otherwise eight Tab presses between the page and the
+         panel it controls. */
+      tabs[i].setAttribute('tabindex', on ? '0' : '-1');
+      if (panel) panel.classList.toggle('is-active', on);
+    }
+    if (focus) tab.focus();
+    if (!quiet) emit('ins:tab', { tab: tab, panel: tabPanel(tab) });
+    return tab;
+  }
+
+  /* The arrows follow the strip, not the keyboard: in RTL the next tab is to the
+     *left*, so ArrowLeft is "next". Activation follows focus — the panels are
+     already in the page, so there is nothing to wait for. */
+  function onTabKey(event) {
+    var tab = event.target.closest ? event.target.closest(TAB) : null;
+    if (!tab || !tabPanel(tab)) return;
+    var list = tabList(tab);
+    var tabs = tabsIn(list);
+    var i = tabs.indexOf(tab);
+    var rtl = window.getComputedStyle(list).direction === 'rtl';
+    var next;
+    switch (event.key) {
+      case 'ArrowRight': next = rtl ? i - 1 : i + 1; break;
+      case 'ArrowLeft': next = rtl ? i + 1 : i - 1; break;
+      case 'Home': next = 0; break;
+      case 'End': next = tabs.length - 1; break;
+      default: return;
+    }
+    event.preventDefault();
+    selectTab(tabs[(next + tabs.length) % tabs.length], true);
+  }
+
+  /* --------------------------------------------------------------- navbar */
+  function navbar(target, open) {
+    var bar = resolve(target);
+    if (bar && !bar.classList.contains('ins-navbar')) bar = bar.closest('.ins-navbar');
+    if (!bar) return null;
+    var want = open === undefined ? !bar.classList.contains('is-open') : !!open;
+    bar.classList.toggle('is-open', want);
+    var toggles = bar.querySelectorAll('[data-ins-navbar]');
+    for (var i = 0; i < toggles.length; i++) toggles[i].setAttribute('aria-expanded', String(want));
+    emit('ins:navbar', { open: want, el: bar });
+    return want;
+  }
+
+  /* ------------------------------------------------------------- password */
+  /* The input is found by the button's own attribute, or as the password field in
+     the same group. It is marked on the first press, because once it is showing its
+     `type` is "text" and it would no longer be found as a password field. */
+  function togglePassword(btn) {
+    var input = resolve(btn.getAttribute('data-ins-password'));
+    if (!input) {
+      var host = btn.closest('.ins-input-group, .ins-field') || btn.parentNode;
+      input = host && host.querySelector('input[type="password"], input[data-ins-secret]');
+    }
+    if (!input) return null;
+    input.setAttribute('data-ins-secret', '');
+    var show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    btn.setAttribute('aria-pressed', String(show));
+    return show;
+  }
+
+  /* --------------------------------------------------------------- layers */
+  // Every pop-up opens in the top layer, placed beside its trigger by `place`, and every open pop-up and modal is one stack.
+  var hasPopover = typeof HTMLElement !== 'undefined' &&
+                   Object.prototype.hasOwnProperty.call(HTMLElement.prototype, 'popover');
+  var nativeClosedBy = typeof HTMLDialogElement !== 'undefined' && 'closedBy' in HTMLDialogElement.prototype;
+  var layers = [], layerFrame = 0, pressSpent = false, pressFrom = null, focusNow = null, focusBefore = null;
+  // Set by this script, not the boot one, so a page whose script failed still shows its menus in the flow.
+  if (hasPopover) root.setAttribute('data-ins-layers', '');
+  var layerRO = typeof window.ResizeObserver === 'function' ? new window.ResizeObserver(function () { layerSchedule(); }) : null;
+
+  function layerAt(el) {
+    for (var i = 0; i < layers.length; i++) if (layers[i].el === el) return i;
+    return -1;
+  }
+
+  // A modal taken off the page while open leaves the stack too.
+  function layerPrune() {
+    for (var i = layers.length - 1; i >= 0; i--) {
+      var l = layers[i];
+      if (l && l.kind === 'modal' && (!l.el.open || !root.contains(l.el))) modalClosed(l.el);
+    }
+  }
+
+  function layerTop() {
+    layerPrune();
+    return layers.length ? layers[layers.length - 1] : null;
+  }
+
+  function topModal() {
+    for (var i = layers.length - 1; i >= 0; i--) if (layers[i].kind === 'modal') return layers[i].el;
+    return null;
+  }
+
+  // Everything outside the top modal is inert, so a layer lives in the open dialog its trigger is in.
+  function layerHost(trigger) {
+    return (trigger && trigger.closest && trigger.closest('dialog[open]')) || document.body;
+  }
+
+  function popShow(el, o) {
+    if (hasPopover && el.hasAttribute('popover')) {
+      try { if (!el.matches(':popover-open')) el.showPopover(); } catch (e) { /* not connected */ }
+    } else if (o && o.toggle === 'class') {
+      el.hidden = false;
+      el.classList.add('is-open');
+    }
+  }
+
+  function popHide(el, o) {
+    if (hasPopover && el.hasAttribute('popover')) {
+      try { if (el.matches(':popover-open')) el.hidePopover(); } catch (e) { /* already hidden */ }
+    } else if (o && o.toggle === 'class') {
+      el.classList.remove('is-open');
+      el.hidden = true;
+    }
+  }
+
+  // Every ancestor that clips the anchor: once it is wholly outside them, the layer has nothing left to point at.
+  function clipsOf(el) {
+    var out = [];
+    for (var p = el.parentElement; p && p !== document.body && p !== root; p = p.parentElement) {
+      var cs = window.getComputedStyle(p);
+      if (/auto|scroll|hidden|clip/.test(cs.overflowX + cs.overflowY)) out.push(p);
+    }
+    return out;
+  }
+
+  function layerGone(l) {
+    if (!root.contains(l.anchor)) return true;
+    var a = l.anchor.getBoundingClientRect();
+    var top = 0, left = 0, bottom = window.innerHeight, right = root.clientWidth;
+    for (var i = 0; i < l.clips.length; i++) {
+      var c = l.clips[i].getBoundingClientRect();
+      top = Math.max(top, c.top);
+      left = Math.max(left, c.left);
+      bottom = Math.min(bottom, c.bottom);
+      right = Math.min(right, c.right);
+    }
+    return a.bottom <= top || a.top >= bottom || a.right <= left || a.left >= right;
+  }
+
+  // A fixed layer beside its anchor: o.side (bottom), o.align (start, end, left, center), o.gap, o.match (the anchor's width), o.dir and o.flip (gets data-ins-flip); flipped where the other side has room, then kept in the viewport.
+  function place(layer, anchor, o) {
+    o = o || {};
+    var a = anchor.getBoundingClientRect(), s = layer.style;
+    var gap = o.gap == null ? 6 : o.gap, pad = 8, vw = root.clientWidth, vh = window.innerHeight;
+    s.left = '0px';
+    s.top = '0px';
+    s.right = 'auto';
+    s.bottom = 'auto';
+    if (o.match) s.width = Math.round(a.width) + 'px';
+    var w = layer.offsetWidth, h = layer.offsetHeight;
+    var rtl = (o.dir || window.getComputedStyle(anchor).direction) === 'rtl';
+    var want = o.side || 'bottom', side = want;
+    if (side === 'start') side = rtl ? 'right' : 'left';
+    if (side === 'end') side = rtl ? 'left' : 'right';
+    var room = { top: a.top - gap - pad, bottom: vh - a.bottom - gap - pad, left: a.left - gap - pad, right: vw - a.right - gap - pad };
+    var other = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' }[side];
+    var need = side === 'top' || side === 'bottom' ? h : w;
+    if (room[side] < need && room[other] >= need) side = other;
+    var x, y, turned = false, align = o.align || 'start';
+    var at = function (al) {
+      if (al === 'center') return a.left + a.width / 2 - w / 2;
+      if (al === 'left') return a.left;
+      return (al === 'start') !== rtl ? a.left : a.right - w;
+    };
+    if (side === 'top' || side === 'bottom') {
+      y = side === 'top' ? a.top - gap - h : a.bottom + gap;
+      x = at(align);
+      if ((align === 'start' || align === 'end') && (x < pad || x + w > vw - pad)) {
+        var x2 = at(align === 'start' ? 'end' : 'start');
+        if (x2 >= pad && x2 + w <= vw - pad) { x = x2; turned = true; }
+      }
+    } else {
+      x = side === 'left' ? a.left - gap - w : a.right + gap;
+      y = a.top + a.height / 2 - h / 2;
+    }
+    s.left = Math.round(Math.max(pad, Math.min(x, vw - w - pad))) + 'px';
+    s.top = Math.round(Math.max(pad, Math.min(y, vh - h - pad))) + 'px';
+    if (o.flip) {
+      var flips = (side === 'top' && want === 'bottom' ? 'up' : '') + (turned ? ' inline' : '');
+      flips = flips.replace(/^ /, '');
+      if (flips && o.flip.getAttribute('data-ins-flip') !== flips) o.flip.setAttribute('data-ins-flip', flips);
+      else if (!flips && o.flip.hasAttribute('data-ins-flip')) o.flip.removeAttribute('data-ins-flip');
+    }
+    return side;
+  }
+
+  // Opens `el` on the stack: o.trigger, o.anchor, o.owns (presses that leave it open), o.close(why), o.move (into the trigger's dialog), o.toggle ('class' without the Popover API) and the `place` options.
+  function layerOpen(el, o) {
+    var at = layerAt(el);
+    if (at !== -1) { layerPlace(layers[at]); return layers[at]; }
+    var trigger = o.trigger || o.anchor;
+    layerPrune();
+    for (var i = layers.length - 1; i >= 0; i--) {
+      if (!layers[i] || layers[i].kind === 'modal' || layers[i].el.contains(trigger)) break;
+      layers[i].o.close('other');
+    }
+    if (o.move) {
+      var host = layerHost(trigger);
+      if (el.parentNode !== host) host.appendChild(el);
+    }
+    var entry = { el: el, kind: 'popup', o: o, trigger: trigger, anchor: o.anchor || trigger };
+    entry.clips = clipsOf(entry.anchor);
+    layers.push(entry);
+    popShow(el, o);
+    layerPlace(entry);
+    if (layerRO) { layerRO.observe(el); layerRO.observe(entry.anchor); }
+    return entry;
+  }
+
+  function layerShut(el) {
+    var at = layerAt(el), entry = at === -1 ? null : layers.splice(at, 1)[0];
+    popHide(el, entry && entry.o);
+    if (entry && layerRO) { layerRO.unobserve(el); layerRO.unobserve(entry.anchor); }
+  }
+
+  function layerPlace(l) {
+    if ((hasPopover && l.el.hasAttribute('popover')) || l.o.toggle === 'class') place(l.el, l.anchor, l.o);
+  }
+
+  function layerOwns(l, t) {
+    if (l.el.contains(t) || l.trigger.contains(t)) return true;
+    var owns = l.o.owns || [];
+    for (var i = 0; i < owns.length; i++) if (owns[i] && owns[i].contains(t)) return true;
+    return false;
+  }
+
+  function layerSchedule() {
+    if (layerFrame) return;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].kind === 'popup') { layerFrame = window.requestAnimationFrame(layerTick); return; }
+    }
+  }
+
+  function layerTick() {
+    layerFrame = 0;
+    var open = layers.slice();
+    for (var i = open.length - 1; i >= 0; i--) {
+      var l = open[i];
+      if (l.kind !== 'popup' || layerAt(l.el) === -1) continue;
+      if (layerGone(l)) l.o.close('scroll');
+      else layerPlace(l);
+    }
+  }
+
+  // Where focus goes back to: the control itself, or the summary of the closed menu it sits in.
+  function returnTarget(x) {
+    for (var n = 0; x && n < 8; n++) {
+      if (!root.contains(x)) return null;
+      if (x.getClientRects().length && !x.closest('[inert]')) return x;
+      var pop = x.closest(POP);
+      if (pop && pop.querySelector('summary') === x) pop = pop.parentElement ? pop.parentElement.closest(POP) : null;
+      x = pop ? pop.querySelector('summary') : null;
+    }
+    return null;
+  }
+
+  // `closedby` as HTML defines it; without the attribute a drawer closes on an outside press and a dialog does not.
+  function closedBy(d) {
+    var v = (d.getAttribute('closedby') || '').toLowerCase();
+    if (v === 'any' || v === 'closerequest' || v === 'none') return v;
+    return d.classList.contains('ins-drawer') ? 'any' : 'closerequest';
+  }
+
+  function modalOpened(d) {
+    if (layerAt(d) !== -1) return;
+    var from = d._insFrom;
+    d._insFrom = null;
+    if (!from || d.contains(from)) from = focusBefore && !d.contains(focusBefore) ? focusBefore : null;
+    for (var i = layers.length - 1; i >= 0; i--) {
+      var l = layers[i];
+      if (!l) continue;
+      if (l.kind === 'modal') l.el.setAttribute('data-ins-under', '');
+      else if (!d.contains(l.trigger)) l.o.close('cover');
+    }
+    layers.push({ el: d, kind: 'modal', from: from });
+    if (tipOwner && !d.contains(tipOwner)) hideTip();
+  }
+
+  function modalClosed(d) {
+    var at = layerAt(d);
+    if (at === -1) return;
+    var entry = layers.splice(at, 1)[0];
+    d.removeAttribute('data-ins-under');
+    for (var i = layers.length - 1; i >= 0; i--) {
+      var l = layers[i];
+      if (l && l.kind === 'popup' && (d.contains(l.trigger) || d.contains(l.el))) l.o.close('modal');
+    }
+    var below = topModal();
+    if (below) below.removeAttribute('data-ins-under');
+    if (tipOwner && (d.contains(tipOwner) || (tipEl && d.contains(tipEl)))) hideTip();
+    var toasts = document.querySelector('.ins-toasts');
+    if (toasts && d.contains(toasts)) toastHost(toasts);
+    var ae = document.activeElement;
+    if (!ae || ae === document.body || ae === root || d.contains(ae)) {
+      var to = returnTarget(entry.from);
+      if (to) to.focus();
+    }
+  }
+
+  function onOpenChange(records) {
+    for (var i = 0; i < records.length; i++) {
+      var d = records[i].target;
+      if (d.tagName !== 'DIALOG') continue;
+      var modal = d.open;
+      try { modal = d.open && d.matches(':modal'); } catch (e) { /* no :modal: an open dialog counts */ }
+      if (modal) modalOpened(d);
+      else if (!d.open) modalClosed(d);
+    }
+  }
+  if (window.MutationObserver) {
+    new window.MutationObserver(onOpenChange).observe(root, { attributes: true, attributeFilter: ['open'], subtree: true });
+  }
+
+  // A page that scrolls keeps its scrollbar's room while a modal locks it, so nothing shifts sideways.
+  function gutterCheck() {
+    if (topModal()) return;
+    var on = window.innerWidth - root.clientWidth > 0;
+    if (on !== root.hasAttribute('data-ins-gutter')) root.toggleAttribute('data-ins-gutter', on);
+  }
+
+  function outsideBox(el, event) {
+    var r = el.getBoundingClientRect();
+    return event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom;
+  }
+
+  document.addEventListener('focusin', function (event) {
+    if (event.target !== focusNow) { focusBefore = focusNow; focusNow = event.target; }
+  }, true);
+
+  // A press outside the top pop-ups closes them, down to the one it landed in or the first modal; the press is then spent.
+  document.addEventListener('pointerdown', function (event) {
+    pressSpent = false;
+    gutterCheck();
+    var t = event.target, top = layerTop();
+    pressFrom = top && top.kind === 'modal' && t === top.el && outsideBox(top.el, event) ? top.el : null;
+    for (var i = layers.length - 1; i >= 0; i--) {
+      var l = layers[i];
+      if (!l || l.kind === 'modal' || layerOwns(l, t)) break;
+      l.o.close('outside');
+      pressSpent = true;
+    }
+  }, true);
+
+  document.addEventListener('keydown', function (event) {
+    pressSpent = false;
+    if (event.key === 'Enter' || event.key === ' ' || event.ctrlKey || event.metaKey) gutterCheck();
+  }, true);
+
+  // A spent press does not also light-dismiss the dialog under it, and closedby="none" ignores Escape where the browser does not know the attribute.
+  document.addEventListener('cancel', function (event) {
+    var d = event.target;
+    if (!d || d.tagName !== 'DIALOG') return;
+    if (pressSpent) event.preventDefault();
+    else if (!nativeClosedBy && closedBy(d) === 'none') event.preventDefault();
+  }, true);
+
+  // Light dismiss where the browser does not do it: the top modal, pressed and released on its backdrop.
+  document.addEventListener('click', function (event) {
+    var d = event.target, from = pressFrom, spent = pressSpent;
+    pressFrom = null;
+    pressSpent = false;
+    if (spent || !from || d !== from || !d.open || d !== topModal() || !outsideBox(d, event)) return;
+    if (closedBy(d) !== 'any' || (nativeClosedBy && d.hasAttribute('closedby'))) return;
+    if (d.requestClose) d.requestClose();
+    else d.close();
+  }, false);
+
+  // Open layers follow their anchors, in one frame for all of them, and close once the anchor has scrolled out of sight.
+  window.addEventListener('scroll', function (event) {
+    for (var i = 0; i < layers.length; i++) if (layers[i].kind === 'popup' && layers[i].el.contains(event.target)) return;
+    layerSchedule();
+  }, true);
+  window.addEventListener('resize', layerSchedule, false);
+
+  /* -------------------------------------------------------------- tooltip */
+  /* One tooltip element for the page, in the top layer, moved to whichever control
+     asked. The text is `data-ins-tip`, or the control's own `aria-label` when the
+     attribute is empty — which is the common case: an icon button's tip *is* its
+     name. When the tip says something the name does not, it is also linked as the
+     control's description, so a screen reader hears it too; when it only repeats
+     the name it is not, or it would be announced twice.
+
+     Hover waits 400ms, so sweeping the pointer across a toolbar does not strobe a
+     tip over every button; once one is showing the next appears at once. Keyboard
+     focus shows it immediately. It closes on Escape, on scroll, on a press, and when
+     the pointer leaves both the control and the tip — the last so it can be read. */
+  var TIP = '[data-ins-tip]';
+  var tipEl = null, tipOwner = null, tipTimer = 0, tipWarmUntil = 0;
+
+  function tipLayer() {
+    if (tipEl) return tipEl;
+    tipEl = document.createElement('div');
+    tipEl.className = 'ins-tooltip';
+    tipEl.id = 'ins-tooltip';
+    tipEl.setAttribute('role', 'tooltip');
+    if (hasPopover) tipEl.setAttribute('popover', 'manual');
+    else tipEl.hidden = true;
+    tipEl.addEventListener('pointerenter', function () { clearTimeout(tipTimer); });
+    tipEl.addEventListener('pointerleave', hideTipSoon);
+    document.body.appendChild(tipEl);
+    return tipEl;
+  }
+
+  function describedBy(el, add) {
+    var ids = (el.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+    var at = ids.indexOf('ins-tooltip');
+    if (add && at === -1) ids.push('ins-tooltip');
+    if (!add && at !== -1) ids.splice(at, 1);
+    if (ids.length) el.setAttribute('aria-describedby', ids.join(' '));
+    else el.removeAttribute('aria-describedby');
+  }
+
+  function placeTip(el, tip) {
+    var side = place(tip, el, { side: el.getAttribute('data-ins-tip-side') || 'top', align: 'center', gap: 8 });
+    tip.style.setProperty('--ins-tip-dy', side === 'top' ? '4px' : (side === 'bottom' ? '-4px' : '0px'));
+    tip.setAttribute('data-side', side);
+  }
+
+  function showTip(el) {
+    clearTimeout(tipTimer);
+    var own = el.getAttribute('data-ins-tip');
+    var name = el.getAttribute('aria-label') || '';
+    var text = own || name;
+    if (!text) return;
+    var tip = tipLayer();
+    if (tipOwner && tipOwner !== el) describedBy(tipOwner, false);
+    tipOwner = el;
+    /* textContent, as everywhere else a string reaches the page. */
+    tip.textContent = text;
+    describedBy(el, !!own && own !== name && own !== (el.textContent || '').trim());
+    var host = layerHost(el);
+    if (tip.parentNode !== host) host.appendChild(tip);
+    if (hasPopover) {
+      try { if (!tip.matches(':popover-open')) tip.showPopover(); } catch (e) { /* not connected yet */ }
+    } else {
+      tip.hidden = false;
+      tip.classList.add('is-open');
+    }
+    placeTip(el, tip);
+  }
+
+  function hideTip() {
+    clearTimeout(tipTimer);
+    if (!tipEl || !tipOwner) return;
+    describedBy(tipOwner, false);
+    tipOwner = null;
+    tipWarmUntil = Date.now() + 400;
+    if (hasPopover) {
+      try { tipEl.hidePopover(); } catch (e) { /* already hidden */ }
+    } else {
+      tipEl.classList.remove('is-open');
+      tipEl.hidden = true;
+    }
+  }
+
+  function hideTipSoon() {
+    clearTimeout(tipTimer);
+    tipTimer = setTimeout(hideTip, 120);
+  }
+
+  /* ---------------------------------------------------------------- menus */
+  /* A `.ins-pop` is a working disclosure without any of this. What the script adds
+     is everything a *menu* needs that a <details> does not have: Escape (which the
+     platform does not give it — tested, it does nothing), the arrow keys between
+     items, opening onto the first item, closing when an item is chosen or focus
+     tabs away, one menu open at a time, and turning to open upward or the other way
+     when the viewport's edge is in the way. */
+  var POP = 'details.ins-pop';
+
+  function popItems(pop) {
+    var all = pop.querySelectorAll('.ins-pop-body .ins-pop-item'), out = [];
+    for (var i = 0; i < all.length; i++) {
+      var it = all[i];
+      if (it.disabled || it.getAttribute('aria-disabled') === 'true') continue;
+      if (it.closest(POP) === pop) out.push(it);
+    }
+    return out;
+  }
+
+  function focusItem(items, i) {
+    if (items.length) items[(i + items.length) % items.length].focus();
+  }
+
+  function closePop(pop, refocus) {
+    if (!pop.open) return;
+    pop.open = false;
+    menuHide(pop);
+    var summary = refocus && pop.querySelector('summary');
+    if (summary) summary.focus();
+  }
+
+  function popBody(pop) {
+    for (var c = pop.firstElementChild; c; c = c.nextElementSibling) if (c.classList.contains('ins-pop-body')) return c;
+    return null;
+  }
+
+  // Opening in the same task, not on the toggle event that follows, so the first item can take focus at once.
+  function popOpen(pop) {
+    pop.open = true;
+    menuShow(pop);
+  }
+
+  // The body joins the top layer, beside its summary: no scrolling box clips it and none grows to hold it.
+  function menuShow(pop) {
+    var body = popBody(pop), summary = pop.querySelector('summary');
+    if (!body || !summary) return;
+    if (hasPopover && !body.hasAttribute('popover')) body.setAttribute('popover', 'manual');
+    layerOpen(body, {
+      trigger: summary, anchor: summary, flip: pop,
+      align: pop.classList.contains('ins-pop--end') ? 'end' : 'start',
+      close: function (why) { closePop(pop, why === 'escape'); }
+    });
+  }
+
+  function menuHide(pop) {
+    var body = popBody(pop);
+    if (body) layerShut(body);
+    pop.removeAttribute('data-ins-flip');
+  }
+
+  function onPopKey(event) {
+    var pop = event.target.closest ? event.target.closest(POP) : null;
+    if (!pop) return;
+    var summary = pop.querySelector('summary');
+    var onSummary = event.target === summary;
+    var items = popItems(pop);
+    var at = items.indexOf(document.activeElement);
+
+    switch (event.key) {
+      case 'Escape':
+        if (!pop.open) return;
+        /* Prevented, so a menu inside a dialog closes the menu and not the dialog. */
+        event.preventDefault();
+        closePop(pop, true);
+        return;
+      case 'ArrowDown':
+      case 'ArrowUp':
+        if (!items.length) return;
+        event.preventDefault();
+        if (!pop.open) popOpen(pop);
+        if (event.key === 'ArrowDown') focusItem(items, onSummary ? 0 : at + 1);
+        else focusItem(items, onSummary ? items.length - 1 : at - 1);
+        return;
+      case 'Home':
+      case 'End':
+        if (onSummary || !pop.open || !items.length) return;
+        event.preventDefault();
+        focusItem(items, event.key === 'Home' ? 0 : items.length - 1);
+        return;
+      case 'Enter':
+      case ' ':
+        /* Opening from the keyboard lands on the first item, as a menu button does.
+           Closing is left to the platform. */
+        if (!onSummary || pop.open || !items.length) return;
+        event.preventDefault();
+        popOpen(pop);
+        focusItem(items, 0);
+        return;
+    }
+  }
+
+  /* ----------------------------------------------------------- validation */
+  /* In a form marked `data-ins-validate`, the browser's own constraint validation
+     does the checking and the field's `.ins-error` does the telling. An empty
+     message is filled with the browser's `validationMessage` — already in the
+     visitor's own language, which is most of the reason to use it — and a message
+     the page wrote is left as written. The browser's bubble is suppressed for the
+     fields that have a message of their own, and the first of them takes focus,
+     which the browser stops doing once its own report is cancelled. */
+  function fieldMessage(control) {
+    var field = control.closest && control.closest('.ins-field');
+    if (!field) return null;
+    for (var i = 0; i < field.children.length; i++) {
+      if (field.children[i].classList.contains('ins-error')) return field.children[i];
+    }
+    return null;
+  }
+
+  var firstInvalid = null;
+
+  /* An event a page's own listeners will see, as if the person had done it. */
+  function fire(el, type) {
+    var event;
+    try {
+      event = new Event(type, { bubbles: true });
+    } catch (e) {                                  /* very old WebView */
+      event = document.createEvent('Event');
+      event.initEvent(type, true, false);
+    }
+    el.dispatchEvent(event);
+  }
+
+  /* The few words the library itself has to say — on a calendar, in a confirmation.
+     Arabic and English, chosen by the nearest `lang`; anything else gets English,
+     and every one of them can be overridden where it is used. */
+  var STRINGS = {
+    ar: {
+      ok: 'تأكيد', cancel: 'إلغاء', choose: 'اختر تاريخًا', calendar: 'التقويم',
+      prevMonth: 'الشهر السابق', nextMonth: 'الشهر التالي', month: 'الشهر', year: 'السنة',
+      today: 'اليوم', clear: 'مسح', badDate: 'اكتب تاريخًا صحيحًا.', calendarSystem: 'نظام التقويم',
+      early: 'اختر {date} أو ما بعده.', late: 'اختر {date} أو ما قبله.',
+      selected: 'المحدد: {n}', remove: 'إزالة', badTime: 'اكتب وقتًا صحيحًا.',
+      pickStart: 'اختر البداية', pickEnd: 'اختر النهاية', done: 'تم', chooseTime: 'اختر وقتًا',
+      hour: 'الساعة', minute: 'الدقيقة', period: 'الفترة',
+      words: function (n, max) { return n + '/' + max + ' ' + (max % 100 >= 3 && max % 100 <= 10 ? 'كلمات' : 'كلمة'); },
+      wordsFree: function (n) { return arCount(n, ['كلمة واحدة', 'كلمتان', 'كلمات', 'كلمة', 'كلمة']); },
+      tooManyWords: function (max) { return 'لا تتجاوز ' + arCount(max, ['كلمة واحدة', 'كلمتين', 'كلمات', 'كلمة', 'كلمة']) + '.'; },
+      days: function (d) { return arCount(d, ['يوم واحد', 'يومان', 'أيام', 'يومًا', 'يوم']); },
+      saving: 'جارٍ الحفظ…', saved: 'حُفظ', saveError: 'تعذر الحفظ', resize: 'تغيير حجم اللوحين'
+    },
+    en: {
+      ok: 'OK', cancel: 'Cancel', choose: 'Choose a date', calendar: 'Calendar',
+      prevMonth: 'Previous month', nextMonth: 'Next month', month: 'Month', year: 'Year',
+      today: 'Today', clear: 'Clear', badDate: 'Enter a valid date.', calendarSystem: 'Calendar system',
+      early: 'Choose {date} or later.', late: 'Choose {date} or earlier.',
+      selected: '{n} selected', remove: 'Remove', badTime: 'Enter a valid time.',
+      pickStart: 'Choose the start', pickEnd: 'Choose the end', done: 'Done', chooseTime: 'Choose a time',
+      hour: 'Hour', minute: 'Minute', period: 'AM/PM',
+      words: function (n, max) { return n + '/' + max + (max === 1 ? ' word' : ' words'); },
+      wordsFree: function (n) { return n + (n === 1 ? ' word' : ' words'); },
+      tooManyWords: function (max) { return 'Use ' + max + (max === 1 ? ' word' : ' words') + ' or fewer.'; },
+      days: function (d) { return d + 'd'; },
+      saving: 'Saving…', saved: 'Saved', saveError: 'Could not save', resize: 'Resize the panes'
+    }
+  };
+
+  // Arabic noun after a number; w = [one, two, 3–10, 11–99, otherwise].
+  function arCount(n, w) {
+    var r = n % 100;
+    return n === 1 ? w[0] : n === 2 ? w[1] : n + ' ' + (r >= 3 && r <= 10 ? w[2] : r >= 11 ? w[3] : w[4]);
+  }
+
+  function langOf(el) {
+    var own = el && el.getAttribute && el.getAttribute('data-ins-locale');
+    if (own) return own;
+    var host = (el && el.closest && el.closest('[lang]')) || root;
+    return host.getAttribute('lang') || window.navigator.language || 'en';
+  }
+
+  function strings(el) {
+    return STRINGS[langOf(el).slice(0, 2).toLowerCase()] || STRINGS.en;
+  }
+
+  /* --------------------------------------------------------------- toggle */
+  function toggleButton(el) {
+    var on = el.getAttribute('aria-pressed') !== 'true';
+    el.setAttribute('aria-pressed', String(on));
+    emit('ins:toggle', { el: el, pressed: on });
+    return on;
+  }
+
+  /* ---------------------------------------------------------------- range */
+  /* The fill's edge has to sit under the thumb's centre, and the thumb's centre
+     does not travel the whole track: it stops half a thumb short of each end. So the
+     stop is the percentage plus a correction of up to half a thumb — without it the
+     fill runs ahead of the thumb near one end and behind it near the other. */
+  var THUMB_REM = 1.25;
+
+  function rangeFill(input) {
+    var min = parseFloat(input.min), max = parseFloat(input.max), value = parseFloat(input.value);
+    if (isNaN(min)) min = 0;
+    if (isNaN(max)) max = 100;
+    var pct = max > min ? Math.max(0, Math.min(100, (value - min) / (max - min) * 100)) : 0;
+    var nudge = (0.5 - pct / 100) * THUMB_REM;
+    input.style.setProperty('--ins-fill', 'calc(' + pct.toFixed(3) + '% + ' + nudge.toFixed(4) + 'rem)');
+  }
+
+  /* -------------------------------------------------------- number stepper */
+  function spinInput(btn) {
+    var group = btn.closest('.ins-input-group') || btn.parentNode;
+    return group ? group.querySelector('input') : null;
+  }
+
+  function syncSpin(input) {
+    var group = input.closest('.ins-input-group') || input.parentNode;
+    var value = parseFloat(input.value), min = parseFloat(input.min), max = parseFloat(input.max);
+    var btns = group.querySelectorAll('.ins-spin');
+    for (var i = 0; i < btns.length; i++) {
+      var down = btns[i].getAttribute('data-ins-spin') === 'down';
+      btns[i].disabled = input.disabled || (!isNaN(value) && (down ? (!isNaN(min) && value <= min) : (!isNaN(max) && value >= max)));
+    }
+  }
+
+  /* The number rolls like an odometer on a layer over the field, since an input's text cannot move. */
+  function spinRoll(input, from, to, up) {
+    var group = input.parentNode;
+    if (from === to || motionless() || input.offsetParent !== group) return;
+    var old = group.querySelector('.ins-spin-roll');
+    if (old) old.parentNode.removeChild(old);
+    var cs = getComputedStyle(input);
+    var roll = el('span', 'ins-spin-roll' + (up ? '' : ' ins-spin-roll--down'));
+    roll.setAttribute('aria-hidden', 'true');
+    var st = roll.style;
+    st.left = input.offsetLeft + 'px';
+    st.top = input.offsetTop + 'px';
+    st.inlineSize = input.offsetWidth + 'px';
+    st.blockSize = input.offsetHeight + 'px';
+    st.font = cs.font;
+    st.color = cs.color;
+    roll.appendChild(el('span', 'ins-spin-out', from));
+    var next = el('span', 'ins-spin-in', to);
+    roll.appendChild(next);
+    group.appendChild(roll);
+    input.classList.add('ins-spin-rolling');
+    next.addEventListener('animationend', function () {
+      if (roll.parentNode) roll.parentNode.removeChild(roll);
+      if (!group.querySelector('.ins-spin-roll')) input.classList.remove('ins-spin-rolling');
+    });
+  }
+
+  function spin(btn) {
+    var input = spinInput(btn);
+    if (!input || input.disabled || input.readOnly) return null;
+    var from = input.value;
+    try {
+      if (btn.getAttribute('data-ins-spin') === 'down') input.stepDown(); else input.stepUp();
+    } catch (e) {
+      return null;                                 /* not a number field */
+    }
+    spinRoll(input, from, input.value, btn.getAttribute('data-ins-spin') !== 'down');
+    fire(input, 'input');
+    fire(input, 'change');
+    syncSpin(input);
+    return input.value;
+  }
+
+  /* ---------------------------------------------------------- autocomplete */
+  /* The matching. Lower case, and then the Arabic that a person types differently
+     from how a database stored it made to meet in the middle: canonical
+     decomposition splits every hamza off its seat (أ إ آ into ا, ؤ into و, ئ into
+     ي) and the combining-mark range then drops it along with every other haraka and
+     the tatweel; ة is read as ه and ى as ي; Arabic-Indic and Persian digits are read
+     as Latin ones. The same decomposition takes the accents off Latin letters, so
+     "Beyrouth" finds "Beyrouth" however it was typed. */
+  function norm(text) {
+    var s = String(text || '').toLowerCase();
+    if (s.normalize) s = s.normalize('NFD');
+    return s
+      .replace(/[\u0300-\u036f\u064b-\u065f\u0670\u0640]/g, '')
+      .replace(/\u0629/g, '\u0647')
+      .replace(/\u0649/g, '\u064a')
+      .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+      .replace(/[\u06f0-\u06f9]/g, function (d) { return String(d.charCodeAt(0) - 0x06f0); })
+      .trim();
+  }
+
+  var COMBO = '.ins-combo';
+
+  function comboInput(combo) { return combo.querySelector('input:not([type="hidden"])'); }
+  function comboList(combo) { return combo.querySelector('.ins-combo-list'); }
+
+  function comboOptions(combo, visible) {
+    var all = combo.querySelectorAll('.ins-combo-option'), out = [];
+    for (var i = 0; i < all.length; i++) {
+      if (visible && (all[i].hidden || all[i].getAttribute('aria-disabled') === 'true')) continue;
+      out.push(all[i]);
+    }
+    return out;
+  }
+
+  function comboActive(combo) { return combo.querySelector('.ins-combo-option.is-active'); }
+
+  function comboActivate(combo, opt) {
+    var input = comboInput(combo), prev = comboActive(combo);
+    if (prev) prev.classList.remove('is-active');
+    if (opt) {
+      opt.classList.add('is-active');
+      input.setAttribute('aria-activedescendant', opt.id);
+      if (opt.scrollIntoView) opt.scrollIntoView({ block: 'nearest' });
+    } else {
+      input.removeAttribute('aria-activedescendant');
+    }
+  }
+
+  function comboOpen(combo, open) {
+    var list = comboList(combo), input = comboInput(combo);
+    if (!list || !input) return;
+    if (open) {
+      list.setAttribute('data-ins-open', '');
+      input.setAttribute('aria-expanded', 'true');
+      if (hasPopover && !list.hasAttribute('popover')) list.setAttribute('popover', 'manual');
+      layerOpen(list, {
+        trigger: input, anchor: combo, owns: [combo], match: true, flip: combo,
+        close: function () { comboOpen(combo, false); }
+      });
+      /* The current choice, in view: in a list of forty-eight times, the one set. A
+         time list with nothing set opens at the hour it is now. */
+      var sel = list.querySelector('.ins-combo-option[aria-selected="true"]:not([hidden])');
+      if (sel) comboActivate(combo, sel);
+    } else {
+      list.removeAttribute('data-ins-open');
+      input.setAttribute('aria-expanded', 'false');
+      comboActivate(combo, null);
+      layerShut(list);
+      combo.removeAttribute('data-ins-flip');
+    }
+  }
+
+  function comboFilter(combo) {
+    var q = norm(comboInput(combo).value), any = false;
+    var opts = comboOptions(combo, false);
+    /* The field still showing the option already chosen is not a search for it: the
+       whole list comes back, so a person reopening it can pick another. */
+    var chosen = combo.querySelector('.ins-combo-option[aria-selected="true"]');
+    if (chosen && q === norm(chosen.getAttribute('data-label') || chosen.textContent)) q = '';
+    for (var i = 0; i < opts.length; i++) {
+      var hit = !q || norm(opts[i].textContent).indexOf(q) !== -1 ||
+                norm(opts[i].getAttribute('data-value')).indexOf(q) !== -1;
+      /* A multi-select's chosen options are chips now, not choices. */
+      if (opts[i].hasAttribute('data-ins-chosen')) hit = false;
+      opts[i].hidden = !hit;
+      if (hit) any = true;
+    }
+    var empty = combo.querySelector('.ins-combo-empty');
+    if (empty) empty.hidden = any;
+    return any || !!empty;
+  }
+
+  function comboChoose(combo, opt) {
+    var input = comboInput(combo);
+    var label = opt.getAttribute('data-label') || opt.textContent.trim();
+    var value = opt.hasAttribute('data-value') ? opt.getAttribute('data-value') : label;
+    /* A multi-select adds a chip and stays open for the next one. */
+    if (combo.classList.contains('ins-tags')) {
+      tagsAdd(combo, value, label);
+      input.value = '';
+      comboActivate(combo, null);
+      comboOpen(combo, comboFilter(combo));
+      return;
+    }
+    input.value = label;
+    var opts = comboOptions(combo, false);
+    for (var i = 0; i < opts.length; i++) opts[i].setAttribute('aria-selected', String(opts[i] === opt));
+    var hidden = combo.querySelector('input[type="hidden"]');
+    if (hidden) hidden.value = value;
+    comboOpen(combo, false);
+    fire(input, 'change');
+    emit('ins:combo', { el: combo, value: value, label: label, option: opt });
+  }
+
+  function onComboKey(event) {
+    var input = event.target;
+    var combo = input.closest ? input.closest(COMBO) : null;
+    if (!combo || input !== comboInput(combo)) return;
+    var open = comboList(combo) && comboList(combo).hasAttribute('data-ins-open');
+    var opts = comboOptions(combo, true);
+    var at = opts.indexOf(comboActive(combo));
+    switch (event.key) {
+      case 'ArrowDown':
+      case 'ArrowUp':
+        event.preventDefault();
+        /* Opening lands on the current choice, when there is one, rather than past it. */
+        if (!open) { comboFilter(combo); comboOpen(combo, true); if (event.altKey || comboActive(combo)) return; }
+        if (!opts.length) return;
+        if (event.key === 'ArrowDown') comboActivate(combo, opts[(at + 1) % opts.length]);
+        else comboActivate(combo, opts[at <= 0 ? opts.length - 1 : at - 1]);
+        return;
+      case 'Enter':
+        /* Prevented only when it chooses something: an Enter with nothing highlighted
+           is the person submitting the form, and that is theirs to do. */
+        if (open && at !== -1) { event.preventDefault(); comboChoose(combo, opts[at]); }
+        return;
+      case 'Escape':
+        if (open) { event.preventDefault(); comboOpen(combo, false); }
+        else if (input.value) { event.preventDefault(); input.value = ''; comboFilter(combo); fire(input, 'input'); }
+        return;
+      case 'Tab':
+        if (open) comboOpen(combo, false);
+        return;
+    }
+  }
+
+  /* ----------------------------------------------------------------- date */
+  /* A date is a local calendar day, not an instant, so it is kept as one: a Date at
+     local midnight, built from its three numbers and moved by adding to the day of
+     the month. Nothing here goes near a timezone offset, which is how a date picker
+     ends up choosing the day before for everybody west of UTC. */
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function isoOf(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+  function day(y, m, d) { return new Date(y, m, d); }
+  function today() { var t = new Date(); return day(t.getFullYear(), t.getMonth(), t.getDate()); }
+  function sameDay(a, b) { return !!a && !!b && a.getTime() === b.getTime(); }
+  function addDays(d, n) { return day(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+
+  function parseIso(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+    if (!m) return null;
+    var d = day(+m[1], +m[2] - 1, +m[3]);
+    return d.getMonth() === +m[2] - 1 ? d : null;
+  }
+
+  /* ----------------------------------------------------- calendar systems */
+  /* The picker shows days in a calendar system, and keeps them as Gregorian days
+     whatever it shows. A day button's `data-date`, the range, `min` and `max`, and
+     what the form sends are all Gregorian ISO in every calendar; only how a date is
+     labelled, how the grid is cut into months and how a typed date is read change.
+
+     So a calendar is four small answers, and Gregorian is the one built in:
+
+       intl               the Intl calendar id, for every label — month and day
+                          names, the year, the field's text
+       parts(d)           { y, m, d } of a local-midnight Date, m from 0
+       fromParts(y, m, d) that Date back; m may run past 11 or below 0, and d past
+                          the end of the month, the way `new Date()` allows
+       monthLength(y, m)
+       label              { ar, en } for the switch in the calendar's footer
+       parse(text, loc)   optional: a typed date in this calendar — a Date, null for
+                          "not a date", or undefined to fall back to the numbers
+
+     Others register with `Insiyab.calendar(name, calendar)`; insiyab-hijri.js adds
+     `hijri` (Umm al-Qura) and `hijri-civil`. A field asks for one with
+     `data-ins-calendar`, or a whole page does on <html>. And every label passes the
+     calendar to Intl explicitly, Gregorian included: `ar-SA` defaults to Umm al-Qura,
+     and a Gregorian grid under Hijri month names is what leaving it implicit gave. */
+  var GREGORY = {
+    intl: 'gregory',
+    label: { ar: 'ميلادي', en: 'Gregorian' },
+    parts: function (d) { return { y: d.getFullYear(), m: d.getMonth(), d: d.getDate() }; },
+    fromParts: function (y, m, d) { return day(y, m, d); },
+    monthLength: function (y, m) { return day(y, m + 1, 0).getDate(); }
+  };
+  var CALENDARS = { gregory: GREGORY };
+  var warnedCalendar = {};
+
+  function registerCalendar(name, cal) {
+    if (cal === undefined) return CALENDARS[name] || null;
+    CALENDARS[name] = cal;
+    /* Registered after the page was built — a plugin loaded late, or async. Its
+       fields were written in Gregorian meanwhile, so they are written again. */
+    var fields = document.querySelectorAll('[data-ins-date-ready]');
+    for (var i = 0; i < fields.length; i++) {
+      if (homeCalendarName(fields[i]) !== name) continue;
+      var d = dateOf(fields[i]);
+      if (d) fields[i].value = dateText(fields[i], d);
+    }
+    return cal;
+  }
+
+  function homeCalendarName(input) {
+    var own = input.getAttribute('data-ins-calendar');
+    return own || root.getAttribute('data-ins-calendar') || 'gregory';
+  }
+
+  /* The field's own calendar. One that is asked for and not registered falls back
+     to Gregorian, said once in the console: a Hijri page whose plugin failed to load
+     should still be a working date field, not a broken one. */
+  function homeCalendar(input) {
+    var name = homeCalendarName(input);
+    if (CALENDARS[name]) return CALENDARS[name];
+    if (!warnedCalendar[name] && window.console) {
+      warnedCalendar[name] = true;
+      window.console.warn('[insiyab] no calendar called "' + name + '" is registered — showing Gregorian. Load its plugin (insiyab-hijri.js for hijri) after insiyab.js.');
+    }
+    return GREGORY;
+  }
+
+  /* The calendar the field is shown in right now: its own, or Gregorian when the
+     person has flipped the footer switch. */
+  function viewCalendar(input) {
+    return input.getAttribute('data-ins-calendar-view') === 'gregory' ? GREGORY : homeCalendar(input);
+  }
+
+  function sysFormat(cal, locale, options) {
+    options.calendar = cal.intl;
+    return dateFormat(locale, options);
+  }
+
+  function sameMonthIn(cal, a, b) {
+    var p = cal.parts(a), q = cal.parts(b);
+    return p.y === q.y && p.m === q.m;
+  }
+
+  function monthStartIn(cal, d) {
+    var p = cal.parts(d);
+    return cal.fromParts(p.y, p.m, 1);
+  }
+
+  /* A month on, or back, in the calendar on screen — the same day of the month where
+     it exists, the last day where it does not. */
+  function addMonthsIn(cal, d, n) {
+    var p = cal.parts(d), y = p.y, m = p.m + n;
+    y += Math.floor(m / 12);
+    m = ((m % 12) + 12) % 12;
+    return cal.fromParts(y, m, Math.min(p.d, cal.monthLength(y, m)));
+  }
+
+  /* Latin digits unless the page asked for others. Every figure in this library is
+     set in Inter's Latin numerals — the money, the tables, the stat tiles — and a
+     calendar in Arabic-Indic digits beside them would be the one thing on the page in
+     a different hand. `lang="ar-u-nu-arab"` asks for them explicitly. */
+  function dateFormat(locale, options) {
+    var opts = {};
+    for (var k in options) if (Object.prototype.hasOwnProperty.call(options, k)) opts[k] = options[k];
+    var own = null;
+    try { own = new Intl.Locale(locale).numberingSystem; } catch (e) { /* no Intl.Locale */ }
+    if (!own) opts.numberingSystem = 'latn';
+    try { return new Intl.DateTimeFormat(locale, opts); }
+    catch (e) { return new Intl.DateTimeFormat('en', opts); }
+  }
+
+  /* Where the week starts, as a JavaScript day number (Sunday is 0). The locale
+     knows, where the engine will say; otherwise Arabic and Persian start on Saturday,
+     the United States on Sunday, and nearly everywhere else on Monday. */
+  function weekStart(locale) {
+    try {
+      var loc = new Intl.Locale(locale);
+      var info = loc.getWeekInfo ? loc.getWeekInfo() : loc.weekInfo;
+      if (info && info.firstDay) return info.firstDay % 7;
+    } catch (e) { /* no Intl.Locale */ }
+    var lang = locale.toLowerCase();
+    if (/^(ar|fa)\b/.test(lang)) return 6;
+    if (/^en-us\b|^he\b|^ja\b|^ko\b/.test(lang)) return 0;
+    return 1;
+  }
+
+  /* Is day written before month in this locale's numeric dates? Asked of the locale
+     rather than assumed, because "3/4" is the third of April or the fourth of March
+     depending on who typed it. */
+  function monthFirst(locale) {
+    try {
+      var parts = dateFormat(locale, { day: 'numeric', month: 'numeric', year: 'numeric' }).formatToParts(day(2001, 10, 22));
+      for (var i = 0; i < parts.length; i++) {
+        if (parts[i].type === 'day') return false;
+        if (parts[i].type === 'month') return true;
+      }
+    } catch (e) { /* no formatToParts */ }
+    return false;
+  }
+
+  function toLatin(s) {
+    return String(s || '')
+      .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+      .replace(/[\u06f0-\u06f9]/g, function (d) { return String(d.charCodeAt(0) - 0x06f0); });
+  }
+
+  /* What a person typed: an ISO date, or three numbers in the locale's own order, in
+     either set of digits, read in the calendar on screen. Anything else is not
+     guessed at.
+
+     Another calendar reads the text first, ISO-shaped or not: `1448-09-01` typed
+     into a Hijri field is the first of Ramadan, not a day in the fifteenth century.
+     The Hijri reader passes a year past 1700 back as Gregorian, so `2026-09-24`
+     still means what it says there. */
+  function parseTyped(text, input) {
+    var locale = dateLocale(input), cal = viewCalendar(input);
+    var s = toLatin(text).trim();
+    var iso = parseIso(s);
+    if (iso && cal === GREGORY) return iso;
+    if (cal.parse) {
+      var own = cal.parse(s, locale);
+      if (own !== undefined) return own;
+    }
+    if (iso) return iso;
+    var parts = s.split(/[^0-9]+/).filter(Boolean);
+    if (parts.length !== 3) return null;
+    var y, m, d;
+    if (parts[0].length === 4) { y = +parts[0]; m = +parts[1]; d = +parts[2]; }
+    else if (monthFirst(locale)) { m = +parts[0]; d = +parts[1]; y = +parts[2]; }
+    else { d = +parts[0]; m = +parts[1]; y = +parts[2]; }
+    if (cal === GREGORY && y < 100) y += 2000;
+    if (m < 1 || m > 12 || d < 1) return null;
+    var out = cal.fromParts(y, m - 1, d), back = out && cal.parts(out);
+    return back && back.y === y && back.m === m - 1 && back.d === d ? out : null;
+  }
+
+  function dateValue(input) { return resolve(input.getAttribute('data-ins-date-value')); }
+  function dateOf(input) { var h = dateValue(input); return h ? parseIso(h.value.slice(0, 10)) : null; }
+  function dateLocale(input) { return langOf(input); }
+  function formatDay(input, d) {
+    return sysFormat(viewCalendar(input), dateLocale(input), { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
+  }
+  function dateMode(input) { return input.getAttribute('data-ins-date-mode') || ''; }
+  function endValue(input) { return resolve(input.getAttribute('data-ins-date-end-value')); }
+  function endOf(input) { var h = endValue(input); return h ? parseIso(h.value) : null; }
+  function timeOf(input) {
+    var h = dateValue(input);
+    return input.getAttribute('data-ins-at') || (h && h.value.slice(11, 16)) || '';
+  }
+  function timeStep(input) { return Math.max(1, +input.getAttribute('data-ins-step') || 30); }
+  function timeDefault(input) {
+    var step = timeStep(input), now = new Date();
+    var m = (Math.ceil((now.getHours() * 60 + now.getMinutes()) / step) * step) % 1440;
+    return pad2(Math.floor(m / 60)) + ':' + pad2(m % 60);
+  }
+
+  /* What the field shows: a day, a span of days, or a day and a time. */
+  function dateText(input, d) {
+    if (!d) return '';
+    var mode = dateMode(input), sys = viewCalendar(input), loc = dateLocale(input);
+    if (mode === 'range') {
+      var to = endOf(input);
+      if (!to) return formatDay(input, d) + ' – ';
+      var f = sysFormat(sys, loc, { day: 'numeric', month: 'long', year: 'numeric' });
+      return f.formatRange ? f.formatRange(d, to) : f.format(d) + ' – ' + f.format(to);
+    }
+    if (mode === 'datetime') {
+      var t = timeOf(input);
+      if (!t) return formatDay(input, d);
+      var p = t.split(':');
+      return sysFormat(sys, loc, { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit' })
+        .format(new Date(d.getFullYear(), d.getMonth(), d.getDate(), +p[0], +p[1]));
+    }
+    return formatDay(input, d);
+  }
+
+  /* The bounds that apply to a field right now: its own `min` and `max`, and for the
+     end of a range, its start — the end cannot come before it.
+
+     Only the end is narrowed, never the start. The first version capped the start
+     at the end as well, and that made the obvious correction impossible: to move a
+     range a week later you pick the new start first, and with the start capped at
+     the old end the new start was greyed out. Now any start can be picked, and one
+     that falls after the end clears the end and opens it (`calChoose`). */
+  function dateBounds(input) {
+    var min = parseIso(input.getAttribute('data-ins-min'));
+    var max = parseIso(input.getAttribute('data-ins-max'));
+    var start = resolve(input.getAttribute('data-ins-date-start'));
+    var from = start && dateOf(start);
+    if (from && (!min || from > min)) min = from;
+    return { min: min, max: max };
+  }
+
+  function dateRange(input) {
+    var start = resolve(input.getAttribute('data-ins-date-start'));
+    var end = resolve(input.getAttribute('data-ins-date-end'));
+    if (start) return { from: dateOf(start), to: dateOf(input) };
+    if (end) return { from: dateOf(input), to: dateOf(end) };
+    return null;
+  }
+
+  function checkDate(input, d) {
+    var t = strings(input), b = dateBounds(input), msg = '';
+    var to = dateMode(input) === 'range' ? endOf(input) : null;
+    if (d === null) msg = t.badDate;
+    else if (d && b.min && d < b.min) msg = t.early.replace('{date}', formatDay(input, b.min));
+    else if (d && b.max && d > b.max) msg = t.late.replace('{date}', formatDay(input, b.max));
+    else if (to && b.max && to > b.max) msg = t.late.replace('{date}', formatDay(input, b.max));
+    input.setCustomValidity(msg);
+    return !msg;
+  }
+
+  /* `to` is a range's end: left out, the end stays unless it now falls before the start. */
+  function setDate(input, d, quiet, to) {
+    var hidden = dateValue(input);
+    if (!hidden) return;
+    var mode = dateMode(input), end = mode === 'range' ? endValue(input) : null;
+    var value = d ? isoOf(d) : '';
+    if (mode === 'datetime' && d) {
+      var t = timeOf(input) || timeDefault(input);
+      input.setAttribute('data-ins-at', t);
+      value += 'T' + t;
+    }
+    var endIso = end ? (to === undefined ? end.value : (to ? isoOf(to) : '')) : '';
+    if (end && (!d || (endIso && endIso < value))) endIso = '';
+    var changed = hidden.value !== value || (end && end.value !== endIso);
+    hidden.value = value;
+    if (end) end.value = endIso;
+    input.value = dateText(input, d);
+    checkDate(input, d || undefined);
+    if (!quiet && changed) {
+      fire(input, 'input');
+      fire(input, 'change');
+      emit('ins:date', { input: input, value: value, date: d, end: end ? endIso : undefined });
+    }
+  }
+
+  /* Read what was typed, when the person leaves the field or presses Enter. Text
+     that is still exactly the formatted value is the value, untouched. */
+  function commitTyped(input) {
+    var current = dateOf(input);
+    var text = input.value.trim();
+    if (current && text === dateText(input, current).trim()) return;
+    if (!text) { setDate(input, null); return; }
+    var mode = dateMode(input);
+    if (mode === 'range') {
+      var parts = text.split(/\s+[-–—]\s+|\s*[–—]\s*/);
+      var a = parseTyped(parts[0], input), b = parts[1] ? parseTyped(parts[1], input) : undefined;
+      if (a && b !== null && (!b || b >= a)) setDate(input, a, false, b || null);
+      else checkDate(input, null);
+      return;
+    }
+    if (mode === 'datetime') {
+      var latin = toLatin(text);
+      var tm = latin.match(/\d{1,2}\s*[:.٫]\s*\d{2}(\s*(am|pm|a\.m\.|p\.m\.|صباحًا|صباحا|مساءً|مساء|ص|م))?/i);
+      var at = tm ? parseTime(tm[0]) : null;
+      var day = parseTyped(tm ? latin.replace(tm[0], '').replace(/(في|at|،|,)\s*$/i, '').trim() : latin, input);
+      if (day) { if (at) input.setAttribute('data-ins-at', at); setDate(input, day); }
+      else checkDate(input, null);
+      return;
+    }
+    var d = parseTyped(text, input);
+    if (d) setDate(input, d);
+    else checkDate(input, null);
+  }
+
+  /* The calendar, one for the page. */
+  var calEl = null, calFor = null, calView = null, calFocus = null, calPick = 'start';
+
+  function calLayer() {
+    if (calEl) return calEl;
+    calEl = document.createElement('div');
+    calEl.className = 'ins-cal';
+    calEl.setAttribute('role', 'dialog');
+    if (hasPopover) calEl.setAttribute('popover', 'manual');
+    else calEl.hidden = true;
+    calEl.addEventListener('keydown', onCalKey);
+    calEl.addEventListener('click', onCalClick);
+    calEl.addEventListener('change', onCalChange);
+    calEl.addEventListener('mouseover', onCalOver);
+    document.body.appendChild(calEl);
+    return calEl;
+  }
+
+  function calButton(input) {
+    var group = input.closest('.ins-input-group') || input.parentNode;
+    return group.querySelector('.ins-date-btn');
+  }
+
+  function el(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function renderCal() {
+    var cal = calLayer(), input = calFor, t = strings(input), locale = dateLocale(input);
+    var sys = viewCalendar(input), vp = sys.parts(calView);
+    var y = vp.y, m = vp.m;
+    var selected = dateOf(input), now = today(), bounds = dateBounds(input), mode = dateMode(input);
+    var range = mode === 'range' ? { from: selected, to: endOf(input) } : dateRange(input);
+    var fd = weekStart(locale);
+
+    var dual = !!range && !!(window.matchMedia && window.matchMedia('(min-width: 45rem)').matches);
+    var after = dual ? addMonthsIn(sys, sys.fromParts(y, m, 1), 1) : null;
+    cal.textContent = '';
+    cal.classList.toggle('ins-cal--datetime', mode === 'datetime');
+    cal.classList.toggle('ins-cal--dual', dual);
+    cal.setAttribute('aria-label', t.calendar);
+    cal.setAttribute('lang', locale);
+    cal.dir = window.getComputedStyle(input).direction;
+
+    var head = el('div', 'ins-cal-head');
+    var prev = el('button', 'ins-cal-nav ins-cal-nav--prev');
+    prev.type = 'button'; prev.setAttribute('aria-label', t.prevMonth); prev.setAttribute('data-ins-cal', 'prev');
+    var next = el('button', 'ins-cal-nav ins-cal-nav--next');
+    next.type = 'button'; next.setAttribute('aria-label', t.nextMonth); next.setAttribute('data-ins-cal', 'next');
+
+    var title = el('div', 'ins-cal-title');
+    var months = el('select', 'ins-select ins-select--sm');
+    months.setAttribute('aria-label', t.month); months.setAttribute('data-ins-cal', 'month');
+    var monthName = sysFormat(sys, locale, { month: 'long' });
+    for (var i = 0; i < 12; i++) {
+      var o = el('option', '', monthName.format(sys.fromParts(y, i, 1)));
+      o.value = String(i);
+      if (i === m) o.selected = true;
+      months.appendChild(o);
+    }
+    var years = el('select', 'ins-select ins-select--sm');
+    years.setAttribute('aria-label', t.year); years.setAttribute('data-ins-cal', 'year');
+    var yearName = sysFormat(sys, locale, { year: 'numeric' });
+    var nowY = sys.parts(now).y;
+    var y0 = bounds.min ? sys.parts(bounds.min).y : Math.min(y, nowY) - 100;
+    var y1 = bounds.max ? sys.parts(bounds.max).y : Math.max(y, nowY) + 20;
+    for (var yy = y1; yy >= y0; yy--) {
+      var oy = el('option', '', yearName.format(sys.fromParts(yy, 0, 1)));
+      oy.value = String(yy);
+      if (yy === y) oy.selected = true;
+      years.appendChild(oy);
+    }
+    title.appendChild(months);
+    title.appendChild(years);
+    head.appendChild(prev);
+    head.appendChild(title);
+    if (dual) head.appendChild(el('div', 'ins-cal-title ins-cal-title--next', sysFormat(sys, locale, { month: 'long', year: 'numeric' }).format(after)));
+    head.appendChild(next);
+    cal.appendChild(head);
+
+    var pane = dual ? cal.appendChild(el('div', 'ins-cal-months')) : cal;
+    var shown = dual ? [sys.fromParts(y, m, 1), after] : [sys.fromParts(y, m, 1)];
+    for (var g = 0; g < shown.length; g++) {
+    var grid = el('table', 'ins-cal-grid');
+    grid.setAttribute('role', 'grid');
+    var thead = el('thead'), hr = el('tr');
+    var narrow = dateFormat(locale, { weekday: 'narrow' }), long = dateFormat(locale, { weekday: 'long' });
+    for (var c = 0; c < 7; c++) {
+      var wd = day(2023, 0, 1 + (fd + c) % 7);        /* 1 Jan 2023 was a Sunday */
+      var th = el('th', '', narrow.format(wd));
+      th.scope = 'col';
+      th.abbr = long.format(wd);
+      hr.appendChild(th);
+    }
+    thead.appendChild(hr);
+    grid.appendChild(thead);
+
+    var tbody = el('tbody');
+    var first = shown[g];
+    var cell = addDays(first, -((first.getDay() - fd + 7) % 7));
+    var dayNum = sysFormat(sys, locale, { day: 'numeric' });
+    var full = sysFormat(sys, locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    for (var r = 0; r < 6; r++) {
+      var tr = el('tr');
+      for (var k = 0; k < 7; k++) {
+        var td = el('td');
+        if (dual && !sameMonthIn(sys, cell, first)) { tr.appendChild(td); cell = addDays(cell, 1); continue; }
+        var btn = el('button', 'ins-cal-day', dayNum.format(cell));
+        btn.type = 'button';
+        btn.setAttribute('data-date', isoOf(cell));
+        btn.setAttribute('aria-label', full.format(cell));
+        btn.tabIndex = sameDay(cell, calFocus) ? 0 : -1;
+        if (!sameMonthIn(sys, cell, first)) btn.classList.add('is-outside');
+        if (sameDay(cell, now)) btn.setAttribute('aria-current', 'date');
+        if (sameDay(cell, selected)) btn.setAttribute('aria-selected', 'true');
+        if ((bounds.min && cell < bounds.min) || (bounds.max && cell > bounds.max)) btn.setAttribute('aria-disabled', 'true');
+        if (range && range.from && range.to && cell >= range.from && cell <= range.to) {
+          td.classList.add('is-in-range');
+          if (sameDay(cell, range.from)) td.classList.add('is-range-start');
+          if (sameDay(cell, range.to)) td.classList.add('is-range-end');
+        }
+        if (range && !sameDay(cell, selected) && (sameDay(cell, range.from) || sameDay(cell, range.to))) {
+          btn.classList.add('is-range-edge');
+        }
+        td.appendChild(btn);
+        tr.appendChild(td);
+        cell = addDays(cell, 1);
+      }
+      tbody.appendChild(tr);
+    }
+    grid.appendChild(tbody);
+    pane.appendChild(grid);
+    calCorners(grid, 'is-in-range', 'is-rc-');
+    }
+
+    var drum = null;
+    if (mode === 'datetime') {
+      var side = el('div', 'ins-cal-time');
+      drum = drumBuild(input, function (v) {
+        if (!calFor) return;
+        calFor.setAttribute('data-ins-at', v);
+        if (dateOf(calFor)) setDate(calFor, dateOf(calFor));
+      });
+      side.appendChild(drum);
+      cal.appendChild(side);
+    }
+
+    var foot = el('div', 'ins-cal-foot');
+    var todayBtn = el('button', 'ins-btn ins-btn--bare ins-btn--sm', t.today);
+    todayBtn.type = 'button'; todayBtn.setAttribute('data-ins-cal', 'today');
+    foot.appendChild(todayBtn);
+    if (mode === 'range') foot.appendChild(el('span', 'ins-cal-hint', calPick === 'end' ? t.pickEnd : t.pickStart));
+    /* A field in another calendar can be flipped to Gregorian and back, for the
+       person who thinks in the other one. Only then: a Gregorian field has nothing
+       to switch to. The field's text follows the calendar on screen. */
+    var home = homeCalendar(input);
+    if (home !== GREGORY) {
+      var lang = langOf(input).slice(0, 2).toLowerCase();
+      var sw = el('div', 'ins-seg ins-cal-switch');
+      sw.setAttribute('role', 'group');
+      sw.setAttribute('aria-label', t.calendarSystem);
+      var pair = [[homeCalendarName(input), home], ['gregory', GREGORY]];
+      for (var s = 0; s < 2; s++) {
+        var opt = el('button', sys === pair[s][1] ? 'is-active' : '', pair[s][1].label[lang] || pair[s][1].label.en);
+        opt.type = 'button';
+        opt.setAttribute('data-ins-cal', 'system');
+        opt.setAttribute('data-value', pair[s][0]);
+        opt.setAttribute('aria-pressed', String(sys === pair[s][1]));
+        sw.appendChild(opt);
+      }
+      foot.appendChild(sw);
+    }
+    if (!input.required) {
+      var clear = el('button', 'ins-btn ins-btn--bare ins-btn--sm', t.clear);
+      clear.type = 'button'; clear.setAttribute('data-ins-cal', 'clear');
+      foot.appendChild(clear);
+    }
+    if (mode === 'datetime') {
+      var done = el('button', 'ins-btn ins-btn--primary ins-btn--sm', t.done);
+      done.type = 'button'; done.setAttribute('data-ins-cal', 'done');
+      foot.appendChild(done);
+    }
+    cal.appendChild(foot);
+    if (drum) drumSet(drum, timeOf(input) || timeDefault(input));
+  }
+
+  var CAL_TURN = 560, CAL_EASE = 'cubic-bezier(.22, 1, .36, 1)', calGhosts = [];
+
+  function calSnap() {
+    var out = {}, days = calEl.querySelectorAll('.ins-cal-day[data-date]');
+    for (var i = 0; i < days.length; i++) {
+      out[days[i].getAttribute('data-date')] = { el: days[i], at: days[i].getBoundingClientRect(), col: days[i].parentNode.cellIndex || 0, name: days[i].__insName || days[i].textContent };
+    }
+    return out;
+  }
+
+  // A day turns over like a card mid-glide, and its other calendar's number is on the back.
+  function calFlip(day, from, dx, dy, wait) {
+    var name = day.textContent, a = dy < 0 ? -90 : 90, tilt = ' perspective(20rem) rotateX(';
+    day.__insName = name;
+    day.textContent = from;
+    day.animate([
+      { transform: 'translate(' + dx + 'px, ' + dy + 'px)' + tilt + '0deg)', easing: 'cubic-bezier(.5, 0, .75, 0)' },
+      { transform: 'translate(' + dx / 2 + 'px, ' + dy / 2 + 'px)' + tilt + a + 'deg)', offset: .5 },
+      { transform: 'translate(' + dx / 2 + 'px, ' + dy / 2 + 'px)' + tilt + -a + 'deg)', offset: .5, easing: 'cubic-bezier(.25, 1, .5, 1)' },
+      { transform: 'translate(0px, 0px)' + tilt + '0deg)' }
+    ], { duration: CAL_TURN, delay: wait, fill: 'backwards' });
+    window.setTimeout(function () { day.textContent = name; day.__insName = null; }, wait + CAL_TURN / 2);
+  }
+
+  function calDrop(node) { return function () { if (node.parentNode) node.parentNode.removeChild(node); }; }
+
+  // Switching calendars: the same days glide to their rows in the other calendar, in a wave across the columns.
+  function calTurn(before) {
+    var seg = calEl.querySelector('.ins-cal-switch');
+    if (seg) segFly(seg, seg.querySelector(':scope > :not(.is-active)'), seg.querySelector(':scope > .is-active'));
+    if (motionless() || !Element.prototype.animate) return;
+    while (calGhosts.length) calDrop(calGhosts.pop())();
+    var days = calEl.querySelectorAll('.ins-cal-day[data-date]'), seen = {}, sx = 0, sy = 0, i, at, was;
+    for (i = 0; i < days.length; i++) {
+      was = before[days[i].getAttribute('data-date')];
+      if (was) { at = days[i].getBoundingClientRect(); sx = was.at.left - at.left; sy = was.at.top - at.top; break; }
+    }
+    for (i = 0; i < days.length; i++) {
+      var day = days[i], iso = day.getAttribute('data-date'), wait = (day.parentNode.cellIndex || 0) * 30;
+      was = before[iso];
+      seen[iso] = true;
+      if (was) {
+        at = day.getBoundingClientRect();
+        calFlip(day, was.name, was.at.left - at.left, was.at.top - at.top, wait);
+      } else {
+        day.animate([{ transform: 'translate(' + sx + 'px, ' + sy + 'px)', opacity: 0 }, { opacity: 0, offset: .4 }, { transform: 'none', opacity: 1 }],
+          { duration: CAL_TURN, delay: wait, easing: CAL_EASE, fill: 'backwards' });
+      }
+    }
+    var box = calEl.getBoundingClientRect();
+    for (var key in before) {
+      if (seen[key]) continue;
+      var r = before[key].at, ghost = before[key].el.cloneNode(true);
+      ghost.removeAttribute('data-date');
+      ghost.tabIndex = -1;
+      ghost.inert = true;
+      ghost.setAttribute('aria-hidden', 'true');
+      ghost.style.cssText = 'position:absolute;margin:0;pointer-events:none;left:' + (r.left - box.left - calEl.clientLeft) + 'px;top:' +
+        (r.top - box.top - calEl.clientTop) + 'px;width:' + r.width + 'px;height:' + r.height + 'px;max-block-size:none';
+      calEl.appendChild(ghost);
+      calGhosts.push(ghost);
+      ghost.animate([{ transform: 'none', opacity: 1 }, { opacity: 0, offset: .45 }, { transform: 'translate(' + -sx + 'px, ' + -sy + 'px)', opacity: 0 }],
+        { duration: CAL_TURN, delay: before[key].col * 30, easing: CAL_EASE, fill: 'both' }).onfinish = calDrop(ghost);
+    }
+    var titles = calEl.querySelectorAll('.ins-cal-title');
+    for (i = 0; i < titles.length; i++) {
+      titles[i].animate([{ opacity: 0, transform: 'translateY(-.375rem)', filter: 'blur(2px)' }, { opacity: 1, transform: 'none', filter: 'none' }],
+        { duration: 360, easing: CAL_EASE });
+    }
+  }
+
+  /* Below the field, aligned to its leading edge — the right edge on an Arabic page
+     — and above it when there is no room below. */
+  function focusCalDay() {
+    var btn = calEl && calEl.querySelector('.ins-cal-day[tabindex="0"]');
+    if (btn) btn.focus();
+  }
+
+  function openCal(input, focusGrid) {
+    if (calFor && calFor !== input) closeCal(false);
+    if (timeFor) closeTime(false);
+    calFor = input;
+    calPick = dateMode(input) === 'range' && dateOf(input) && !endOf(input) ? 'end' : 'start';
+    var start = dateOf(input) || today();
+    var b = dateBounds(input);
+    if (b.min && start < b.min) start = b.min;
+    if (b.max && start > b.max) start = b.max;
+    calFocus = start;
+    calView = monthStartIn(viewCalendar(input), start);
+    renderCal();
+    layerOpen(calEl, {
+      trigger: input, anchor: input.closest('.ins-input-group') || input, owns: [calButton(input)],
+      move: true, toggle: 'class', dir: calEl.dir,
+      close: function (why) { closeCal(why === 'escape'); }
+    });
+    var drum = calEl.querySelector('.ins-drum');
+    if (drum) drumSet(drum, timeOf(input) || timeDefault(input));
+    var btn = calButton(input);
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+    if (focusGrid) focusCalDay();
+  }
+
+  function closeCal(refocus) {
+    if (!calEl || !calFor) return;
+    var input = calFor;
+    calFor = null;
+    layerShut(calEl);
+    var btn = calButton(input);
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    if (refocus) input.focus();
+  }
+
+  function calMove(d) {
+    calFocus = d;
+    var sys = viewCalendar(calFor);
+    var dual = calEl.classList.contains('ins-cal--dual');
+    if (!sameMonthIn(sys, d, calView) && !(dual && sameMonthIn(sys, d, addMonthsIn(sys, calView, 1)))) {
+      calView = monthStartIn(sys, d);
+      renderCal();
+    } else {
+      var btns = calEl.querySelectorAll('.ins-cal-day');
+      for (var i = 0; i < btns.length; i++) btns[i].tabIndex = btns[i].getAttribute('data-date') === isoOf(d) ? 0 : -1;
+    }
+    focusCalDay();
+    calPreview(d);
+  }
+
+  // Rounds only the band's outer corners: a corner of a day is round when the band does not go on past either of its sides.
+  function calCorners(grid, on, pre) {
+    var rows = grid.tBodies[0].rows, m = [], r, c;
+    for (r = 0; r < rows.length; r++) {
+      m.push([]);
+      for (c = 0; c < rows[r].cells.length; c++) m[r].push(rows[r].cells[c].classList.contains(on));
+    }
+    var at = function (y, x) { return y >= 0 && y < m.length && x >= 0 && x < m[y].length && m[y][x]; };
+    for (r = 0; r < rows.length; r++) {
+      for (c = 0; c < rows[r].cells.length; c++) {
+        var td = rows[r].cells[c], x = m[r][c];
+        td.classList.toggle(pre + 'ss', x && !at(r, c - 1) && !at(r - 1, c));
+        td.classList.toggle(pre + 'se', x && !at(r, c + 1) && !at(r - 1, c));
+        td.classList.toggle(pre + 'es', x && !at(r, c - 1) && !at(r + 1, c));
+        td.classList.toggle(pre + 'ee', x && !at(r, c + 1) && !at(r + 1, c));
+      }
+    }
+  }
+
+  /* While a range waits for its end, the band follows the pointer or the focused day. */
+  function calPreview(d) {
+    if (!calFor || dateMode(calFor) !== 'range' || calPick !== 'end') return;
+    var from = dateOf(calFor);
+    if (!from) return;
+    var tds = calEl.querySelectorAll('.ins-cal-grid td');
+    for (var i = 0; i < tds.length; i++) {
+      if (!tds[i].firstChild) continue;
+      var c = parseIso(tds[i].firstChild.getAttribute('data-date'));
+      var on = !!d && d >= from && c >= from && c <= d;
+      tds[i].classList.toggle('is-preview', on);
+      tds[i].classList.toggle('is-preview-start', on && sameDay(c, from));
+      tds[i].classList.toggle('is-preview-end', on && sameDay(c, d));
+    }
+    var grids = calEl.querySelectorAll('.ins-cal-grid');
+    for (var g = 0; g < grids.length; g++) calCorners(grids[g], 'is-preview', 'is-pc-');
+  }
+
+  function onCalOver(event) {
+    var b = event.target.closest ? event.target.closest('.ins-cal-day') : null;
+    if (b && b.getAttribute('aria-disabled') !== 'true') calPreview(parseIso(b.getAttribute('data-date')));
+  }
+
+  function calChoose(d) {
+    var input = calFor, mode = dateMode(input);
+    if (mode === 'range') {
+      var from = dateOf(input);
+      if (calPick === 'end' && from && d && d >= from) { setDate(input, from, false, d); closeCal(true); return; }
+      setDate(input, d, false, null);
+      if (!d) { closeCal(true); return; }
+      calPick = 'end';
+      calFocus = d;
+      renderCal();
+      focusCalDay();
+      return;
+    }
+    if (mode === 'datetime') {
+      setDate(input, d);
+      if (!d) { closeCal(true); return; }
+      calFocus = d;
+      renderCal();
+      focusCalDay();
+      return;
+    }
+    setDate(input, d);
+    closeCal(true);
+    /* The start of a range hands straight on to its end, when the end is empty or
+       now falls before it. */
+    var end = resolve(input.getAttribute('data-ins-date-end'));
+    if (d && end) {
+      var to = dateOf(end);
+      if (!to || to < d) { if (to) setDate(end, null); openCal(end, true); }
+    }
+  }
+
+  function onCalKey(event) {
+    var target = event.target;
+    if (event.key === 'Escape') { event.preventDefault(); closeCal(true); return; }
+    if (event.key === 'Enter' && target.closest('.ins-drum')) { event.preventDefault(); closeCal(true); return; }
+    if (!target.classList.contains('ins-cal-day')) return;
+    var d = parseIso(target.getAttribute('data-date'));
+    var rtl = calEl.dir === 'rtl';
+    var next = null;
+    switch (event.key) {
+      case 'ArrowRight': next = addDays(d, rtl ? -1 : 1); break;
+      case 'ArrowLeft': next = addDays(d, rtl ? 1 : -1); break;
+      case 'ArrowDown': next = addDays(d, 7); break;
+      case 'ArrowUp': next = addDays(d, -7); break;
+      case 'Home': next = addDays(d, -((d.getDay() - weekStart(dateLocale(calFor)) + 7) % 7)); break;
+      case 'End': next = addDays(d, 6 - ((d.getDay() - weekStart(dateLocale(calFor)) + 7) % 7)); break;
+      case 'PageUp': next = addMonthsIn(viewCalendar(calFor), d, event.shiftKey ? -12 : -1); break;
+      case 'PageDown': next = addMonthsIn(viewCalendar(calFor), d, event.shiftKey ? 12 : 1); break;
+      default: return;
+    }
+    event.preventDefault();
+    calMove(next);
+  }
+
+  function onCalClick(event) {
+    var t = event.target.closest ? event.target.closest('button') : null;
+    if (!t || !calFor) return;
+    if (t.classList.contains('ins-cal-day')) {
+      if (t.getAttribute('aria-disabled') === 'true') return;
+      calChoose(parseIso(t.getAttribute('data-date')));
+      return;
+    }
+    var act = t.getAttribute('data-ins-cal');
+    if (act === 'prev' || act === 'next') {
+      var sys = viewCalendar(calFor);
+      calFocus = addMonthsIn(sys, calFocus, act === 'prev' ? -1 : 1);
+      calView = monthStartIn(sys, calFocus);
+      renderCal();
+      var again = calEl.querySelector('[data-ins-cal="' + act + '"]');
+      if (again) again.focus();
+    } else if (act === 'system') {
+      /* Stopped here: the switch is drawn as a segmented control, and the page's
+         own segmented-control handler has nothing to do with it. */
+      event.stopPropagation();
+      if (t.classList.contains('is-active')) return;
+      var input = calFor, want = t.getAttribute('data-value'), before = calSnap();
+      if (want === 'gregory') input.setAttribute('data-ins-calendar-view', 'gregory');
+      else input.removeAttribute('data-ins-calendar-view');
+      calView = monthStartIn(viewCalendar(input), calFocus);
+      renderCal();
+      calTurn(before);
+      /* The field says the same day in the calendar now on screen, and so do its
+         min and max messages. */
+      var chosen = dateOf(input);
+      if (chosen) { input.value = dateText(input, chosen); checkDate(input, chosen); }
+      emit('ins:calendar', { input: input, calendar: want });
+      var back = calEl.querySelector('[data-ins-cal="system"][data-value="' + want + '"]');
+      if (back) back.focus();
+    } else if (act === 'today') {
+      var now = today(), b = dateBounds(calFor);
+      if ((!b.min || now >= b.min) && (!b.max || now <= b.max)) calChoose(now);
+      else calMove(now);
+    } else if (act === 'clear') {
+      setDate(calFor, null);
+      closeCal(true);
+    } else if (act === 'done') {
+      closeCal(true);
+    }
+  }
+
+  function onCalChange(event) {
+    var sel = event.target, act = sel.getAttribute('data-ins-cal');
+    if (act !== 'month' && act !== 'year') return;
+    var sys = viewCalendar(calFor), vp = sys.parts(calView);
+    var y = act === 'year' ? +sel.value : vp.y;
+    var m = act === 'month' ? +sel.value : vp.m;
+    calFocus = sys.fromParts(y, m, Math.min(sys.parts(calFocus).d, sys.monthLength(y, m)));
+    calView = sys.fromParts(y, m, 1);
+    renderCal();
+    var again = calEl.querySelector('[data-ins-cal="' + act + '"]');
+    if (again) again.focus();
+  }
+
+  /* --------------------------------------------------------------- wizard */
+  /* Every panel of this wizard, in order, and the ones that are steps right now: a
+     panel with `hidden` is skipped, so a flow whose length the server decides (two
+     steps for one account, three for another) only has to hide what it does not
+     need. */
+  function wizardAll(w) {
+    var all = w.querySelectorAll('.ins-wizard-panel'), out = [];
+    for (var i = 0; i < all.length; i++) if (all[i].closest('.ins-wizard') === w) out.push(all[i]);
+    return out;
+  }
+
+  function wizardPanels(w) {
+    return wizardAll(w).filter(function (p) { return !p.hidden; });
+  }
+
+  function wizardIndex(w) {
+    var panels = wizardPanels(w);
+    for (var i = 0; i < panels.length; i++) if (panels[i].classList.contains('is-active')) return i;
+    return 0;
+  }
+
+  /* Check the panel being left with the browser's own validation. In a
+     `data-ins-validate` form every invalid field is reported, so each shows its own
+     message; elsewhere only the first, because the browser's bubble can only point at
+     one field at a time. */
+  function panelValid(panel) {
+    var form = panel.closest('form');
+    var inline = !!(form && form.hasAttribute('data-ins-validate'));
+    var controls = panel.querySelectorAll('input, select, textarea'), bad = null;
+    for (var i = 0; i < controls.length; i++) {
+      var c = controls[i];
+      if (!c.willValidate || c.validity.valid) continue;
+      if (!bad) bad = c;
+      if (inline) c.reportValidity();
+    }
+    if (bad && !inline) bad.reportValidity();
+    return !bad;
+  }
+
+  /* The optional viewport around the panels, `.ins-wizard-body`. With it the wizard
+     changes height smoothly and can slide; without it the panels still animate. */
+  function wizardBody(w) {
+    var b = w.querySelector('.ins-wizard-body');
+    return b && b.closest('.ins-wizard') === w ? b : null;
+  }
+
+  /* Where focus goes in a step that has just arrived: its `autofocus` field, so a
+     login step can be typed into at once, or else the panel itself, so a screen
+     reader starts reading the new step instead of staying on a button that has
+     changed underneath it. */
+  function wizardFocus(panel) {
+    var field = panel.querySelector('[autofocus]');
+    (field || panel).focus();
+  }
+
+  /* A running move is settled at once before another starts, so two quick clicks
+     never leave two panels half-way. */
+  function wizardSettle(w) {
+    if (w.__insWizMove) w.__insWizMove.finish();
+  }
+
+  /* The move from one step to the next. Two ways, chosen on the wizard:
+
+     - Pane (the default, for a form): the new step fades in from 16px away while the
+       viewport, if there is one, takes its height at the same time. The old step is
+       simply gone.
+     - Slide (`data-ins-wizard-motion="slide"`, for a login card): the steps sit side
+       by side and the whole row slides a step's width, the old one fading out as the
+       new one fades in. The card is never smaller than the step it holds: when the
+       new step is taller it grows first and then slides, when it is shorter it slides
+       first and then shrinks.
+
+     Either way the next step comes from the end of the line, the left on an Arabic
+     page, as the next page of a book does, and going back reverses it. Reduced motion
+     and effects-off swap in place. `landed` runs once the move is over, at once when
+     nothing moves. */
+  function wizardMove(w, from, to, back, before, landed) {
+    var body = wizardBody(w);
+    var slide = body && w.getAttribute('data-ins-wizard-motion') === 'slide';
+    if (!from || !to || from === to || motionless() || !to.animate) { landed(); return; }
+    var rtl = window.getComputedStyle(w).direction === 'rtl';
+    var side = (rtl ? -1 : 1) * (back ? -1 : 1);
+    var anims = [];
+    var done = false;
+    var move = { finish: function () { end(); } };
+    var end = function () {
+      if (done) return;
+      done = true;
+      anims.forEach(function (a) { try { a.cancel(); } catch (e) {} });
+      from.removeAttribute('data-ins-leaving');
+      to.removeAttribute('data-ins-entering');
+      if (body) body.removeAttribute('data-ins-moving');
+      if (w.__insWizMove === move) w.__insWizMove = null;
+      landed();
+    };
+    w.__insWizMove = move;
+
+    if (!slide) {
+      var enter = to.animate([
+        { opacity: 0, transform: 'translateX(' + (16 * side) + 'px)' },
+        { opacity: 1, transform: 'none' }
+      ], { duration: 250, easing: 'cubic-bezier(.22, 1, .36, 1)' });
+      anims.push(enter);
+      if (body) {
+        var h = body.offsetHeight;
+        if (Math.abs(h - before) > 1) {
+          body.setAttribute('data-ins-moving', '');
+          anims.push(body.animate([{ blockSize: before + 'px' }, { blockSize: h + 'px' }],
+            { duration: 250, easing: 'cubic-bezier(.22, 1, .36, 1)' }));
+        }
+      }
+      enter.onfinish = end;
+      enter.oncancel = end;
+      return;
+    }
+
+    /* Slide: the old step stays in the flow, the new one is laid beside it. The states
+       are attributes, not classes, so a framework that renders the panels' classes
+       (the React wrapper) cannot wipe them half-way through a slide. */
+    from.setAttribute('data-ins-leaving', '');
+    to.setAttribute('data-ins-entering', '');
+    body.setAttribute('data-ins-moving', '');
+    var gap = 24;
+    var span = to.offsetWidth + gap;
+    var after = to.offsetHeight + (body.offsetHeight - from.offsetHeight);
+    var ease = 'cubic-bezier(.4, 0, .2, 1)';
+    var grow = after > before;
+    /* Each stage starts the next only if the move has not been settled meanwhile. */
+    var run = function (list, next) {
+      if (done) return;
+      var last = null;
+      list.forEach(function (spec) { last = spec[0].animate(spec[1], spec[2]); anims.push(last); });
+      last.onfinish = function () { if (!done) next(); };
+    };
+    var resize = function (next) {
+      if (Math.abs(after - before) <= 1) { next(); return; }
+      run([[body, [{ blockSize: before + 'px' }, { blockSize: after + 'px' }], { duration: 320, easing: ease, fill: 'forwards' }]], next);
+    };
+    var hold = function () {
+      anims.push(body.animate([{ blockSize: before + 'px' }, { blockSize: before + 'px' }], { duration: 1, fill: 'forwards' }));
+    };
+    var shift = function (next) {
+      var opts = { duration: 320, easing: ease, fill: 'forwards' };
+      run([
+        [from, [{ transform: 'none', opacity: 1 }, { opacity: 0, offset: .7 }, { transform: 'translateX(' + (-span * side) + 'px)', opacity: 0 }], opts],
+        [to, [{ transform: 'translateX(' + (span * side) + 'px)', opacity: 0 }, { opacity: 1, offset: .7 }, { transform: 'none', opacity: 1 }], opts]
+      ], next);
+    };
+    /* The entering step waits off to the side until its turn. */
+    anims.push(to.animate([{ transform: 'translateX(' + (span * side) + 'px)', opacity: 0 }], { duration: 1, fill: 'forwards' }));
+    if (grow) resize(function () { shift(end); });
+    else { hold(); shift(function () { resize(end); }); }
+  }
+
+  function wizardGo(target, index, opts) {
+    var w = resolve(target);
+    if (w && !w.classList.contains('ins-wizard')) w = w.closest('.ins-wizard');
+    if (!w) return null;
+    var o = opts || {};
+    wizardSettle(w);
+    var panels = wizardPanels(w), cur = wizardIndex(w);
+    if (!panels.length) return null;
+    var to = Math.max(0, Math.min(panels.length - 1, index));
+    if (o.validate && to > cur) {
+      if (!panelValid(panels[cur])) return cur;
+      /* Asked first, for a step that has to reach a server before it is done: a
+         listener that cancels this owns the move. The wizard waits, marked busy, until
+         the page says `Insiyab.wizard(w, 'next')` or `Insiyab.wizard(w, 'stay')`. */
+      var ask = emit('ins:wizard-leave', { el: w, step: cur, to: to, panel: panels[cur] }, true);
+      if (ask.defaultPrevented) {
+        w.setAttribute('aria-busy', 'true');
+        return cur;
+      }
+    }
+    w.removeAttribute('aria-busy');
+    var body = wizardBody(w);
+    var before = body ? body.offsetHeight : 0;
+    var from = panels[cur];
+    for (var i = 0; i < panels.length; i++) panels[i].classList.toggle('is-active', i === to);
+    /* A step list keeps one item per panel, hidden panels included: an item whose
+       panel is hidden goes with it. Each list is counted on its own. */
+    var all = wizardAll(w), at = all.indexOf(panels[to]);
+    var lists = w.querySelectorAll('.ins-steps');
+    for (var l = 0; l < lists.length; l++) {
+      if (lists[l].closest('.ins-wizard') !== w) continue;
+      var steps = lists[l].querySelectorAll('.ins-steps-item');
+      for (var j = 0; j < steps.length; j++) {
+        steps[j].hidden = !!(all[j] && all[j].hidden);
+        steps[j].classList.toggle('is-done', j < at);
+        if (j === at) steps[j].setAttribute('aria-current', 'step');
+        else steps[j].removeAttribute('aria-current');
+      }
+    }
+    w.toggleAttribute('data-ins-first', to === 0);
+    w.toggleAttribute('data-ins-last', to === panels.length - 1);
+    /* An earlier answer said again on a later step: `data-ins-echo="#phone"` shows
+       that field's value, so the person sees which number the code went to. */
+    var echoes = w.querySelectorAll('[data-ins-echo]');
+    for (var k = 0; k < echoes.length; k++) {
+      var src = document.querySelector(echoes[k].getAttribute('data-ins-echo'));
+      if (src && 'value' in src) echoes[k].textContent = src.value;
+    }
+    var arrived = panels[to];
+    var slides = o.focus && from !== arrived && body && w.getAttribute('data-ins-wizard-motion') === 'slide' && !motionless();
+    if (o.focus && !slides) wizardFocus(arrived);
+    wizardMove(w, from, arrived, to < cur, before, function () {
+      if (slides && arrived.classList.contains('is-active')) wizardFocus(arrived);
+    });
+    if (!o.quiet) emit('ins:wizard', { el: w, step: to, panel: arrived });
+    return to;
+  }
+
+  /* ----------------------------------------------------------------- chip */
+  /* The value a chip stands for: its hidden input's, else `data-value`, else its
+     text. */
+  function chipValue(chip) {
+    var h = chip.querySelector('input[type="hidden"]');
+    if (h) return h.value;
+    return chip.hasAttribute('data-value') ? chip.getAttribute('data-value') : chip.textContent.trim();
+  }
+
+  /* A chip's × takes it away, unless `ins:chip-remove` is cancelled. Focus moves to
+     the next chip's × (or the previous one's, or the field's box), so a keyboard can
+     clear several in a row. */
+  function chipRemove(chip) {
+    if (!chip || !chip.parentNode) return false;
+    var value = chipValue(chip);
+    var ask = emit('ins:chip-remove', { el: chip, value: value }, true);
+    if (ask.defaultPrevented) return false;
+    var tags = chip.closest('.ins-tags');
+    var near = chip.nextElementSibling, far = chip.previousElementSibling;
+    while (near && near.hasAttribute('data-ins-leaving')) near = near.nextElementSibling;
+    while (far && far.hasAttribute('data-ins-leaving')) far = far.previousElementSibling;
+    var next = (near && near.querySelector('.ins-chip-x')) || (far && far.querySelector && far.querySelector('.ins-chip-x')) ||
+      (tags && tagsInput(tags));
+    var hadFocus = chip.contains(document.activeElement);
+    chipLeave(chip);
+    if (tags) tagsDropped(tags, value);
+    if (hadFocus && next) next.focus();
+    return true;
+  }
+
+  /* Chips arrive and leave in motion; the neighbours glide to their new places (FLIP). */
+  var CHIP_EASE = 'cubic-bezier(.22, 1, .36, 1)';
+
+  function chipNeighbours(parent, except) {
+    var out = [];
+    for (var i = 0; i < parent.children.length; i++) {
+      var c = parent.children[i];
+      if (c === except || c.hasAttribute('data-ins-leaving') || c.classList.contains('ins-combo-list') || !c.offsetParent) continue;
+      out.push({ el: c, at: c.getBoundingClientRect() });
+    }
+    return out;
+  }
+
+  function chipGlide(list) {
+    for (var i = 0; i < list.length; i++) {
+      var now = list[i].el.getBoundingClientRect();
+      var dx = list[i].at.left - now.left, dy = list[i].at.top - now.top;
+      if (!dx && !dy) continue;
+      list[i].el.animate([{ transform: 'translate(' + dx + 'px, ' + dy + 'px)' }, { transform: 'none' }],
+        { duration: 360, easing: CHIP_EASE });
+    }
+  }
+
+  function chipMoves() { return !motionless() && !!Element.prototype.animate; }
+
+  function chipEnter(parent, chip, before) {
+    var list = chipMoves() ? chipNeighbours(parent, null) : null;
+    parent.insertBefore(chip, before);
+    if (!list) return;
+    chipGlide(list);
+    chip.animate([
+      { opacity: 0, transform: 'translateY(-10px) scale(.4) rotate(-8deg)', filter: 'blur(6px)' },
+      { opacity: 1, transform: 'none', filter: 'blur(0)' }
+    ], { duration: 460, easing: 'cubic-bezier(.34, 1.56, .64, 1)' });
+  }
+
+  function chipLeave(chip) {
+    var parent = chip.parentNode;
+    var values = chip.querySelectorAll('input');
+    for (var i = values.length - 1; i >= 0; i--) values[i].parentNode.removeChild(values[i]);
+    if (!chipMoves() || chip.offsetParent !== parent) { parent.removeChild(chip); return; }
+    var list = chipNeighbours(parent, chip);
+    var x = chip.offsetLeft, y = chip.offsetTop, w = chip.offsetWidth;
+    chip.setAttribute('data-ins-leaving', '');
+    chip.setAttribute('aria-hidden', 'true');
+    var st = chip.style;
+    st.position = 'absolute';
+    st.left = x + 'px';
+    st.top = y + 'px';
+    st.inlineSize = w + 'px';
+    st.margin = '0';
+    st.pointerEvents = 'none';
+    chipGlide(list);
+    chip.animate([
+      { opacity: 1, transform: 'none', filter: 'blur(0)' },
+      { opacity: 0, transform: 'translateY(12px) scale(.55) rotate(10deg)', filter: 'blur(6px)' }
+    ], { duration: 300, easing: 'cubic-bezier(.4, 0, 1, 1)', fill: 'forwards' }).onfinish = function () {
+      if (chip.parentNode) chip.parentNode.removeChild(chip);
+    };
+  }
+
+  /* ----------------------------------------------------------------- tags */
+  function tagsInput(tags) { return tags.querySelector('.ins-tags-input') || tags.querySelector('input:not([type="hidden"])'); }
+
+  function tagsChips(tags) {
+    var out = [];
+    for (var i = 0; i < tags.children.length; i++) {
+      var c = tags.children[i];
+      if (c.classList.contains('ins-chip') && !c.hasAttribute('data-ins-leaving')) out.push(c);
+    }
+    return out;
+  }
+
+  function tagsValues(tags) { return tagsChips(tags).map(chipValue); }
+
+  function tagsOption(tags, value) {
+    var opts = tags.querySelectorAll('.ins-combo-option');
+    for (var i = 0; i < opts.length; i++) {
+      var v = opts[i].hasAttribute('data-value') ? opts[i].getAttribute('data-value') : opts[i].textContent.trim();
+      if (v === value) return opts[i];
+    }
+    return null;
+  }
+
+  /* A value as a chip, before the box. Not twice, and not past `data-ins-max`. */
+  function tagsAdd(tags, value, label) {
+    value = String(value || '').trim();
+    if (!value || tagsValues(tags).indexOf(value) !== -1) return false;
+    var max = parseInt(tags.getAttribute('data-ins-max'), 10);
+    if (max && tagsChips(tags).length >= max) return false;
+    label = label || value;
+    var chip = el('span', 'ins-chip', label);
+    var x = el('button', 'ins-chip-x');
+    x.type = 'button';
+    x.setAttribute('aria-label', strings(tags).remove + ' ' + label);
+    chip.appendChild(x);
+    var name = tags.getAttribute('data-ins-name');
+    if (name) {
+      var h = el('input');
+      h.type = 'hidden';
+      h.name = name;
+      h.value = value;
+      chip.appendChild(h);
+    } else {
+      chip.setAttribute('data-value', value);
+    }
+    chipEnter(tags, chip, tagsInput(tags));
+    var opt = tagsOption(tags, value);
+    if (opt) { opt.setAttribute('data-ins-chosen', ''); opt.setAttribute('aria-selected', 'true'); }
+    emit('ins:tags', { el: tags, values: tagsValues(tags), added: value });
+    return true;
+  }
+
+  function tagsDropped(tags, value) {
+    var opt = tagsOption(tags, value);
+    if (opt) { opt.removeAttribute('data-ins-chosen'); opt.setAttribute('aria-selected', 'false'); }
+    emit('ins:tags', { el: tags, values: tagsValues(tags), removed: value });
+  }
+
+  /* Whatever is typed becomes a tag when the field has no list to choose from, or
+     says `data-ins-free`. */
+  function tagsFree(tags) { return tags.hasAttribute('data-ins-free') || !tags.querySelector('.ins-combo-option'); }
+
+  /* The keys a tags box adds to the autocomplete's: Enter or a comma make what was
+     typed a tag, where free text is allowed; Backspace in an empty box takes the last
+     chip back. Returns whether it used the key. */
+  function onTagsKey(event) {
+    var input = event.target, tags = input.closest ? input.closest('.ins-tags') : null;
+    if (!tags || input !== tagsInput(tags) || event.isComposing) return false;
+    var list = tags.querySelector('.ins-combo-list');
+    var picking = list && list.hasAttribute('data-ins-open') && tags.querySelector('.ins-combo-option.is-active');
+    if ((event.key === 'Enter' || event.key === ',' || event.key === '،') && !picking && tagsFree(tags) && input.value.trim()) {
+      event.preventDefault();
+      tagsAdd(tags, input.value);
+      input.value = '';
+      if (list) comboFilter(tags);
+      return true;
+    }
+    if (event.key === 'Backspace' && !input.value && input.selectionStart === 0) {
+      var chips = tagsChips(tags);
+      if (chips.length) { event.preventDefault(); chipRemove(chips[chips.length - 1]); return true; }
+    }
+    return false;
+  }
+
+  /* ----------------------------------------------------------------- time */
+  /* A time as `HH:MM`, from what a person typed: "14:30", "1430", "2:30 م",
+     "2 pm", in either set of digits. Anything else: null. */
+  function parseTime(text) {
+    var t = toLatin(text).toLowerCase().replace(/[‎‏ ]/g, ' ').trim();
+    if (!t) return null;
+    var pm = /(pm|p\.m|م|مساء)/.test(t), am = /(am|a\.m|ص|صباح)/.test(t);
+    var m = t.match(/(\d{1,2})\s*[:.٫]\s*(\d{2})/), h, min;
+    if (m) { h = +m[1]; min = +m[2]; }
+    else {
+      var digits = (t.match(/\d+/) || [''])[0];
+      if (!digits || digits.length > 4) return null;
+      if (digits.length > 2) { h = +digits.slice(0, -2); min = +digits.slice(-2); }
+      else { h = +digits; min = 0; }
+    }
+    if ((pm || am) && (h < 1 || h > 12)) return null;
+    if (pm && h < 12) h += 12;
+    if (am && h === 12) h = 0;
+    if (h > 23 || min > 59) return null;
+    return pad2(h) + ':' + pad2(min);
+  }
+
+  function minutesOf(hhmm) { var p = hhmm.split(':'); return +p[0] * 60 + +p[1]; }
+
+  function formatTime(input, hhmm) {
+    var p = hhmm.split(':');
+    return dateFormat(langOf(input), { hour: 'numeric', minute: '2-digit' }).format(new Date(2000, 0, 1, +p[0], +p[1]));
+  }
+
+  function timeHidden(input) { var c = input.closest('.ins-time'); return c && c.querySelector('input[type="hidden"]'); }
+
+  /* Set a time field: its hidden value, the words in the box, the matching option
+     marked. Refuses a time outside `min`–`max`. */
+  function setTime(input, hhmm, quiet) {
+    var hidden = timeHidden(input);
+    if (!hidden) return;
+    var lo = input.getAttribute('data-ins-min'), hi = input.getAttribute('data-ins-max');
+    var out = hhmm && ((lo && minutesOf(hhmm) < minutesOf(lo)) || (hi && minutesOf(hhmm) > minutesOf(hi)));
+    if (out) { input.setCustomValidity(strings(input).badTime); return; }
+    input.setCustomValidity('');
+    var changed = hidden.value !== (hhmm || '');
+    hidden.value = hhmm || '';
+    input.value = hhmm ? formatTime(input, hhmm) : '';
+    var drum = timeFor === input && timeEl && timeEl.querySelector('.ins-drum');
+    if (drum && hhmm && drum._value !== hhmm) drumSet(drum, hhmm, true);
+    if (!quiet && changed) { fire(input, 'change'); emit('ins:time', { input: input, value: hidden.value }); }
+  }
+
+  /* What was typed, read as the person leaves the field. The words already showing
+     are the value, untouched; text that is not a time marks the field invalid. */
+  function commitTime(input) {
+    var hidden = timeHidden(input);
+    if (!hidden) return;
+    var text = input.value.trim();
+    if (hidden.value && text === formatTime(input, hidden.value)) return;
+    if (!text) { setTime(input, ''); return; }
+    var t = parseTime(text);
+    if (t) setTime(input, t);
+    else input.setCustomValidity(strings(input).badTime);
+  }
+
+  /* ----------------------------------------------------------------- drum */
+  /* Hour, minute and period wheels that snap under a lens; each wheel is a spinbutton. */
+  function hour12(input) {
+    try {
+      var o = dateFormat(langOf(input), { hour: 'numeric' }).resolvedOptions();
+      return o.hourCycle ? o.hourCycle === 'h11' || o.hourCycle === 'h12' : !!o.hour12;
+    } catch (e) { return true; }
+  }
+
+  function periodNames(input) {
+    var f = dateFormat(langOf(input), { hour: 'numeric', hour12: true }), out = [];
+    for (var i = 0; i < 2; i++) {
+      var parts = f.formatToParts ? f.formatToParts(new Date(2000, 0, 1, i ? 21 : 9)) : [], name = '';
+      for (var j = 0; j < parts.length; j++) if (parts[j].type === 'dayPeriod') name = parts[j].value;
+      out.push(name || (i ? 'PM' : 'AM'));
+    }
+    return out;
+  }
+
+  // A looping wheel holds five copies of its items and is moved back to the middle one whenever it comes to rest.
+  function drumCol(kind, label, items, loop) {
+    var col = el('div', 'ins-drum-col ins-drum-col--' + kind);
+    col.tabIndex = 0;
+    col.setAttribute('role', 'spinbutton');
+    col.setAttribute('aria-label', label);
+    col.setAttribute('aria-valuemin', '0');
+    col.setAttribute('aria-valuemax', String(items.length - 1));
+    col._n = items.length;
+    col._copies = loop && items.length > 2 ? 5 : 1;
+    for (var c = 0; c < col._copies; c++) {
+      for (var i = 0; i < items.length; i++) col.appendChild(el('div', 'ins-drum-item', items[i]));
+    }
+    return col;
+  }
+
+  function drumBuild(input, onPick) {
+    var t = strings(input), h12 = hour12(input), step = timeStep(input);
+    var hours = [], minutes = [], mins = [];
+    for (var h = 0; h < (h12 ? 12 : 24); h++) hours.push(h12 ? String(h || 12) : pad2(h));
+    for (var m = 0; m < 60; m += Math.min(step, 60)) { minutes.push(pad2(m)); mins.push(m); }
+    var drum = el('div', 'ins-drum');
+    var clock = el('div', 'ins-drum-clock');
+    clock.dir = 'ltr';
+    var hc = drumCol('hour', t.hour, hours, true), mc = drumCol('minute', t.minute, minutes, true);
+    clock.appendChild(hc);
+    clock.appendChild(el('span', 'ins-drum-sep', ':'));
+    clock.appendChild(mc);
+    drum.appendChild(clock);
+    drum._cols = [hc, mc];
+    if (h12) {
+      var pc = drumCol('period', t.period, periodNames(input));
+      drum.appendChild(pc);
+      drum._cols.push(pc);
+    }
+    drum._h12 = h12;
+    drum._mins = mins;
+    drum._pick = onPick;
+    drum._input = input;
+    drum._value = '';
+    drum._cols.forEach(function (col) {
+      col.addEventListener('scroll', function () {
+        drumPaint(col);
+        clearTimeout(col._settle);
+        if (!col._drag) col._settle = setTimeout(function () { drumSettle(drum); }, 110);
+      }, { passive: true });
+      drumDrag(col);
+    });
+    drum.addEventListener('click', function (event) {
+      var item = event.target.closest ? event.target.closest('.ins-drum-item') : null;
+      if (!item) return;
+      var col = item.parentNode;
+      drumGo(col, Array.prototype.indexOf.call(col.children, item));
+      col.focus({ preventScroll: true });
+    });
+    drum.addEventListener('keydown', function (event) {
+      var col = event.target.closest ? event.target.closest('.ins-drum-col') : null;
+      if (!col) return;
+      var i = drumIndex(col), n = col.children.length, base = i - i % col._n, to;
+      switch (event.key) {
+        case 'ArrowUp': to = i - 1; break;
+        case 'ArrowDown': to = i + 1; break;
+        case 'PageUp': to = i - 5; break;
+        case 'PageDown': to = i + 5; break;
+        case 'Home': to = base; break;
+        case 'End': to = base + col._n - 1; break;
+        default: return;
+      }
+      event.preventDefault();
+      drumGo(col, Math.max(0, Math.min(n - 1, to)));
+    });
+    return drum;
+  }
+
+  function drumRow(col) { return (col.firstChild && col.firstChild.offsetHeight) || 36; }
+  function drumIndex(col) { return Math.max(0, Math.min(col.children.length - 1, Math.round(col.scrollTop / drumRow(col)))); }
+
+  // A mouse drags a wheel as a finger does, and a quick release flings it on.
+  function drumDrag(col) {
+    col.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      e.preventDefault();
+      col.focus({ preventScroll: true });
+      col._drag = { y: e.clientY, top: col.scrollTop, moved: false, lastY: e.clientY, lastT: Date.now(), v: 0 };
+      col.setPointerCapture(e.pointerId);
+    });
+    col.addEventListener('pointermove', function (e) {
+      var d = col._drag;
+      if (!d) return;
+      var dy = e.clientY - d.y, now = Date.now();
+      if (!d.moved && Math.abs(dy) > 3) { d.moved = true; col.classList.add('is-drag'); }
+      if (!d.moved) return;
+      col.scrollTop = d.top - dy;
+      d.v = d.v * 0.6 + ((e.clientY - d.lastY) / Math.max(1, now - d.lastT)) * 0.4;
+      d.lastY = e.clientY; d.lastT = now;
+    });
+    var drop = function (e) {
+      var d = col._drag;
+      if (!d) return;
+      col._drag = null;
+      col.classList.remove('is-drag');
+      if (!d.moved) {
+        var hit = document.elementFromPoint(e.clientX, e.clientY), item = hit && hit.closest ? hit.closest('.ins-drum-item') : null;
+        if (item && item.parentNode === col) drumGo(col, Array.prototype.indexOf.call(col.children, item));
+        return;
+      }
+      var fling = Date.now() - d.lastT > 80 || Math.abs(d.v) < 0.6 ? 0 : d.v;
+      drumGo(col, Math.max(0, Math.min(col.children.length - 1, Math.round((col.scrollTop - fling * 180) / drumRow(col)))));
+    };
+    col.addEventListener('pointerup', drop);
+    col.addEventListener('pointercancel', drop);
+  }
+
+  function drumValue(col) { return drumIndex(col) % col._n; }
+  function drumMid(col, v) { return Math.floor(col._copies / 2) * col._n + v; }
+
+  function drumGo(col, i) {
+    if (Math.abs(col.scrollTop - i * drumRow(col)) < 1) { drumSettle(col.closest('.ins-drum')); return; }
+    col.scrollTo({ top: i * drumRow(col), behavior: motionless() ? 'auto' : 'smooth' });
+  }
+
+  function drumPaint(col) {
+    var row = drumRow(col), mid = col.scrollTop / row, items = col.children;
+    for (var i = 0; i < items.length; i++) {
+      var d = i - mid, a = Math.min(Math.abs(d), 3), st = items[i].style;
+      if (Math.abs(d) > 4) { st.opacity = '0'; continue; }
+      st.transform = 'rotateX(' + (-d * 22).toFixed(1) + 'deg) scale(' + (1 - a * .1).toFixed(3) + ')';
+      st.opacity = String(1 - a * .3);
+      items[i].classList.toggle('is-on', Math.abs(d) < .5);
+    }
+  }
+
+  function drumRead(drum) {
+    var c = drum._cols, h = drumValue(c[0]), m = drum._mins[drumValue(c[1])];
+    if (drum._h12) h += c[2] && drumValue(c[2]) ? 12 : 0;
+    return pad2(h) + ':' + pad2(m);
+  }
+
+  function drumAria(drum) {
+    drum._cols.forEach(function (col) {
+      var i = drumIndex(col);
+      col.setAttribute('aria-valuenow', String(i % col._n));
+      col.setAttribute('aria-valuetext', col.children[i] ? col.children[i].textContent : '');
+    });
+  }
+
+  // Hours, minutes and periods outside min–max are dimmed, so the snap back to the limit is expected.
+  function drumMarks(drum) {
+    var input = drum._input, lo = input.getAttribute('data-ins-min'), hi = input.getAttribute('data-ins-max');
+    lo = lo && lo.length === 5 ? minutesOf(lo) : null;
+    hi = hi && hi.length === 5 ? minutesOf(hi) : null;
+    var out = function (a, b) { return (lo !== null && b < lo) || (hi !== null && a > hi); };
+    var c = drum._cols, pm = drum._h12 && c[2] && drumValue(c[2]) ? 12 : 0, now = minutesOf(drumRead(drum));
+    var hour = Math.floor(now / 60) * 60;
+    [].forEach.call(c[0].children, function (it, j) { var h = (j % c[0]._n + pm) * 60; it.classList.toggle('is-out', out(h, h + 59)); });
+    [].forEach.call(c[1].children, function (it, j) { var m = hour + drum._mins[j % c[1]._n]; it.classList.toggle('is-out', out(m, m)); });
+    if (c[2]) [].forEach.call(c[2].children, function (it, j) { it.classList.toggle('is-out', out(j * 720, j * 720 + 719)); });
+  }
+
+  function drumSettle(drum) {
+    drum._cols.forEach(function (col) {
+      var mid = drumMid(col, drumValue(col));
+      if (col._copies > 1 && drumIndex(col) !== mid) { col.scrollTop = mid * drumRow(col); drumPaint(col); }
+    });
+    var v = drumRead(drum), input = drum._input, was = drum._value;
+    var lo = input.getAttribute('data-ins-min'), hi = input.getAttribute('data-ins-max');
+    if (lo && lo.length === 5 && minutesOf(v) < minutesOf(lo)) { drumSet(drum, lo, true); v = lo; }
+    else if (hi && hi.length === 5 && minutesOf(v) > minutesOf(hi)) { drumSet(drum, hi, true); v = hi; }
+    drumAria(drum);
+    drumMarks(drum);
+    if (v === was) return;
+    drum._value = v;
+    drum._pick(v);
+  }
+
+  function drumSet(drum, hhmm, smooth) {
+    var p = hhmm.split(':'), h = +p[0], m = +p[1], mi = 0;
+    for (var k = 0; k < drum._mins.length; k++) if (drum._mins[k] <= m) mi = k;
+    var idx = drum._h12 ? [h % 12, mi, h >= 12 ? 1 : 0] : [h, mi];
+    drum._value = pad2(h) + ':' + pad2(drum._mins[mi]);
+    drum._cols.forEach(function (col, k) {
+      var to = drumMid(col, idx[k]);
+      if (smooth) col.scrollTo({ top: to * drumRow(col), behavior: motionless() ? 'auto' : 'smooth' });
+      else { col.scrollTop = to * drumRow(col); drumPaint(col); }
+    });
+    drumAria(drum);
+    drumMarks(drum);
+  }
+
+  /* The time field's own popover, one for the page. */
+  var timeEl = null, timeFor = null;
+
+  function timeLayer() {
+    if (timeEl) return timeEl;
+    timeEl = el('div', 'ins-time-pop');
+    timeEl.setAttribute('role', 'dialog');
+    if (hasPopover) timeEl.setAttribute('popover', 'manual');
+    else timeEl.hidden = true;
+    timeEl.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' || event.key === 'Enter') { event.preventDefault(); closeTime(true); }
+    });
+    document.body.appendChild(timeEl);
+    return timeEl;
+  }
+
+  function openTime(input, focusDrum) {
+    if (timeFor === input) { if (focusDrum) timeEl.querySelector('.ins-drum-col').focus(); return; }
+    if (timeFor) closeTime(false);
+    if (calFor) closeCal(false);
+    timeFor = input;
+    var pop = timeLayer(), hidden = timeHidden(input);
+    pop.textContent = '';
+    pop.dir = window.getComputedStyle(input).direction;
+    pop.setAttribute('lang', langOf(input));
+    pop.setAttribute('aria-label', strings(input).chooseTime);
+    var drum = drumBuild(input, function (v) { if (timeFor) setTime(timeFor, v); });
+    pop.appendChild(drum);
+    layerOpen(pop, {
+      trigger: input, anchor: input, move: true, toggle: 'class', dir: pop.dir,
+      close: function (why) { closeTime(why === 'escape'); }
+    });
+    drumSet(drum, (hidden && hidden.value) || timeDefault(input));
+    input.setAttribute('aria-expanded', 'true');
+    if (focusDrum) drum._cols[0].focus();
+  }
+
+  function closeTime(refocus) {
+    if (!timeEl || !timeFor) return;
+    var input = timeFor;
+    timeFor = null;
+    layerShut(timeEl);
+    input.setAttribute('aria-expanded', 'false');
+    if (refocus) input.focus();
+  }
+
+  /* A date and a time sent together, where the group asks: `data-ins-datetime`. */
+  function datetimeSync(group) {
+    var out = group.querySelector('input[data-ins-datetime-value]');
+    if (!out) return;
+    var d = group.querySelector('[data-ins-date-ready]'), t = group.querySelector('[data-ins-time-ready]');
+    var dv = d && dateValue(d) ? dateValue(d).value : '', tv = t && timeHidden(t) ? timeHidden(t).value : '';
+    out.value = dv && tv ? dv + 'T' + tv : '';
+  }
+
+  /* -------------------------------------------------------------- counter */
+  function countSync(control) {
+    var words = control.getAttribute('data-ins-count') === 'words';
+    var v = control.value || '';
+    var n = words ? (v.trim() ? v.trim().split(/\s+/).length : 0) : v.length;
+    var max = words ? parseInt(control.getAttribute('data-ins-max'), 10) : (control.maxLength > 0 ? control.maxLength : parseInt(control.getAttribute('data-ins-max'), 10));
+    var out = resolve('#' + control.getAttribute('data-ins-count-el'));
+    if (!out) return n;
+    var t = strings(control);
+    var own = out.getAttribute('data-ins-text');
+    out.textContent = own ? own.replace('{n}', n).replace('{max}', max || '')
+      : words ? (max ? t.words(n, max) : t.wordsFree(n)) : (max ? n + '/' + max : String(n));
+    out.classList.toggle('is-near', !!max && n >= max * .9 && n <= max);
+    out.classList.toggle('is-over', !!max && n > max);
+    if (words && max) control.setCustomValidity(n > max ? t.tooManyWords(max) : '');
+    return n;
+  }
+
+  /* ------------------------------------------------------------ highlights */
+  /* A mark (or a reference marker) and the note it points at, as one group: from a
+     mark, its note and every mark sharing it; from a note, the marks pointing at it. */
+  function noteGroup(node) {
+    if (!node || !node.closest) return null;
+    var mark = node.closest('[data-ins-note]'), ref, note;
+    if (mark) {
+      ref = mark.getAttribute('data-ins-note');
+      note = resolve(ref);
+    } else {
+      note = node.closest('.ins-note[id]');
+      if (!note) return null;
+      ref = '#' + note.id;
+    }
+    var marks = document.querySelectorAll('[data-ins-note="' + ref + '"]');
+    return marks.length ? { key: ref, marks: marks, note: note } : null;
+  }
+
+  var litGroup = null;
+  function noteLight(group) {
+    if (litGroup && group && litGroup.key === group.key) return;
+    var parts = function (g, on) {
+      for (var i = 0; i < g.marks.length; i++) g.marks[i].classList.toggle('is-lit', on);
+      if (g.note) g.note.classList.toggle('is-lit', on);
+    };
+    if (litGroup) parts(litGroup, false);
+    litGroup = group;
+    if (group) parts(group, true);
+  }
+
+  /* ------------------------------------------------------------ countdown */
+  /* Every running countdown, on one timer. Each keeps the moment it ends rather than
+     a count of seconds, so a tab left in the background comes back to the right time
+     instead of wherever its throttled ticks had got to. */
+  var countdowns = [], countTimer = null;
+
+  function countdownSet(node, value, resume) {
+    var v = String(value == null ? '' : value).trim();
+    var end = /^\d+(\.\d+)?$/.test(v) ? Date.now() + parseFloat(v) * 1000 : Date.parse(v);
+    if (isNaN(end)) return null;
+    node.removeAttribute('data-ins-countdown-paused');
+    node.__insEnd = end;
+    node.__insLeft = null;
+    if (!resume) {
+      node.__insWarned = node.__insDone = false;
+      node.classList.remove('is-warn', 'is-done');
+    }
+    if (countdowns.indexOf(node) === -1) countdowns.push(node);
+    // A quarter-second tick, so a timer started between two ticks still changes on its own second.
+    if (!countTimer) countTimer = setInterval(countdownTick, 250);
+    countdownDraw(node);
+    return countdownLeft(node);
+  }
+
+  function countdownLeft(node) { return Math.max(0, Math.ceil((node.__insEnd - Date.now()) / 1000)); }
+
+  // Stop keeps the time left on screen; start resumes from it, or begins a waiting timer; restart always begins from the full time.
+  function countdownStop(node) {
+    if (!node.__insEnd) return node.__insLeft != null ? node.__insLeft : null;
+    var left = countdownLeft(node);
+    node.__insEnd = 0;
+    node.__insLeft = left;
+    var at = countdowns.indexOf(node);
+    if (at !== -1) countdowns.splice(at, 1);
+    node.setAttribute('data-ins-countdown-paused', '');
+    countdownPaint(node, left);
+    return left;
+  }
+
+  function countdownStart(node) {
+    if (node.__insEnd) return countdownLeft(node);
+    var left = node.__insLeft;
+    return left ? countdownSet(node, left, true) : countdownSet(node, node.getAttribute('data-ins-countdown'));
+  }
+
+  function countdownAct(node, act) {
+    node.__insAway = false;
+    if (act === 'stop') return countdownStop(node);
+    if (act === 'start') return countdownStart(node);
+    if (act === 'restart') return countdownSet(node, node.getAttribute('data-ins-countdown'));
+    return countdownSet(node, act);
+  }
+
+  // A paused countdown shows the whole of its time and waits for data-ins-countdown-start or Insiyab.countdown().
+  function countdownIdle(node) {
+    var v = String(node.getAttribute('data-ins-countdown') || '').trim();
+    var secs = /^\d+(\.\d+)?$/.test(v) ? Math.ceil(parseFloat(v)) : Math.max(0, Math.ceil((Date.parse(v) - Date.now()) / 1000));
+    if (!isNaN(secs)) countdownPaint(node, secs);
+  }
+
+  function countdownDraw(node) {
+    var left = countdownLeft(node);
+    countdownPaint(node, left);
+    return countdownFinish(node, left);
+  }
+
+  function countdownPaint(node, left) {
+    var d = Math.floor(left / 86400), h = Math.floor(left % 86400 / 3600), m = Math.floor(left % 3600 / 60), sec = left % 60;
+    var clock = (d || h ? (d ? pad2(h) : h) + ':' : '') + pad2(m) + ':' + pad2(sec);
+    var days = node.querySelector('.ins-countdown-days'), time = node.querySelector('.ins-countdown-clock');
+    if (!time) {
+      node.textContent = '';
+      days = node.appendChild(el('span', 'ins-countdown-days'));
+      time = node.appendChild(el('span', 'ins-countdown-clock'));
+    }
+    days.hidden = !d;
+    var said = d ? strings(node).days(d) : '';
+    if (days.textContent !== said) days.textContent = said;
+    if (time.textContent !== clock) time.textContent = clock;
+  }
+
+  function countdownFinish(node, left) {
+    var warn = parseFloat(node.getAttribute('data-ins-warn'));
+    if (isNaN(warn)) warn = 60;
+    if (!node.__insWarned && left <= warn && left > 0) {
+      node.__insWarned = true;
+      node.classList.add('is-warn');
+      emit('ins:countdown', { el: node, left: left, state: 'warn' });
+    }
+    if (!node.__insDone && left === 0) {
+      node.__insDone = true;
+      node.classList.remove('is-warn');
+      node.classList.add('is-done');
+      emit('ins:countdown', { el: node, left: 0, state: 'end' });
+    }
+    return left;
+  }
+
+  function countdownTick() {
+    for (var i = countdowns.length - 1; i >= 0; i--) {
+      var node = countdowns[i];
+      if (!document.documentElement.contains(node) || countdownDraw(node) === 0) countdowns.splice(i, 1);
+    }
+    if (!countdowns.length) { clearInterval(countTimer); countTimer = null; }
+  }
+
+  // With data-ins-countdown-pause-away a running timer stops while the window is blurred or hidden, and carries on when it comes back.
+  function countdownAway(away) {
+    var nodes = document.querySelectorAll('[data-ins-countdown-pause-away]');
+    for (var i = 0; i < nodes.length; i++) {
+      var node = nodes[i];
+      if (away && node.__insEnd && countdownLeft(node) > 0) { countdownStop(node); node.__insAway = true; }
+      else if (!away && node.__insAway) { node.__insAway = false; countdownStart(node); }
+    }
+  }
+  window.addEventListener('blur', function () { countdownAway(true); });
+  window.addEventListener('focus', function () { countdownAway(false); });
+  document.addEventListener('visibilitychange', function () { countdownAway(document.hidden); });
+
+  // Buttons with data-ins-countdown-start, -stop or -restart="#timer" drive that timer.
+  document.addEventListener('click', function (event) {
+    var btn = event.target.closest ? event.target.closest('[data-ins-countdown-start], [data-ins-countdown-stop], [data-ins-countdown-restart]') : null;
+    if (!btn) return;
+    var act = btn.hasAttribute('data-ins-countdown-stop') ? 'stop' : btn.hasAttribute('data-ins-countdown-restart') ? 'restart' : 'start';
+    var node = resolve(btn.getAttribute('data-ins-countdown-' + act));
+    if (node) countdownAct(node, act);
+  }, false);
+
+  /* -------------------------------------------------------- save indicator */
+  function saveState(target, state, text) {
+    var node = resolve(target);
+    if (!node) return null;
+    var t = strings(node);
+    var said = { saving: t.saving, saved: t.saved, error: t.saveError };
+    node.setAttribute('data-ins-state', state);
+    node.textContent = state === 'idle' ? '' : (text || node.getAttribute('data-ins-text-' + state) || said[state] || '');
+    return state;
+  }
+
+  /* A form that keeps itself: a moment after the last change the indicator says
+     "saving" and `ins:autosave` goes out with the form's data. A page that saves
+     somewhere cancels it and calls `detail.done(true)` or `done(false)` when it
+     knows; one that does not cancel it has kept the change itself (a local draft),
+     and the indicator says so at once. A later change supersedes an earlier save
+     still in flight. */
+  function autosave(form) {
+    clearTimeout(form.__insSaveTimer);
+    var wait = parseInt(form.getAttribute('data-ins-autosave'), 10) || 800;
+    form.__insSaveTimer = setTimeout(function () {
+      var ind = form.querySelector('.ins-save') || (form.id && document.querySelector('.ins-save[data-ins-save-for="#' + form.id + '"]'));
+      var seq = (form.__insSaveSeq || 0) + 1;
+      form.__insSaveSeq = seq;
+      if (ind) saveState(ind, 'saving');
+      var done = function (ok) {
+        if (form.__insSaveSeq !== seq) return;
+        if (ind) saveState(ind, ok === false ? 'error' : 'saved');
+      };
+      var data = null;
+      try { data = new FormData(form); } catch (e) { /* no FormData */ }
+      var ask = emit('ins:autosave', { el: form, data: data, done: done }, true);
+      if (!ask.defaultPrevented) done(true);
+    }, wait);
+  }
+
+  /* ----------------------------------------------------------------- sums */
+  /* The total of the chosen values in a region: `data-ins-sum="#matrix"`. */
+  function sumSync(out) {
+    var region = resolve(out.getAttribute('data-ins-sum'));
+    if (!region) return;
+    var boxes = region.querySelectorAll('input:checked'), total = 0;
+    for (var i = 0; i < boxes.length; i++) { var n = parseFloat(boxes[i].value); if (!isNaN(n)) total += n; }
+    out.textContent = String(Math.round(total * 100) / 100);
+  }
+
+  function sumsFor(node) {
+    var outs = document.querySelectorAll('[data-ins-sum]');
+    for (var i = 0; i < outs.length; i++) {
+      var region = resolve(outs[i].getAttribute('data-ins-sum'));
+      if (region && region.contains(node)) sumSync(outs[i]);
+    }
+  }
+
+  /* ----------------------------------------------------------------- split */
+  function splitHandle(split) {
+    for (var i = 0; i < split.children.length; i++) if (split.children[i].classList.contains('ins-split-handle')) return split.children[i];
+    return null;
+  }
+
+  function splitLimits(split) {
+    return { min: parseFloat(split.getAttribute('data-ins-min')) || 20, max: parseFloat(split.getAttribute('data-ins-max')) || 80 };
+  }
+
+  /* The first pane's share, in percent, kept within the limits. */
+  function splitSet(split, pct, keep) {
+    var lim = splitLimits(split);
+    pct = Math.max(lim.min, Math.min(lim.max, pct));
+    split.style.setProperty('--ins-split', pct + '%');
+    var handle = splitHandle(split);
+    if (handle) handle.setAttribute('aria-valuenow', String(Math.round(pct)));
+    var key = split.getAttribute('data-ins-split');
+    if (keep) {
+      if (key) write('ins-split:' + key, String(pct));
+      emit('ins:split', { el: split, size: pct });
+    }
+    return pct;
+  }
+
+  function splitNow(split) { return parseFloat(split.style.getPropertyValue('--ins-split')) || 50; }
+
+  /* Where the pointer is, as the first pane's share: from the start edge, which is
+     the right one on an Arabic page, or from the top for a stacked split. */
+  function splitAt(split, event) {
+    var r = split.getBoundingClientRect();
+    if (split.classList.contains('ins-split--v')) return (event.clientY - r.top) / r.height * 100;
+    var rtl = window.getComputedStyle(split).direction === 'rtl';
+    return (rtl ? r.right - event.clientX : event.clientX - r.left) / r.width * 100;
+  }
+
+  /* ---------------------------------------------------------------- table */
+  function tableOf(node) { return node && node.closest ? node.closest('table') : null; }
+
+  /* What a cell sorts and edits by: `data-sort-value` when the text is not the value
+     (a date written out in words, say, sorted by its ISO form), else `data-value`,
+     else the text. */
+  function cellValue(td) {
+    if (!td) return '';
+    var v = td.getAttribute('data-sort-value');
+    if (v === null) v = td.getAttribute('data-value');
+    return (v === null ? td.textContent : v).trim();
+  }
+
+  /* A figure as a number, in either set of digits, with its thousands separators
+     and whatever currency or percent sign stands around it. Not a figure: NaN. */
+  function numberOf(text) {
+    var t = toLatin(text).replace(/[\s,٬ ]/g, '').replace(/٫/g, '.').replace(/−/g, '-');
+    var m = t.match(/^[^\d.-]*(-?\d*\.?\d+)[^\d]*$/);
+    return m ? parseFloat(m[1]) : NaN;
+  }
+
+  /* Sort a table by one column: 'ascending', 'descending', or the other way from now
+     when no direction is given. `ins:sort` is asked first; a page that sorts on the
+     server cancels it, and then only the arrow moves. Rows with nothing to sort by go
+     last either way. Numbers compare as numbers when every filled cell of the column
+     holds one (or the column says `data-ins-sort="number"`); text compares in the
+     page's language, with the digits inside it read as numbers. */
+  function sortTable(th, dir) {
+    var table = tableOf(th), body = table && table.tBodies[0];
+    if (!body) return null;
+    if (dir !== 'ascending' && dir !== 'descending') {
+      dir = th.getAttribute('aria-sort') === 'ascending' ? 'descending' : 'ascending';
+    }
+    var column = th.cellIndex;
+    var heads = th.parentNode.querySelectorAll('th[data-ins-sort]');
+    for (var h = 0; h < heads.length; h++) heads[h].setAttribute('aria-sort', heads[h] === th ? dir : 'none');
+    var ask = emit('ins:sort', { el: table, th: th, column: column, dir: dir }, true);
+    if (ask.defaultPrevented) return dir;
+
+    var rows = Array.prototype.slice.call(body.rows);
+    var texts = rows.map(function (r) { return cellValue(r.cells[column]); });
+    var kind = th.getAttribute('data-ins-sort');
+    var numeric = kind === 'number' || (kind !== 'text' && texts.some(function (t) { return t !== ''; }) &&
+      texts.every(function (t) { return t === '' || !isNaN(numberOf(t)); }));
+    var keys = numeric ? texts.map(numberOf) : texts;
+    var coll = null;
+    try { coll = new Intl.Collator(langOf(table), { numeric: true, sensitivity: 'base' }); } catch (e) { /* plain order */ }
+    var sign = dir === 'descending' ? -1 : 1;
+    var order = rows.map(function (r, i) { return i; });
+    order.sort(function (a, b) {
+      var x = keys[a], y = keys[b];
+      var ex = numeric ? isNaN(x) : x === '', ey = numeric ? isNaN(y) : y === '';
+      if (ex || ey) return ex === ey ? a - b : (ex ? 1 : -1);
+      var c = numeric ? x - y : coll ? coll.compare(x, y) : (x < y ? -1 : x > y ? 1 : 0);
+      return c ? c * sign : a - b;
+    });
+    var before = motionless() ? null : rows.map(function (r) { return r.getBoundingClientRect().top; });
+    table.classList.add('is-sorted');
+    for (var i = 0; i < order.length; i++) body.appendChild(rows[order[i]]);
+    if (before) slideRows(rows, before);
+    return dir;
+  }
+
+  // Each row starts where it was and glides to its new place.
+  function slideRows(rows, before) {
+    var moved = rows.filter(function (r, i) {
+      var dy = before[i] - r.getBoundingClientRect().top;
+      if (Math.abs(dy) < 1) return false;
+      r.style.transition = 'none';
+      r.style.transform = 'translateY(' + dy + 'px)';
+      return true;
+    });
+    if (!moved.length) return;
+    void rows[0].offsetHeight;
+    moved.forEach(function (r) {
+      r.style.transition = 'transform var(--ins-t-enter) var(--ins-ease)';
+      r.style.transform = '';
+      var done = function () { r.style.transition = ''; r.removeEventListener('transitionend', done); };
+      r.addEventListener('transitionend', done);
+    });
+  }
+
+  /* The rows' own checkboxes, not the header's and not a nested table's. */
+  function selectBoxes(table) {
+    var all = table.querySelectorAll('tbody input[data-ins-select]'), out = [];
+    for (var i = 0; i < all.length; i++) if (tableOf(all[i]) === table && all[i].getAttribute('data-ins-select') !== 'all') out.push(all[i]);
+    return out;
+  }
+
+  /* After any change to the boxes: each row marked as its box says, the header box
+     checked, mixed or clear, and every bar tied to this table shown with its count or
+     hidden. Returns the selected rows. */
+  function selectSync(table, quiet) {
+    var boxes = selectBoxes(table), rows = [];
+    for (var i = 0; i < boxes.length; i++) {
+      var tr = boxes[i].closest('tr');
+      if (boxes[i].checked) rows.push(tr);
+      if (!tr) continue;
+      if (boxes[i].checked) tr.setAttribute('aria-selected', 'true');
+      else tr.removeAttribute('aria-selected');
+    }
+    var head = table.querySelector('thead input[data-ins-select="all"]');
+    if (head) {
+      head.checked = rows.length > 0 && rows.length === boxes.length;
+      head.indeterminate = rows.length > 0 && rows.length < boxes.length;
+    }
+    var bars = document.querySelectorAll('[data-ins-bulk]');
+    for (var j = 0; j < bars.length; j++) {
+      if (resolve(bars[j].getAttribute('data-ins-bulk')) !== table) continue;
+      bars[j].hidden = rows.length === 0;
+      var count = bars[j].querySelector('.ins-bulkbar-count');
+      if (count) {
+        var text = count.getAttribute('data-ins-text') || strings(count).selected;
+        count.textContent = text.replace('{n}', rows.length);
+      }
+    }
+    if (!quiet) emit('ins:select', { el: table, rows: rows, count: rows.length });
+    return rows;
+  }
+
+  function selectAll(table, on) {
+    var boxes = selectBoxes(table);
+    for (var i = 0; i < boxes.length; i++) if (!boxes[i].disabled) boxes[i].checked = on;
+  }
+
+  /* The heading over a cell, to name the field that replaces it. */
+  function columnName(td) {
+    var table = tableOf(td), head = table && table.tHead && table.tHead.rows[0];
+    var th = head && head.cells[td.cellIndex];
+    return th ? th.textContent.trim() : '';
+  }
+
+  /* A cell turned into a field. What it held is kept, so Escape, a refused change or
+     a failed save can put it back exactly as it was. */
+  function editStart(td) {
+    if (td.classList.contains('is-editing')) return;
+    var kind = td.getAttribute('data-ins-edit') || 'text';
+    var old = td.hasAttribute('data-value') ? td.getAttribute('data-value') : td.textContent.trim();
+    var field;
+    if (kind === 'select') {
+      field = el('select', 'ins-select ins-select--sm');
+      var opts = (td.getAttribute('data-ins-options') || '').split('|');
+      for (var i = 0; i < opts.length; i++) {
+        var o = el('option', '', opts[i].trim());
+        o.selected = opts[i].trim() === old;
+        field.appendChild(o);
+      }
+    } else {
+      field = el('input', 'ins-input ins-input--sm');
+      field.type = 'text';
+      field.value = old;
+      if (kind === 'number') { field.setAttribute('inputmode', 'decimal'); field.dir = 'ltr'; }
+    }
+    var name = columnName(td);
+    if (name) field.setAttribute('aria-label', name);
+    td.__insEdit = { old: old, html: td.innerHTML };
+    td.classList.add('is-editing');
+    var ghost = el('span', 'ins-edit-ghost');
+    ghost.setAttribute('aria-hidden', 'true');
+    while (td.firstChild) ghost.appendChild(td.firstChild);
+    td.appendChild(ghost);
+    td.appendChild(field);
+    field.focus();
+    if (field.select) field.select();
+  }
+
+  /* Keep or drop the change. `ins:edit` is asked before a change is kept: cancel it
+     to refuse the value, or keep it and call `detail.revert()` later if the save it
+     starts fails. Returns whether the cell changed. */
+  function editEnd(td, keep) {
+    var state = td.__insEdit;
+    if (!state) return false;
+    td.__insEdit = null;
+    var field = td.querySelector(':scope > input, :scope > select');
+    var value = field ? field.value.trim() : state.old;
+    td.classList.remove('is-editing');
+    var changed = !!keep && value !== state.old;
+    if (changed) {
+      var ask = emit('ins:edit', {
+        el: td, row: td.parentNode, value: value, old: state.old,
+        revert: function () { td.innerHTML = state.html; if (td.hasAttribute('data-value')) td.setAttribute('data-value', state.old); }
+      }, true);
+      if (ask.defaultPrevented) changed = false;
+    }
+    if (changed) {
+      td.textContent = value;
+      if (td.hasAttribute('data-value')) td.setAttribute('data-value', value);
+    } else {
+      td.innerHTML = state.html;
+    }
+    return changed;
+  }
+
+  /* -------------------------------------------------------------- confirm */
+  /* `Insiyab.confirm('حذف العملية؟')` — a small modal with two buttons and a promise
+     of which was pressed. It is a real `<dialog>` with a `method="dialog"` form, so
+     Escape, the focus trap and the return value are all the platform's. Focus lands
+     on Cancel, the button that does nothing: the confirmation that defaults to the
+     destructive answer is the one somebody presses Enter through. */
+  function confirmDialog(message, options, from) {
+    var o = options || {};
+    var t = strings(document.body);
+    if (typeof window.Promise !== 'function' || !document.body) return null;
+    return new window.Promise(function (done) {
+      var dlg = el('dialog', 'ins-dialog ins-dialog--sm');
+      var form = el('form');
+      form.method = 'dialog';
+      var textId = uid('ins-confirm');
+      if (o.title) {
+        var head = el('div', 'ins-dialog-head');
+        var h = el('h2', 'ins-dialog-title', o.title);
+        h.id = textId + '-title';
+        head.appendChild(h);
+        form.appendChild(head);
+        dlg.setAttribute('aria-labelledby', h.id);
+      }
+      var body = el('div', 'ins-dialog-body');
+      // With no title the question is the title, so it is drawn and announced as one; with a title it is the text under it.
+      var p = el(o.title ? 'p' : 'h2', o.title ? '' : 'ins-dialog-title', String(message));
+      p.id = textId;
+      p.style.margin = '0';
+      body.appendChild(p);
+      form.appendChild(body);
+      dlg.setAttribute(o.title ? 'aria-describedby' : 'aria-labelledby', textId);
+      var foot = el('div', 'ins-dialog-foot');
+      var no = el('button', 'ins-btn ins-btn--bare', o.cancel || t.cancel);
+      no.value = 'cancel';
+      var yes = el('button', 'ins-btn ' + (o.tone === 'danger' ? 'ins-btn--danger' : 'ins-btn--primary'), o.confirm || t.ok);
+      yes.value = 'ok';
+      foot.appendChild(no);
+      foot.appendChild(yes);
+      form.appendChild(foot);
+      dlg.appendChild(form);
+      dlg.addEventListener('close', function () {
+        done(dlg.returnValue === 'ok');
+        setTimeout(function () { if (dlg.parentNode) dlg.parentNode.removeChild(dlg); }, 400);
+      });
+      document.body.appendChild(dlg);
+      dlg._insFrom = from || document.activeElement;
+      gutterCheck();
+      dlg.showModal();
+      no.focus();
+    });
+  }
+
+  /* ==========================================================================
+     DELEGATION — one listener, so nothing needs wiring up
+     ========================================================================== */
+
+  var HANDLES = [
+    '[data-ins-theme-toggle]',
+    '[data-ins-sidebar]',
+    '[data-ins-toast]',
+    '[data-ins-dialog]',
+    '[data-ins-dialog-close]',
+    '[data-ins-fx]',
+    '[data-ins-dismiss]',
+    '[data-ins-navbar]',
+    '[data-ins-password]',
+    '[data-ins-toggle]',
+    '[data-ins-spin]',
+    '[data-ins-wizard="next"]',
+    '[data-ins-wizard="prev"]',
+    '[data-ins-wizard="restart"]',
+    '.ins-date-btn',
+    '.ins-sort',
+    '.ins-chip-x',
+    '[data-ins-select="none"]',
+    '.ins-table td[data-ins-edit]',
+    TAB,
+    '.ins-seg > a',
+    '.ins-seg > button'
+  ].join(', ');
+
+  document.addEventListener('click', function (event) {
+    var el = event.target.closest ? event.target.closest(HANDLES) : null;
+    if (!el) return;
+
+    if (el.hasAttribute('data-ins-theme-toggle')) {
+      /* An explicit value sets that theme; a bare attribute toggles. */
+      var want = el.getAttribute('data-ins-theme-toggle');
+      /* The switch itself is where the circle starts, so the page changes from the
+         point of contact rather than from an arbitrary corner. */
+      sweep(el, function () {
+        if (want) theme(want); else toggleTheme();
+      });
+      if (el.tagName === 'A') event.preventDefault();
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-sidebar')) {
+      sidebar(el.getAttribute('data-ins-sidebar') || 'toggle');
+      if (el.tagName === 'A') event.preventDefault();
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-toast')) {
+      toast(el.getAttribute('data-ins-toast'), el.getAttribute('data-ins-tone'));
+      if (el.tagName === 'A') event.preventDefault();
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-dialog')) {
+      dialog(el.getAttribute('data-ins-dialog'), 'open', el);
+      if (el.tagName === 'A') event.preventDefault();
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-dialog-close')) {
+      var owner = el.closest('dialog');
+      if (owner) dialog(owner, 'close');
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-fx')) {
+      var off = root.getAttribute('data-ins-fx') === 'off';
+      if (off) root.removeAttribute('data-ins-fx'); else root.setAttribute('data-ins-fx', 'off');
+      el.setAttribute('aria-pressed', String(!off));
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-dismiss')) {
+      dismiss(el);
+      if (el.tagName === 'A') event.preventDefault();
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-navbar')) {
+      navbar(el.getAttribute('data-ins-navbar') || el);
+      return;
+    }
+
+    /* Prevented whatever the element is: a <button> inside a <form> is a submit
+       button unless it says otherwise, and showing a password must not send it. */
+    if (el.hasAttribute('data-ins-password')) {
+      event.preventDefault();
+      togglePassword(el);
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-toggle')) {
+      toggleButton(el);
+      return;
+    }
+
+    /* Prevented for the same reason as the password toggle: a stepper's buttons sit
+       inside a form, and a − that submits it is not a −. */
+    if (el.hasAttribute('data-ins-spin')) {
+      event.preventDefault();
+      spin(el);
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-wizard')) {
+      event.preventDefault();
+      var w = el.closest('.ins-wizard');
+      /* Not while a step is still reaching the server. */
+      if (!w || w.getAttribute('aria-busy') === 'true') return;
+      var how = el.getAttribute('data-ins-wizard');
+      var dest = how === 'restart' ? 0 : wizardIndex(w) + (how === 'next' ? 1 : -1);
+      wizardGo(w, dest, { validate: how === 'next', focus: true });
+      return;
+    }
+
+    if (el.classList.contains('ins-chip-x')) {
+      event.preventDefault();
+      chipRemove(el.closest('.ins-chip'));
+      return;
+    }
+
+    if (el.classList.contains('ins-sort')) {
+      event.preventDefault();
+      sortTable(el.closest('th'));
+      return;
+    }
+
+    /* "Clear" in a selection's bar: every row of its table let go. */
+    if (el.getAttribute('data-ins-select') === 'none') {
+      var bar = el.closest('[data-ins-bulk]');
+      var owned = bar && resolve(bar.getAttribute('data-ins-bulk'));
+      if (owned) { selectAll(owned, false); selectSync(owned); }
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-edit')) {
+      editStart(el);
+      return;
+    }
+
+    if (el.classList.contains('ins-date-btn')) {
+      event.preventDefault();
+      var field = (el.closest('.ins-input-group') || el.parentNode).querySelector('[data-ins-date-ready]');
+      if (field && calFor === field) closeCal(true);
+      else if (field) openCal(field, true);
+      return;
+    }
+
+    /* A tab with a panel on this page. Checked before the segmented control, because
+       a segment can be a tab; `selectTab` moves the segment's selection as well. */
+    if (el.matches(TAB) && tabPanel(el)) {
+      selectTab(el);
+      if (el.tagName === 'A') event.preventDefault();
+      return;
+    }
+
+    /* A segmented control moves its own selection. Only when the segment is not a
+       link to somewhere else: a `.ins-seg > a` with a real href is navigation, and
+       marking it active here would flash the wrong segment before the page leaves. */
+    if (el.parentNode && el.parentNode.classList.contains('ins-seg')) {
+      var href = el.getAttribute('href');
+      if (el.tagName === 'A' && href && href.charAt(0) !== '#') return;
+      var seg = el.parentNode;
+      for (var i = 0; i < seg.children.length; i++) {
+        var child = seg.children[i];
+        child.classList.toggle('is-active', child === el);
+        if (child.hasAttribute('role') || seg.getAttribute('role') === 'tablist') {
+          child.setAttribute('aria-selected', String(child === el));
+        }
+      }
+      emit('ins:seg', { value: el.getAttribute('data-ins-value') || el.textContent.trim(), el: el });
+      if (el.tagName === 'A') event.preventDefault();
+    }
+  }, false);
+
+  /* Choosing an item closes its menu and hands focus back to the trigger — except a
+     checkbox item, which is a setting being flipped, and whose menu stays open for
+     the next one. A radio item moves the check within its group, or within the
+     menu when it has none. */
+  document.addEventListener('click', function (event) {
+    var item = event.target.closest ? event.target.closest('.ins-pop-item') : null;
+    var pop = item && item.closest(POP);
+    if (!pop) return;
+    var role = item.getAttribute('role');
+    if (role === 'menuitemcheckbox') {
+      var on = item.getAttribute('aria-checked') !== 'true';
+      item.setAttribute('aria-checked', String(on));
+      emit('ins:menu', { item: item, checked: on });
+      return;
+    }
+    if (role === 'menuitemradio') {
+      var group = item.closest('[role="group"]') || item.closest('.ins-pop-body');
+      var radios = group.querySelectorAll('[role="menuitemradio"]');
+      for (var i = 0; i < radios.length; i++) radios[i].setAttribute('aria-checked', String(radios[i] === item));
+      emit('ins:menu', { item: item, checked: true });
+    }
+    closePop(pop, true);
+  }, false);
+
+  // A toggle event does not bubble, so it is caught on the way down; however a menu opened or closed, its body follows.
+  document.addEventListener('toggle', function (event) {
+    var pop = event.target;
+    if (!pop.matches || !pop.matches(POP)) return;
+    if (pop.open) menuShow(pop);
+    else menuHide(pop);
+  }, true);
+
+  // Tabbing out of an open menu closes it, unless focus went to a pop-up opened from inside it; focus going nowhere, or to a box around the menu (a dialog), is a click on its padding.
+  document.addEventListener('focusout', function (event) {
+    var pop = event.target.closest ? event.target.closest(POP + '[open]') : null;
+    var to = event.relatedTarget;
+    if (!pop || !to || pop.contains(to) || to.contains(pop)) return;
+    for (var i = 0; i < layers.length; i++) if (layers[i].kind === 'popup' && layers[i].el.contains(to) && pop.contains(layers[i].trigger)) return;
+    closePop(pop, false);
+  }, false);
+
+  /* A sidebar link: a same-page one moves the selection here and now; one that loads
+     another page leaves a note for that page to fly the marker from. */
+  document.addEventListener('click', function (event) {
+    var link = event.target.closest ? event.target.closest('.ins-shell-side a.ins-shell-link[href]') : null;
+    if (!link || !navigates(event, link)) return;
+    if (samePage(link)) { sidebarSelect(link); return; }
+    var side = link.closest('.ins-shell-side'), old = navActive(side);
+    var note = { t: Date.now() };
+    if (!side.classList.contains('is-filtering')) note.top = side.scrollTop;
+    if (old && old !== link && old.href) note.from = old.href;
+    try {
+      window.sessionStorage.setItem(NAV_KEY, JSON.stringify(note));
+    } catch (e) { /* no storage: the page simply arrives with its marker in place */ }
+  }, false);
+
+  /* Following a link in an open navbar menu closes it — on a page that does not
+     navigate away, a fragment link, the menu would otherwise stay over the content
+     it just scrolled to. */
+  document.addEventListener('click', function (event) {
+    var link = event.target.closest ? event.target.closest('.ins-navbar-link') : null;
+    var bar = link && link.closest('.ins-navbar.is-open');
+    if (bar) navbar(bar, false);
+  }, false);
+
+  /* The tooltip's triggers. Pointer events rather than mouse events, so a pen gets
+     tips and a finger does not — a touch has no hover to reveal one, and a tip that
+     appears under the finger that just pressed is covering the thing it describes. */
+  document.addEventListener('pointerover', function (event) {
+    if (event.pointerType === 'touch') return;
+    var el = event.target.closest ? event.target.closest(TIP) : null;
+    if (!el) return;
+    clearTimeout(tipTimer);
+    if (el === tipOwner) return;
+    var delay = (tipOwner || Date.now() < tipWarmUntil) ? 0 : 400;
+    tipTimer = setTimeout(function () { showTip(el); }, delay);
+  }, false);
+
+  document.addEventListener('pointerout', function (event) {
+    var el = event.target.closest ? event.target.closest(TIP) : null;
+    if (!el) return;
+    var to = event.relatedTarget;
+    if (to && (el.contains(to) || (tipEl && tipEl.contains(to)))) return;
+    if (el === tipOwner) hideTipSoon();
+    else clearTimeout(tipTimer);
+  }, false);
+
+  /* Keyboard focus only: a click also focuses a button, and a tip that appears on
+     every click is a tip in the way. */
+  document.addEventListener('focusin', function (event) {
+    var el = event.target.closest ? event.target.closest(TIP) : null;
+    if (!el) return;
+    var keyboard = true;
+    try { keyboard = el.matches(':focus-visible'); } catch (e) { /* old engine: show it */ }
+    if (keyboard) showTip(el);
+  }, false);
+
+  document.addEventListener('focusout', function (event) {
+    if (tipOwner && tipOwner.contains(event.target)) hideTip();
+  }, false);
+
+  document.addEventListener('pointerdown', function () { if (tipOwner) hideTip(); }, true);
+  /* Captured, so a scroll inside any element scroller hides it too — the tip is
+     fixed to the viewport and would otherwise be left floating over the wrong row. */
+  window.addEventListener('scroll', function () { if (tipOwner) hideTip(); }, true);
+
+  /* Validation: see `fieldMessage` above. `invalid` does not bubble either. */
+  document.addEventListener('invalid', function (event) {
+    var control = event.target;
+    /* A field in a wizard step that is not showing cannot be focused or pointed at,
+       so the browser's report would say nothing and the submit would simply not
+       happen. Go to its step first — whether or not this form reports inline. */
+    /* Only ever back, to an earlier step: that is where a field can be left invalid by
+       the time the form is submitted from its last step. */
+    var panel = control.closest && control.closest('.ins-wizard-panel');
+    if (panel && !panel.classList.contains('is-active')) {
+      var wiz = panel.closest('.ins-wizard');
+      var there = wizardPanels(wiz).indexOf(panel);
+      if (there !== -1 && there < wizardIndex(wiz)) wizardGo(wiz, there, { quiet: false });
+    }
+    if (!control.form || !control.form.hasAttribute('data-ins-validate')) return;
+    /* Marked as reported, so the stylesheet can show it as invalid from now on. The
+       browser's own `:user-invalid` would do, but it is only set by a submit attempt
+       or by the person editing the field — not by `reportValidity()`, which is how a
+       wizard checks one step. Tested: after a blocked "next" every field in the step
+       was invalid and none of them said so. The mark clears itself: the stylesheet
+       reads it together with `:invalid`. */
+    control.setAttribute('data-ins-reported', '');
+    var msg = fieldMessage(control);
+    if (!msg) return;
+    event.preventDefault();
+    if (msg.hasAttribute('data-ins-auto') || !msg.textContent.trim()) {
+      msg.setAttribute('data-ins-auto', '');
+      /* The browser's message is in the *browser's* language, which need not be
+         the page's: an English Chrome on an Arabic page says "Please fill out this
+         field." `dir="auto"` lets the sentence take its own direction, so its full
+         stop and its mark land at the right ends rather than mirrored. */
+      msg.setAttribute('dir', 'auto');
+      msg.textContent = control.validationMessage;
+    }
+    if (!firstInvalid) {
+      firstInvalid = control;
+      setTimeout(function () {
+        if (firstInvalid) firstInvalid.focus();
+        firstInvalid = null;
+      }, 0);
+    }
+  }, true);
+
+  /* Keep a filled-in message current as the person types — "required" becomes
+     "not an email address" becomes nothing. */
+  document.addEventListener('input', function (event) {
+    var control = event.target;
+    if (!control.form || !control.form.hasAttribute('data-ins-validate')) return;
+    var msg = fieldMessage(control);
+    if (msg && msg.hasAttribute('data-ins-auto')) msg.textContent = control.validationMessage;
+  }, true);
+
+  /* Enter in a wizard's field means "next". Taken on the key itself, before the
+     browser's implicit submission, which would first check the *whole* form: every
+     required field in the steps still to come would fail and the step would never
+     move. Only the step on screen is checked, and a server step is asked as usual. */
+  document.addEventListener('keydown', function (event) {
+    if (event.key !== 'Enter' || event.isComposing || event.defaultPrevented) return;
+    var t = event.target;
+    if (!t || t.tagName !== 'INPUT' || /^(checkbox|radio|submit|button|reset|image|file)$/i.test(t.type)) return;
+    var w = t.form && t.form.classList.contains('ins-wizard') ? t.form : null;
+    if (!w || w.hasAttribute('data-ins-last') || wizardPanels(w).length < 2) return;
+    event.preventDefault();
+    if (w.getAttribute('aria-busy') === 'true') return;
+    wizardGo(w, wizardIndex(w) + 1, { validate: true, focus: true });
+  }, true);
+
+  /* And a submit that arrives before the last step anyway (a submit button in a
+     step, say) is taken as "next" too. */
+  document.addEventListener('submit', function (event) {
+    var w = event.target.classList && event.target.classList.contains('ins-wizard') ? event.target : null;
+    if (!w || w.hasAttribute('data-ins-last')) return;
+    var panels = wizardPanels(w);
+    if (panels.length < 2) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (w.getAttribute('aria-busy') === 'true') return;
+    wizardGo(w, wizardIndex(w) + 1, { validate: true, focus: true });
+  }, true);
+
+  /* A confirmation in front of a click: `data-ins-confirm="حذف هذه العملية؟"`. The
+     click is stopped before anything else sees it, the question is asked, and on a
+     yes the very same click is replayed — so a link still navigates, a submit button
+     still submits its form with its own name and value, and a `data-ins-*` control
+     still does what it does, none of them knowing they were asked about. A control
+     already styled as dangerous gets a dangerous confirm button. */
+  document.addEventListener('click', function (event) {
+    var el = event.target.closest ? event.target.closest('[data-ins-confirm]') : null;
+    if (!el) return;
+    if (el.hasAttribute('data-ins-confirmed')) { el.removeAttribute('data-ins-confirmed'); return; }
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    var danger = /\bins-(btn--danger|btn--ghost-danger|pop-item--bad)\b/.test(el.className);
+    var asked = confirmDialog(el.getAttribute('data-ins-confirm'), {
+      tone: danger ? 'danger' : el.getAttribute('data-ins-confirm-tone'),
+      confirm: el.getAttribute('data-ins-confirm-ok') || undefined
+    }, el);
+    if (!asked) return;
+    asked.then(function (yes) {
+      if (!yes) return;
+      el.setAttribute('data-ins-confirmed', '');
+      el.click();
+    });
+  }, true);
+
+  /* Everything the new form controls listen for as the person types. */
+  document.addEventListener('input', function (event) {
+    var t = event.target;
+    if (!t.classList) return;
+    if (t.classList.contains('ins-range')) rangeFill(t);
+    if (t.hasAttribute('data-ins-count')) countSync(t);
+    if (t.type === 'number' && t.closest('.ins-input-group') && t.closest('.ins-input-group').querySelector('.ins-spin')) syncSpin(t);
+    var combo = t.closest && t.closest(COMBO);
+    if (combo && t === comboInput(combo) && event.isTrusted !== false) {
+      var any = comboFilter(combo);
+      comboActivate(combo, null);
+      comboOpen(combo, any);
+    }
+  }, false);
+
+  /* The keyboard for the autocomplete and the date field. Registered on its own so
+     neither has to know about the menus and tabs that own their arrow keys above. */
+  document.addEventListener('keydown', function (event) {
+    if (onTagsKey(event)) return;
+    onComboKey(event);
+    var t = event.target;
+    if (t.hasAttribute && t.hasAttribute('data-ins-time-ready') && !event.defaultPrevented) {
+      if (event.key === 'Enter') { commitTime(t); closeTime(false); }
+      else if (event.key === 'ArrowDown') { event.preventDefault(); openTime(t, true); }
+      else if (event.key === 'Escape' && timeFor === t) { event.preventDefault(); closeTime(false); }
+      return;
+    }
+    if (!t.hasAttribute || !t.hasAttribute('data-ins-date-ready')) return;
+    if (event.key === 'ArrowDown') { event.preventDefault(); openCal(t, true); }
+    else if (event.key === 'Escape' && calFor === t) { event.preventDefault(); closeCal(false); }
+    else if (event.key === 'Enter') { commitTyped(t); if (calFor === t) closeCal(false); }
+  }, false);
+
+  /* An autocomplete opens when its field is clicked, and chooses when an option is.
+     A date field opens its calendar on a click too — but leaves the caret in the
+     field, so a person who would rather type still can. */
+  document.addEventListener('click', function (event) {
+    var t = event.target;
+    var opt = t.closest ? t.closest('.ins-combo-option') : null;
+    if (opt) {
+      var combo = opt.closest(COMBO);
+      if (combo && opt.getAttribute('aria-disabled') !== 'true') { comboChoose(combo, opt); comboInput(combo).focus(); }
+      return;
+    }
+    var tagBox = t.classList && t.classList.contains('ins-tags') ? t : null;
+    if (tagBox) { tagsInput(tagBox).focus(); t = tagsInput(tagBox); }
+    var direct = pressedOn === t;
+    var box = t.closest && t.closest(COMBO);
+    if (box && t === comboInput(box)) {
+      var shown = comboList(box) && comboList(box).hasAttribute('data-ins-open');
+      if (shown) comboOpen(box, false);
+      else if (direct) comboOpen(box, comboFilter(box));
+      return;
+    }
+    if (!direct || !t.hasAttribute) return;
+    if (t.hasAttribute('data-ins-date-ready')) { if (calFor === t) closeCal(false); else openCal(t, false); }
+    if (t.hasAttribute('data-ins-time-ready')) { if (timeFor === t) closeTime(false); else openTime(t, false); }
+  }, false);
+
+  // A label passes its click on to its field; only a press on the field itself opens that field's popover.
+  var pressedOn = null;
+  document.addEventListener('pointerdown', function (event) { pressedOn = event.target; }, true);
+
+  /* A press on the list must not take focus from the field, or the field's blur
+     would close the list before the click that was choosing from it arrived. */
+  document.addEventListener('mousedown', function (event) {
+    if (event.target.closest && event.target.closest('.ins-combo-list')) event.preventDefault();
+  }, false);
+
+  document.addEventListener('focusout', function (event) {
+    var t = event.target, to = event.relatedTarget;
+    var combo = t.closest && t.closest(COMBO);
+    if (combo && (!to || !combo.contains(to))) comboOpen(combo, false);
+    if (t.hasAttribute && t.hasAttribute('data-ins-time-ready') && !(to && timeEl && timeEl.contains(to))) commitTime(t);
+    if (timeFor && timeEl && (t === timeFor || timeEl.contains(t)) && !(to && (to === timeFor || timeEl.contains(to) || to.contains(timeEl)))) closeTime(false);
+    /* A date field reads what was typed as focus leaves it — unless it is leaving
+       for its own calendar, which will set the value itself. */
+    if (t.hasAttribute && t.hasAttribute('data-ins-date-ready') && !(to && calEl && calEl.contains(to))) commitTyped(t);
+    if (calFor && calEl && calEl.contains(t) && to && !calEl.contains(to) && !to.contains(calEl) && to !== calFor && to !== calButton(calFor)) closeCal(false);
+  }, false);
+
+  /* A form reset puts the native values back, and neither a slider's fill nor a date
+     field's text is a native value — so they are redrawn once the reset has run. */
+  document.addEventListener('reset', function (event) {
+    var form = event.target;
+    // A reset form starts over: no field stays reported, and every message the library wrote is emptied.
+    if (form.querySelectorAll) {
+      var reported = form.querySelectorAll('[data-ins-reported]');
+      for (var r = 0; r < reported.length; r++) reported[r].removeAttribute('data-ins-reported');
+      var written = form.querySelectorAll('.ins-error[data-ins-auto]');
+      for (var m = 0; m < written.length; m++) written[m].textContent = '';
+    }
+    setTimeout(function () {
+      var ranges = form.querySelectorAll('.ins-range');
+      for (var i = 0; i < ranges.length; i++) rangeFill(ranges[i]);
+      var dates = form.querySelectorAll('[data-ins-date-ready]');
+      for (var j = 0; j < dates.length; j++) {
+        dates[j].removeAttribute('data-ins-at');
+        setDate(dates[j], dateOf(dates[j]), true);
+      }
+      var counted = form.querySelectorAll('[data-ins-count]');
+      for (var k = 0; k < counted.length; k++) countSync(counted[k]);
+    }, 0);
+  }, true);
+
+  /* A password left showing is put back before the form goes, so the browser's
+     password manager sees a password field and offers to save it. */
+  document.addEventListener('submit', function (event) {
+    var shown = event.target.querySelectorAll ? event.target.querySelectorAll('input[data-ins-secret]') : [];
+    for (var i = 0; i < shown.length; i++) shown[i].type = 'password';
+    var toggles = event.target.querySelectorAll ? event.target.querySelectorAll('[data-ins-password]') : [];
+    for (var j = 0; j < toggles.length; j++) toggles[j].setAttribute('aria-pressed', 'false');
+  }, true);
+
+  document.addEventListener('change', function (event) {
+    var group = event.target.closest && event.target.closest('[data-ins-datetime]');
+    if (group) datetimeSync(group);
+  }, false);
+
+  /* Any change in a form that keeps itself. */
+  ['input', 'change'].forEach(function (type) {
+    document.addEventListener(type, function (event) {
+      var form = event.target.closest && event.target.closest('form[data-ins-autosave]');
+      if (form) autosave(form);
+    }, false);
+  });
+
+  /* A choice changes the totals of any region it is in. */
+  document.addEventListener('change', function (event) {
+    if (event.target.type === 'radio' || event.target.type === 'checkbox') sumsFor(event.target);
+  }, false);
+
+  // A chosen radio clicked again is cleared, where it or an ancestor carries data-ins-deselect.
+  var radioWas = null;
+
+  function deselectable(t) {
+    var r = t.type === 'radio' ? t : t.closest && t.closest('label') ? t.closest('label').control : null;
+    return r && r.type === 'radio' && r.closest('[data-ins-deselect]') ? { radio: r, on: r.checked } : null;
+  }
+
+  document.addEventListener('pointerdown', function (event) { radioWas = deselectable(event.target); }, true);
+  document.addEventListener('keydown', function (event) { radioWas = event.key === ' ' ? deselectable(event.target) : null; }, true);
+  document.addEventListener('click', function (event) {
+    var r = event.target, was = radioWas;
+    if (r.type !== 'radio') return;
+    radioWas = null;
+    if (!was || was.radio !== r || !was.on || r.disabled) return;
+    r.checked = false;
+    r.dispatchEvent(new Event('input', { bubbles: true }));
+    r.dispatchEvent(new Event('change', { bubbles: true }));
+  }, false);
+
+  /* The split's handle, dragged. The pointer is captured, so the drag keeps going
+     when it runs ahead of the handle, over an iframe or off the window's edge. */
+  document.addEventListener('pointerdown', function (event) {
+    var handle = event.target.closest ? event.target.closest('.ins-split-handle') : null;
+    if (!handle || event.button > 0) return;
+    var split = handle.parentNode;
+    event.preventDefault();
+    handle.focus();
+    try { handle.setPointerCapture(event.pointerId); } catch (e) { /* old engine */ }
+    handle.classList.add('is-dragging');
+    split.classList.add('is-dragging');
+    var move = function (e) { splitSet(split, splitAt(split, e)); };
+    var up = function () {
+      handle.removeEventListener('pointermove', move);
+      handle.removeEventListener('pointerup', up);
+      handle.removeEventListener('pointercancel', up);
+      handle.classList.remove('is-dragging');
+      split.classList.remove('is-dragging');
+      splitSet(split, splitNow(split), true);
+    };
+    handle.addEventListener('pointermove', move);
+    handle.addEventListener('pointerup', up);
+    handle.addEventListener('pointercancel', up);
+  }, false);
+
+  document.addEventListener('dblclick', function (event) {
+    var handle = event.target.closest ? event.target.closest('.ins-split-handle') : null;
+    if (handle) splitSet(handle.parentNode, parseFloat(handle.parentNode.getAttribute('data-ins-split-default')) || 50, true);
+  }, false);
+
+  /* The handle from the keyboard: the arrows move the line the way they point, so on
+     an Arabic page the left arrow widens the first pane, which is on the right. */
+  document.addEventListener('keydown', function (event) {
+    var handle = event.target;
+    if (!handle.classList || !handle.classList.contains('ins-split-handle')) return;
+    var split = handle.parentNode, now = splitNow(split), lim = splitLimits(split), v = split.classList.contains('ins-split--v');
+    var rtl = window.getComputedStyle(split).direction === 'rtl';
+    var grow = v ? 'ArrowDown' : (rtl ? 'ArrowLeft' : 'ArrowRight');
+    var shrink = v ? 'ArrowUp' : (rtl ? 'ArrowRight' : 'ArrowLeft');
+    var to = null, step = event.shiftKey ? 10 : 2;
+    if (event.key === grow) to = now + step;
+    else if (event.key === shrink) to = now - step;
+    else if (event.key === 'Home') to = lim.min;
+    else if (event.key === 'End') to = lim.max;
+    else if (event.key === 'Enter') to = parseFloat(split.getAttribute('data-ins-split-default')) || 50;
+    if (to === null) return;
+    event.preventDefault();
+    splitSet(split, to, true);
+  }, false);
+
+  /* Marks and their notes light together under the pointer and on keyboard focus;
+     a click on a mark brings its note into view. */
+  document.addEventListener('pointerover', function (event) { noteLight(noteGroup(event.target)); }, false);
+  document.addEventListener('focusin', function (event) { noteLight(noteGroup(event.target)); }, false);
+  document.addEventListener('focusout', function (event) {
+    if (!event.relatedTarget || !noteGroup(event.relatedTarget)) noteLight(null);
+  }, false);
+  document.addEventListener('click', function (event) {
+    var mark = event.target.closest ? event.target.closest('.ins-mark[data-ins-note]') : null;
+    var note = mark && resolve(mark.getAttribute('data-ins-note'));
+    if (note && note.scrollIntoView) note.scrollIntoView({ block: 'nearest', behavior: motionless() ? 'auto' : 'smooth' });
+  }, false);
+
+  /* A table's checkboxes. The header box takes every row with it; a row box with
+     Shift held takes every row between it and the last one clicked. */
+  document.addEventListener('click', function (event) {
+    var box = event.target;
+    if (!box.matches || !box.matches('.ins-table tbody input[data-ins-select]')) return;
+    var table = tableOf(box), boxes = selectBoxes(table);
+    var last = table.__insLastBox, from = boxes.indexOf(last), to = boxes.indexOf(box);
+    if (event.shiftKey && from !== -1 && to !== -1) {
+      for (var i = Math.min(from, to); i <= Math.max(from, to); i++) if (!boxes[i].disabled) boxes[i].checked = box.checked;
+    }
+    table.__insLastBox = box;
+  }, false);
+
+  document.addEventListener('change', function (event) {
+    var box = event.target;
+    if (!box.matches || !box.matches('input[data-ins-select]')) return;
+    var table = tableOf(box);
+    if (!table) return;
+    if (box.getAttribute('data-ins-select') === 'all') selectAll(table, box.checked);
+    selectSync(table);
+  }, false);
+
+  /* An editable cell: Enter or F2 opens it from the keyboard; in its field, Enter
+     keeps the change and Escape drops it, and focus goes back to the cell either way,
+     so the keyboard can carry on down the column. Leaving the field keeps it. */
+  document.addEventListener('keydown', function (event) {
+    var t = event.target;
+    if (!t.closest || event.isComposing) return;
+    if (t.matches('.ins-table td[data-ins-edit]') && (event.key === 'Enter' || event.key === 'F2')) {
+      event.preventDefault();
+      editStart(t);
+      return;
+    }
+    var td = t.closest('.ins-table td.is-editing');
+    if (!td || (event.key !== 'Enter' && event.key !== 'Escape')) return;
+    event.preventDefault();
+    event.stopPropagation();
+    editEnd(td, event.key === 'Enter');
+    td.focus();
+  }, true);
+
+  document.addEventListener('focusout', function (event) {
+    var td = event.target.closest && event.target.closest('.ins-table td.is-editing');
+    if (td && !(event.relatedTarget && td.contains(event.relatedTarget))) editEnd(td, true);
+  }, false);
+
+  /* The drawer's scrim. The CSS shows it as the sidebar's sibling, so it has no
+     handler of its own to hang this on. */
+  document.addEventListener('click', function (event) {
+    if (event.target.classList && event.target.classList.contains('ins-shell-scrim')) {
+      sidebar('closed');
+    }
+  }, false);
+
+  /* The sidebar filter, ahead of the Escape below: its first Escape clears the field and must not also close the drawer. */
+  document.addEventListener('input', function (event) {
+    var box = event.target.closest ? event.target.closest('.ins-shell-filter') : null;
+    var side = box && box.closest('.ins-shell-side');
+    if (side) filterRun(side);
+  }, false);
+  document.addEventListener('keydown', function (event) {
+    if (!event.defaultPrevented && !event.isComposing) filterKey(event);
+  }, false);
+
+  /* The keyboard. Menus and tabs first, because they own their arrow keys; then
+     Escape for everything that is not a <dialog> — which gets Escape from the
+     platform, as the drawer does, being one. The shell's sidebar drawer, the navbar
+     menu and the tooltip are built out of classes and do not, and a panel you cannot
+     dismiss from the keyboard is a trap on a narrow screen. */
+  document.addEventListener('keydown', function (event) {
+    /* An Escape already spent — by a calendar, an autocomplete, a dialog's menu — is
+       not also a request to close the drawer behind it. */
+    if (event.defaultPrevented) return;
+    onPopKey(event);
+    if (event.defaultPrevented) return;
+    onTabKey(event);
+    if (event.defaultPrevented) return;
+
+    if (event.key !== 'Escape' && event.keyCode !== 27) return;
+    if (tipOwner) { hideTip(); event.preventDefault(); return; }
+    var top = layerTop();
+    if (top && top.kind === 'popup') { event.preventDefault(); top.o.close('escape'); return; }
+    var panel = drawer();
+    if (panel && panel.classList.contains('is-open')) sidebar('closed');
+    var bars = document.querySelectorAll('.ins-navbar.is-open');
+    for (var i = 0; i < bars.length; i++) {
+      navbar(bars[i], false);
+      var toggle = bars[i].querySelector('[data-ins-navbar]');
+      if (toggle && bars[i].contains(document.activeElement)) toggle.focus();
+    }
+  }, false);
+
+  /* Crossing the breakpoint with the drawer open would leave a column stuck in its
+     open-drawer state, so the class is dropped on the way out. The collapsed
+     preference is untouched: it belongs to the wide layout and is still wanted when
+     the window grows back. */
+  if (window.matchMedia) {
+    var wide = window.matchMedia('(min-width: 901px)');
+    var onWide = function (e) {
+      if (e.matches) {
+        var panel = drawer();
+        if (panel) panel.classList.remove('is-open');
+        /* The navbar's folded menu is the same case: above the line it is a row
+           again, and an `is-open` left behind would reopen it on the way back down. */
+        var bars = document.querySelectorAll('.ins-navbar.is-open');
+        for (var i = 0; i < bars.length; i++) navbar(bars[i], false);
+      }
+    };
+    if (wide.addEventListener) wide.addEventListener('change', onWide);
+    else if (wide.addListener) wide.addListener(onWide);
+  }
+
+  /* ==========================================================================
+     INIT — only for the things that BUILD DOM rather than listen to it
+     ========================================================================== */
+
+  var builders = [];
+
+  function define(name, fn) { builders.push({ name: name, fn: fn }); }
+
+  function init(scope) {
+    var where = scope || document;
+    for (var i = 0; i < builders.length; i++) {
+      try {
+        builders[i].fn(where);
+      } catch (e) {
+        /* One broken builder must not stop the rest, and must not be silent. */
+        if (window.console) window.console.error('[insiyab] ' + builders[i].name, e);
+      }
+    }
+    return where;
+  }
+
+  /* The orbs. Injected so a two-tag page gets the full ground for free; write the
+     markup yourself if you are CSS-only, or opt out with data-ins-orbs="off". */
+  define('orbs', function (scope) {
+    if (scope !== document) return;                       /* page furniture, once */
+    if (root.getAttribute('data-ins-orbs') === 'off') return;
+    if (document.querySelector('.ins-orbs')) return;      /* hand-written, respect it */
+    var layer = document.createElement('div');
+    layer.className = 'ins-orbs';
+    layer.setAttribute('aria-hidden', 'true');
+    for (var n = 1; n <= 3; n++) {
+      var orb = document.createElement('div');
+      orb.className = 'ins-orb ins-orb-' + n;
+      layer.appendChild(orb);
+    }
+    document.body.insertBefore(layer, document.body.firstChild);
+  });
+
+  /* Give every bare toggle its initial pressed state, so a screen reader is not
+     told the page is in light mode when it is in dark. */
+  define('theme-toggle-state', function (scope) {
+    pressToggles(scope);
+    var skies = scope.querySelectorAll('.ins-daynight');
+    for (var i = 0; i < skies.length; i++) {
+      if (skies[i].querySelector('.ins-dn-sky')) continue;
+      skies[i].insertAdjacentHTML('beforeend', DAYNIGHT);
+    }
+  });
+
+  /* Values from attributes: data-ins-size, data-ins-col and data-ins-height each set the variable of the same name, and a ring's aria-valuenow sets how full it is. A bare number is pixels. */
+  var VALUE_ATTRS = ['data-ins-size', 'data-ins-col', 'data-ins-height', 'aria-valuenow', 'aria-valuemin', 'aria-valuemax'];
+  var valuesWatched = false;
+
+  function setValues(el) {
+    for (var i = 0; i < 3; i++) {
+      var name = VALUE_ATTRS[i], v = el.getAttribute(name), prop = '--ins-' + name.slice(9);
+      if (v == null || v === '') { if (el.__insValues && el.__insValues[prop]) el.style.removeProperty(prop); continue; }
+      el.style.setProperty(prop, /^-?[\d.]+$/.test(v) ? v + 'px' : v);
+      (el.__insValues = el.__insValues || {})[prop] = true;
+    }
+    if (el.classList && el.classList.contains('ins-ring') && el.hasAttribute('aria-valuenow')) {
+      var now = parseFloat(el.getAttribute('aria-valuenow')), min = parseFloat(el.getAttribute('aria-valuemin')) || 0;
+      var max = parseFloat(el.getAttribute('aria-valuemax'));
+      if (isNaN(max)) max = 100;
+      if (!isNaN(now) && max !== min) el.style.setProperty('--ins-value', String(Math.max(0, Math.min(100, (now - min) * 100 / (max - min)))));
+    }
+  }
+
+  define('values', function (scope) {
+    var sel = '[data-ins-size], [data-ins-col], [data-ins-height], .ins-ring[aria-valuenow]';
+    if (scope !== document && scope.matches && scope.matches(sel)) setValues(scope);
+    var nodes = scope.querySelectorAll(sel);
+    for (var i = 0; i < nodes.length; i++) setValues(nodes[i]);
+    if (valuesWatched || !window.MutationObserver) return;
+    valuesWatched = true;
+    new MutationObserver(function (list) {
+      for (var j = 0; j < list.length; j++) setValues(list[j].target);
+    }).observe(root, { attributes: true, subtree: true, attributeFilter: VALUE_ATTRS });
+  });
+
+  /* A press shows on a single click as fully as on a hold: :active draws the hold, and a press too short to see it gets one dip on release. */
+  var PRESS = '.ins-btn:not(.ins-btn--bare), .ins-island:is(a, button, [role="button"]), .ins-spin, :is(a, button).ins-pill';
+  var PRESS_DEPTH = { 'ins-spin': .92, 'ins-pill': .96 };
+  var pressing = null;
+
+  function pressOf(t) {
+    var el = t && t.closest ? t.closest(PRESS) : null;
+    return el && !el.disabled && el.getAttribute('aria-disabled') !== 'true' ? el : null;
+  }
+
+  function pressDip(el) {
+    if (motionless() || !el.animate) return;
+    var s = .97;
+    for (var k in PRESS_DEPTH) if (el.classList.contains(k)) s = PRESS_DEPTH[k];
+    try {
+      el.animate([{ transform: 'scale(1)' }, { transform: 'scale(' + s + ')', offset: .35 }, { transform: 'scale(1)' }],
+        { duration: 240, easing: 'ease-out', composite: 'add' });
+    } catch (e) {}
+  }
+
+  function pressStart(e) { var el = pressOf(e.target); pressing = el ? { el: el, at: Date.now() } : null; }
+  function pressEnd(e) {
+    var p = pressing;
+    pressing = null;
+    if (p && Date.now() - p.at < 150 && p.el.contains(e.target)) pressDip(p.el);
+  }
+  document.addEventListener('pointerdown', function (e) { if (e.button === 0) pressStart(e); }, true);
+  document.addEventListener('pointerup', pressEnd, true);
+  document.addEventListener('keydown', function (e) { if (!e.repeat && (e.key === 'Enter' || e.key === ' ')) pressStart(e); }, true);
+  document.addEventListener('keyup', function (e) { if (e.key === 'Enter' || e.key === ' ') pressEnd(e); }, true);
+
+  /* The selected face travels like the sidebar marker: the far edge reaches the new segment, then the near edge follows. */
+  function segFly(seg, from, to) {
+    if (!from || !to || from === to || !seg.offsetWidth) return;
+    var line = seg.classList.contains('ins-tablist--line');
+    var inset = line ? parseFloat(window.getComputedStyle(to, '::after').left) || 10 : 0;
+    var on = null;
+    flyBar(seg,
+      { x: from.offsetLeft + inset, w: from.offsetWidth - 2 * inset },
+      { x: to.offsetLeft + inset, w: to.offsetWidth - 2 * inset, y: line ? to.offsetTop + to.offsetHeight - 2 : to.offsetTop, h: line ? null : to.offsetHeight },
+      {
+        axis: 'x', bar: line ? 'ins-tab-flight' : 'ins-seg-flight', moving: 'ins-seg-moving',
+        /* The face the flight hands over to appears at once, not through its own transition. */
+        landing: function () { on = seg.querySelector(':scope > .is-active'); if (on) on.style.transition = 'none'; },
+        done: function () { if (on) { void on.offsetWidth; on.style.transition = ''; } }
+      });
+  }
+
+  /* Watches the segments' classes, since several paths change the selection. */
+  define('seg-slide', function (scope) {
+    if (!window.MutationObserver) return;
+    var segs = scope.querySelectorAll('.ins-seg, .ins-tablist');
+    for (var i = 0; i < segs.length; i++) {
+      if (segs[i].__insSegWatch) continue;
+      segs[i].__insSegWatch = true;
+      (function (seg) {
+        new MutationObserver(function (list) {
+          var from = null, to = null;
+          for (var j = 0; j < list.length; j++) {
+            var t = list[j].target;
+            if (t.parentNode !== seg) continue;
+            var was = /(^|\s)is-active(\s|$)/.test(list[j].oldValue || ''), now = t.classList.contains('is-active');
+            if (was && !now) from = t;
+            if (!was && now) to = t;
+          }
+          if (from && to) segFly(seg, from, to);
+        }).observe(seg, { attributes: true, attributeFilter: ['class'], attributeOldValue: true, subtree: true });
+      }(segs[i]));
+    }
+  });
+
+  /* A table row is marked when it is selected, current or .is-selected, as the stylesheet draws it. */
+  function rowMarked(tr) {
+    var current = tr.getAttribute('aria-current');
+    return tr.getAttribute('aria-selected') === 'true' || (current !== null && current !== 'false') || tr.classList.contains('is-selected');
+  }
+
+  /* Where a row's marker is (the first cell's ::before, on the page's start edge), in the table wrapper's coordinates. */
+  function rowMarker(wrap, s, tr) {
+    var td = tr.cells[0], r = td.getBoundingClientRect(), cs = window.getComputedStyle(td, '::before');
+    var top = parseFloat(cs.top) || 0, bottom = parseFloat(cs.bottom) || 0, w = parseFloat(cs.width) || 3;
+    var rtl = root.getAttribute('dir') === 'rtl';
+    return {
+      x: (rtl ? r.right - w : r.left) - s.left - wrap.clientLeft + wrap.scrollLeft,
+      y: r.top + top - s.top - wrap.clientTop + wrap.scrollTop,
+      w: w,
+      h: r.height - top - bottom
+    };
+  }
+
+  /* When the one marked row of a table changes, its marker flies to the new row as the sidebar's does, rather than one shrinking while the other grows. */
+  define('table-marker', function (scope) {
+    if (!window.MutationObserver) return;
+    var bodies = scope.querySelectorAll('.ins-table-wrap > .ins-table > tbody');
+    for (var i = 0; i < bodies.length; i++) {
+      if (bodies[i].__insRowWatch) continue;
+      bodies[i].__insRowWatch = true;
+      (function (body) {
+        var marked = function () { var rows = [].filter.call(body.rows, rowMarked); return rows.length === 1 ? rows[0] : null; };
+        body.__insMarked = marked();
+        new MutationObserver(function () {
+          var now = marked(), was = body.__insMarked;
+          body.__insMarked = now;
+          if (!now || !was || was === now || rowMarked(was) || !body.contains(was) || !was.cells.length || !now.cells.length) return;
+          var wrap = body.parentNode.parentNode, s = wrap.getBoundingClientRect();
+          flyBar(wrap, rowMarker(wrap, s, was), rowMarker(wrap, s, now), { bar: 'ins-table-flight', moving: 'ins-table-moving' });
+        }).observe(body, { attributes: true, attributeFilter: ['class', 'aria-selected', 'aria-current'], subtree: true });
+      }(bodies[i]));
+    }
+  });
+
+  /* Tabs: every role and relationship the pattern needs, written once from the
+     markup's own `data-ins-tab` references, and the first tab selected when the
+     page did not say which. The markup stays two attributes deep. */
+  define('tabs', function (scope) {
+    var seen = [];
+    var nodes = scope.querySelectorAll(TAB);
+    for (var i = 0; i < nodes.length; i++) {
+      var list = tabList(nodes[i]);
+      if (seen.indexOf(list) !== -1) continue;
+      seen.push(list);
+      var tabs = tabsIn(list);
+      if (!tabs.length) continue;
+      list.setAttribute('role', 'tablist');
+      var active = null;
+      for (var j = 0; j < tabs.length; j++) {
+        var tab = tabs[j], panel = tabPanel(tabs[j]);
+        if (!tab.id) tab.id = uid('ins-tab');
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-controls', panel.id);
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', tab.id);
+        /* A panel of plain text has nothing in it to Tab to, so the panel itself is
+           the stop after the strip — the pattern's own recommendation. */
+        if (!panel.hasAttribute('tabindex')) panel.setAttribute('tabindex', '0');
+        if (!active && (tab.classList.contains('is-active') || tab.getAttribute('aria-selected') === 'true')) active = tab;
+      }
+      selectTab(active || tabs[0], false, true);
+    }
+  });
+
+  /* Menus: a `.ins-pop` whose body holds items is a menu button, so it is marked as
+     one. The items leave the tab order because the arrow keys now reach them; a
+     popover holding anything else — a card, a form — is left as the disclosure it
+     is. */
+  define('menus', function (scope) {
+    var pops = scope.querySelectorAll(POP);
+    for (var i = 0; i < pops.length; i++) {
+      var summary = pops[i].querySelector('summary');
+      var body = pops[i].querySelector('.ins-pop-body');
+      // The body becomes a popover when it first opens, not here, so server-rendered markup still hydrates unchanged.
+      if (pops[i].open) menuShow(pops[i]);
+      if (!summary || !body || !body.querySelector('.ins-pop-item')) continue;
+      summary.setAttribute('aria-haspopup', 'menu');
+      body.setAttribute('role', 'menu');
+      var items = body.querySelectorAll('.ins-pop-item');
+      for (var j = 0; j < items.length; j++) {
+        if (!items[j].hasAttribute('role')) items[j].setAttribute('role', 'menuitem');
+        items[j].setAttribute('tabindex', '-1');
+      }
+      var seps = body.querySelectorAll('.ins-pop-sep');
+      for (var k = 0; k < seps.length; k++) seps[k].setAttribute('role', 'separator');
+    }
+  });
+
+  define('navbar', function (scope) {
+    var toggles = scope.querySelectorAll('[data-ins-navbar]');
+    for (var i = 0; i < toggles.length; i++) {
+      var bar = toggles[i].closest('.ins-navbar');
+      var menu = bar && bar.querySelector('.ins-navbar-menu');
+      toggles[i].setAttribute('aria-expanded', String(!!(bar && bar.classList.contains('is-open'))));
+      if (menu) {
+        if (!menu.id) menu.id = uid('ins-navbar-menu');
+        toggles[i].setAttribute('aria-controls', menu.id);
+      }
+    }
+  });
+
+  /* A show-password control is a toggle, and a <button> in a form is a submit
+     button until it is told otherwise. */
+  define('password', function (scope) {
+    var toggles = scope.querySelectorAll('[data-ins-password]');
+    for (var i = 0; i < toggles.length; i++) {
+      if (toggles[i].tagName === 'BUTTON' && !toggles[i].hasAttribute('type')) toggles[i].type = 'button';
+      if (!toggles[i].hasAttribute('aria-pressed')) toggles[i].setAttribute('aria-pressed', 'false');
+    }
+  });
+
+  define('toggles', function (scope) {
+    var nodes = scope.querySelectorAll('[data-ins-toggle]');
+    for (var i = 0; i < nodes.length; i++) {
+      if (!nodes[i].hasAttribute('aria-pressed')) nodes[i].setAttribute('aria-pressed', 'false');
+      if (nodes[i].tagName === 'BUTTON' && !nodes[i].hasAttribute('type')) nodes[i].type = 'button';
+    }
+  });
+
+  /* `indeterminate` is a property with no attribute, so markup cannot say it. */
+  define('indeterminate', function (scope) {
+    var nodes = scope.querySelectorAll('input[type="checkbox"][data-ins-indeterminate]');
+    for (var i = 0; i < nodes.length; i++) nodes[i].indeterminate = true;
+  });
+
+  define('ranges', function (scope) {
+    var nodes = scope.querySelectorAll('.ins-range');
+    for (var i = 0; i < nodes.length; i++) rangeFill(nodes[i]);
+  });
+
+  define('steppers', function (scope) {
+    var btns = scope.querySelectorAll('.ins-spin');
+    for (var i = 0; i < btns.length; i++) {
+      if (btns[i].tagName === 'BUTTON' && !btns[i].hasAttribute('type')) btns[i].type = 'button';
+      var input = spinInput(btns[i]);
+      if (!input) continue;
+      if (!input.id) input.id = uid('ins-number');
+      btns[i].setAttribute('aria-controls', input.id);
+      syncSpin(input);
+    }
+  });
+
+  /* A time field: the native input turned into a text field with a list of times,
+     built as an autocomplete so it shares that one's keys and look. Its hidden
+     input takes the `name`, and its default value, so a form reset restores it. */
+  define('times', function (scope) {
+    var nodes = scope.querySelectorAll('input[data-ins-time]:not([data-ins-time-ready])');
+    for (var i = 0; i < nodes.length; i++) {
+      var input = nodes[i];
+      var value = parseTime(input.value || input.getAttribute('value') || '') || '';
+      var step = Math.max(1, Math.round((parseFloat(input.getAttribute('step')) || 1800) / 60));
+      var lo = parseTime(input.getAttribute('min') || '') || '00:00';
+      var hi = parseTime(input.getAttribute('max') || '') || '23:59';
+      var box = el('div', 'ins-time');
+      input.parentNode.insertBefore(box, input);
+      box.appendChild(input);
+      var hidden = el('input');
+      hidden.type = 'hidden';
+      if (input.name) { hidden.name = input.name; input.removeAttribute('name'); }
+      hidden.setAttribute('value', value);
+      hidden.value = value;
+      box.appendChild(hidden);
+      input.setAttribute('data-ins-step', String(step));
+      input.setAttribute('aria-haspopup', 'dialog');
+      input.setAttribute('aria-expanded', 'false');
+      if (input.hasAttribute('min')) input.setAttribute('data-ins-min', lo);
+      if (input.hasAttribute('max')) input.setAttribute('data-ins-max', hi);
+      input.removeAttribute('min');
+      input.removeAttribute('max');
+      input.removeAttribute('step');
+      input.type = 'text';
+      input.setAttribute('autocomplete', 'off');
+      input.setAttribute('data-ins-time-ready', '');
+      setTime(input, value, true);
+    }
+  });
+
+  /* A tags field with a list is a multi-select, and an autocomplete underneath; the
+     chips the server sent mark their options chosen. */
+  define('tags', function (scope) {
+    var all = scope.querySelectorAll('.ins-tags');
+    for (var i = 0; i < all.length; i++) {
+      var list = all[i].querySelector('.ins-combo-list');
+      if (list) { all[i].classList.add('ins-combo'); list.setAttribute('aria-multiselectable', 'true'); }
+      var chips = tagsChips(all[i]);
+      for (var j = 0; j < chips.length; j++) {
+        var opt = tagsOption(all[i], chipValue(chips[j]));
+        if (opt) { opt.setAttribute('data-ins-chosen', ''); opt.setAttribute('aria-selected', 'true'); }
+      }
+    }
+  });
+
+  /* The combobox pattern, stamped from the markup: the field is the combobox, the
+     list its listbox, and every option gets an id for `aria-activedescendant` to
+     point at. An option already matching the field's value is marked chosen. */
+  define('combos', function (scope) {
+    var combos = scope.querySelectorAll(COMBO);
+    for (var i = 0; i < combos.length; i++) {
+      var input = comboInput(combos[i]), list = comboList(combos[i]);
+      if (!input || !list) continue;
+      if (!list.id) list.id = uid('ins-combo-list');
+      input.setAttribute('role', 'combobox');
+      input.setAttribute('aria-autocomplete', 'list');
+      input.setAttribute('aria-controls', list.id);
+      input.setAttribute('aria-expanded', 'false');
+      if (!input.hasAttribute('autocomplete')) input.setAttribute('autocomplete', 'off');
+      list.setAttribute('role', 'listbox');
+      var opts = comboOptions(combos[i], false);
+      for (var j = 0; j < opts.length; j++) {
+        if (!opts[j].id) opts[j].id = uid('ins-opt');
+        opts[j].setAttribute('role', 'option');
+        var label = opts[j].getAttribute('data-label') || opts[j].textContent.trim();
+        opts[j].setAttribute('aria-selected', String(!!input.value && label === input.value));
+      }
+      var empty = combos[i].querySelector('.ins-combo-empty');
+      if (empty) { empty.setAttribute('role', 'presentation'); empty.hidden = true; }
+    }
+  });
+
+  /* A counter under every counted field, tied to it for a screen reader. */
+  define('counters', function (scope) {
+    var nodes = scope.querySelectorAll('[data-ins-count]');
+    for (var i = 0; i < nodes.length; i++) {
+      var c = nodes[i];
+      if (!c.getAttribute('data-ins-count-el')) {
+        var out = el('span', 'ins-count');
+        out.id = uid('ins-count');
+        c.parentNode.insertBefore(out, c.nextSibling);
+        c.setAttribute('data-ins-count-el', out.id);
+        var ids = (c.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+        ids.push(out.id);
+        c.setAttribute('aria-describedby', ids.join(' '));
+      }
+      countSync(c);
+    }
+  });
+
+  /* The date field, which is the one builder here that changes the markup it was
+     given. The native date input is turned into a text field showing the date in the
+     page's language; a hidden input takes over its `name`, so what reaches the server
+     is the same ISO string the native field would have sent; and the calendar button
+     is added to the group. The hidden input's *default* value is set too, so that a
+     form reset puts the original date back. */
+  define('dates', function (scope) {
+    var nodes = scope.querySelectorAll('input[data-ins-date]:not([data-ins-date-ready])');
+    for (var i = 0; i < nodes.length; i++) {
+      var input = nodes[i];
+      var mode = input.type === 'datetime-local' ? 'datetime' : (input.hasAttribute('data-ins-date-range') ? 'range' : '');
+      var raw = input.value || input.getAttribute('value') || '';
+      var value = mode === 'datetime'
+        ? (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(raw) && parseIso(raw.slice(0, 10)) ? raw.slice(0, 16) : '')
+        : (parseIso(raw) ? raw : '');
+      var hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.id = uid('ins-date-value');
+      if (input.name) { hidden.name = input.name; input.removeAttribute('name'); }
+      hidden.setAttribute('value', value);
+      hidden.value = value;
+      input.parentNode.insertBefore(hidden, input.nextSibling);
+      if (mode === 'range') {
+        var endH = document.createElement('input');
+        var endV = input.getAttribute('data-ins-date-to') || '';
+        endV = parseIso(endV) ? endV : '';
+        endH.type = 'hidden';
+        endH.id = uid('ins-date-end');
+        endH.name = input.getAttribute('data-ins-date-range');
+        endH.setAttribute('value', endV);
+        endH.value = endV;
+        input.parentNode.insertBefore(endH, hidden.nextSibling);
+        input.setAttribute('data-ins-date-end-value', '#' + endH.id);
+      }
+      if (mode === 'datetime') {
+        var secs = parseFloat(input.getAttribute('step'));
+        input.setAttribute('data-ins-step', String(secs ? Math.max(1, Math.round(secs / 60)) : 5));
+        input.removeAttribute('step');
+      }
+      if (mode) input.setAttribute('data-ins-date-mode', mode);
+
+      if (input.min) input.setAttribute('data-ins-min', input.min.slice(0, 10));
+      if (input.max) input.setAttribute('data-ins-max', input.max.slice(0, 10));
+      input.removeAttribute('min');
+      input.removeAttribute('max');
+      input.type = 'text';
+      input.setAttribute('autocomplete', 'off');
+      input.setAttribute('data-ins-date-value', '#' + hidden.id);
+      input.setAttribute('data-ins-date-ready', '');
+      setDate(input, parseIso(hidden.value.slice(0, 10)), true);
+      input.setCustomValidity('');
+
+      var group = input.closest('.ins-input-group');
+      if (group && !group.querySelector('.ins-date-btn')) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ins-date-btn';
+        btn.setAttribute('aria-label', strings(input).choose);
+        btn.setAttribute('aria-haspopup', 'dialog');
+        btn.setAttribute('aria-expanded', 'false');
+        /* Beside its own date, where a time shares the group; else at the end. */
+        group.insertBefore(btn, group.querySelector('[data-ins-time]') ? hidden.nextSibling : null);
+      }
+    }
+  });
+
+  define('datetime', function (scope) {
+    var groups = scope.querySelectorAll('[data-ins-datetime]');
+    for (var i = 0; i < groups.length; i++) {
+      if (groups[i].querySelector('input[data-ins-datetime-value]')) continue;
+      var h = el('input');
+      h.type = 'hidden';
+      h.name = groups[i].getAttribute('data-ins-datetime');
+      h.setAttribute('data-ins-datetime-value', '');
+      groups[i].appendChild(h);
+      datetimeSync(groups[i]);
+    }
+  });
+
+  /* A matrix's radios named for their row and column; totals drawn once. */
+  define('matrix', function (scope) {
+    var tables = scope.querySelectorAll('.ins-matrix');
+    for (var i = 0; i < tables.length; i++) {
+      var head = tables[i].tHead && tables[i].tHead.rows[0];
+      var body = tables[i].tBodies[0];
+      if (!head || !body) continue;
+      for (var r = 0; r < body.rows.length; r++) {
+        var row = body.rows[r], name = row.cells[0] ? row.cells[0].textContent.trim() : '';
+        for (var c = 1; c < row.cells.length; c++) {
+          var input = row.cells[c].querySelector('input');
+          var col = head.cells[c] ? head.cells[c].textContent.trim() : '';
+          if (input && !input.hasAttribute('aria-label') && !input.closest('label.ins-matrix-cell')) input.setAttribute('aria-label', name + ': ' + col);
+        }
+      }
+    }
+    var sums = scope.querySelectorAll('[data-ins-sum]');
+    for (var k = 0; k < sums.length; k++) sumSync(sums[k]);
+  });
+
+  /* A split gets its handle, and the share it was left at. */
+  define('shell-filter', function (scope) {
+    var sides = scope.querySelectorAll('.ins-shell-side[data-ins-filter]');
+    for (var i = 0; i < sides.length; i++) {
+      var box = filterBuild(sides[i]), input = box && box.querySelector('input');
+      if (!input) continue;
+      if (slashTaken()) input.removeAttribute('aria-keyshortcuts'); else input.setAttribute('aria-keyshortcuts', '/');
+      if (input.value) filterRun(sides[i]);
+    }
+  });
+
+  define('split', function (scope) {
+    var splits = scope.querySelectorAll('.ins-split');
+    for (var i = 0; i < splits.length; i++) {
+      var split = splits[i];
+      var handle = splitHandle(split);
+      var panes = [];
+      for (var j = 0; j < split.children.length; j++) if (split.children[j].classList.contains('ins-split-pane')) panes.push(split.children[j]);
+      if (!handle && panes.length > 1) {
+        handle = el('div', 'ins-split-handle');
+        split.insertBefore(handle, panes[1]);
+      }
+      if (!handle) continue;
+      var lim = splitLimits(split);
+      handle.setAttribute('role', 'separator');
+      handle.setAttribute('tabindex', '0');
+      handle.setAttribute('aria-orientation', split.classList.contains('ins-split--v') ? 'horizontal' : 'vertical');
+      handle.setAttribute('aria-valuemin', String(lim.min));
+      handle.setAttribute('aria-valuemax', String(lim.max));
+      if (!handle.hasAttribute('aria-label')) handle.setAttribute('aria-label', strings(split).resize);
+      if (panes[0]) { if (!panes[0].id) panes[0].id = uid('ins-pane'); handle.setAttribute('aria-controls', panes[0].id); }
+      var key = split.getAttribute('data-ins-split');
+      var kept = key ? parseFloat(read('ins-split:' + key)) : NaN;
+      splitSet(split, !isNaN(kept) ? kept : (parseFloat(split.getAttribute('data-ins-split-default')) || 50));
+    }
+  });
+
+  define('countdowns', function (scope) {
+    var nodes = scope.querySelectorAll('[data-ins-countdown]');
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i].__insEnd || nodes[i].__insLeft != null) continue;
+      if (!nodes[i].hasAttribute('role')) nodes[i].setAttribute('role', 'timer');
+      if (nodes[i].hasAttribute('data-ins-countdown-paused')) countdownIdle(nodes[i]);
+      else countdownSet(nodes[i], nodes[i].getAttribute('data-ins-countdown'));
+    }
+  });
+
+  /* A save indicator is a status, so a screen reader hears "saved" when it lands. */
+  define('save', function (scope) {
+    var nodes = scope.querySelectorAll('.ins-save');
+    for (var i = 0; i < nodes.length; i++) {
+      if (!nodes[i].hasAttribute('role')) nodes[i].setAttribute('role', 'status');
+      var st = nodes[i].getAttribute('data-ins-state');
+      if (st && !nodes[i].textContent.trim()) saveState(nodes[i], st);
+    }
+  });
+
+  /* A mark with a note is reachable from the keyboard, and reads its note out. */
+  define('marks', function (scope) {
+    var marks = scope.querySelectorAll('.ins-mark[data-ins-note]');
+    for (var i = 0; i < marks.length; i++) {
+      var note = resolve(marks[i].getAttribute('data-ins-note'));
+      if (!marks[i].hasAttribute('tabindex')) marks[i].setAttribute('tabindex', '0');
+      if (!note) continue;
+      if (!note.id) note.id = uid('ins-note');
+      var ids = (marks[i].getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+      if (ids.indexOf(note.id) === -1) { ids.push(note.id); marks[i].setAttribute('aria-describedby', ids.join(' ')); }
+    }
+  });
+
+  /* A sortable heading becomes a button, so the keyboard can reach it, and says how
+     its column is sorted — a page the server sent sorted says so with `aria-sort`. */
+  define('table-sort', function (scope) {
+    var ths = scope.querySelectorAll('.ins-table th[data-ins-sort]');
+    for (var i = 0; i < ths.length; i++) {
+      var th = ths[i];
+      if (!th.hasAttribute('aria-sort')) th.setAttribute('aria-sort', 'none');
+      if (th.querySelector('.ins-sort')) continue;
+      var btn = el('button', 'ins-sort');
+      btn.type = 'button';
+      while (th.firstChild) btn.appendChild(th.firstChild);
+      th.appendChild(btn);
+    }
+  });
+
+  // In a sticky table the rows are cut off at the header's lower edge, so none show round its corners or in the gap.
+  function stickyCut(wrap) {
+    var table = wrap.querySelector('.ins-table'), head = table && table.tHead, body = table && table.tBodies[0];
+    if (!head || !body) return;
+    var cut = wrap.scrollTop + head.offsetHeight - (table.offsetTop + body.offsetTop);
+    body.style.clipPath = cut > 0 ? 'inset(' + cut + 'px 0 0 0 round var(--ins-table-card-r))' : '';
+  }
+  document.addEventListener('scroll', function (event) {
+    var t = event.target;
+    if (t.classList && t.classList.contains('ins-table-wrap--sticky')) stickyCut(t);
+  }, true);
+
+  /* Rows the server sent checked are marked, and their bar shown, from the start. */
+  define('table-select', function (scope) {
+    var boxes = scope.querySelectorAll('.ins-table input[data-ins-select]'), seen = [];
+    for (var i = 0; i < boxes.length; i++) {
+      var table = tableOf(boxes[i]);
+      if (!table || seen.indexOf(table) !== -1) continue;
+      seen.push(table);
+      selectSync(table, true);
+    }
+  });
+
+  define('table-edit', function (scope) {
+    var cells = scope.querySelectorAll('.ins-table td[data-ins-edit]');
+    for (var i = 0; i < cells.length; i++) if (!cells[i].hasAttribute('tabindex')) cells[i].setAttribute('tabindex', '0');
+  });
+
+  define('wizards', function (scope) {
+    var wizards = scope.querySelectorAll('.ins-wizard');
+    for (var i = 0; i < wizards.length; i++) {
+      var panels = wizardPanels(wizards[i]);
+      for (var j = 0; j < panels.length; j++) {
+        if (!panels[j].hasAttribute('tabindex')) panels[j].setAttribute('tabindex', '-1');
+      }
+      wizardGo(wizards[i], wizardIndex(wizards[i]), { quiet: true });
+    }
+  });
+
+  /* The arrival half of the sidebar's journey: the previous page's note, read once
+     and thrown away, and the marker flown from the item it names to this page's. */
+  define('nav-arrival', function (scope) {
+    if (scope !== document) return;
+    var note = navNote();
+    try { window.sessionStorage.removeItem(NAV_KEY); } catch (e) { /* read-only storage */ }
+    var side = note && document.querySelector('.ins-shell-side');
+    var to = side && navActive(side), from = null;
+    if (to && note.from && to.href !== note.from) {
+      var links = side.querySelectorAll('a.ins-shell-link[href]');
+      for (var i = 0; i < links.length; i++) if (links[i].href === note.from) { from = links[i]; break; }
+    }
+    if (!navFly(side, from, to)) navArrived();
+  });
+
+  /* A field's hint and its message describe its control. Without the link a screen
+     reader announces a red border, which is to say nothing at all. */
+  define('field-messages', function (scope) {
+    var msgs = scope.querySelectorAll('.ins-field > .ins-hint, .ins-field > .ins-error, .ins-field > .ins-success');
+    for (var i = 0; i < msgs.length; i++) {
+      if (!msgs[i].classList.contains('ins-hint') && !msgs[i].hasAttribute('dir')) msgs[i].setAttribute('dir', 'auto');
+      var control = msgs[i].parentNode.querySelector('input, select, textarea');
+      if (!control) continue;
+      if (!msgs[i].id) msgs[i].id = uid('ins-msg');
+      var ids = (control.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+      if (ids.indexOf(msgs[i].id) === -1) {
+        ids.push(msgs[i].id);
+        control.setAttribute('aria-describedby', ids.join(' '));
+      }
+    }
+  });
+
+  function ready() {
+    init(document);
+    watchScroll();
+    gutterCheck();
+  }
+
+  /* Loaded in <head> as recommended: wait. Loaded late, or injected: run now. */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ready);
+  } else {
+    ready();
+  }
+
+  /* ==========================================================================
+     PUBLIC API — the escape hatch, not the front door
+     ========================================================================== */
+
+  window.Insiyab = {
+    version: VERSION,
+    init: init,
+    define: define,
+    theme: theme,
+    toggleTheme: toggleTheme,
+    sidebar: sidebar,
+    sidebarSelect: sidebarSelect,
+    brand: brand,
+    toast: toast,
+    dialog: dialog,
+    dismiss: dismiss,
+    tab: function (target) { return selectTab(target, false); },
+    navbar: navbar,
+    confirm: confirmDialog,
+    calendar: registerCalendar,
+    // The overlay stack, for the plugins: open(el, options), shut(el), place(el) and host(trigger).
+    _layer: {
+      open: layerOpen,
+      shut: layerShut,
+      place: function (el) { var at = layerAt(el); if (at !== -1) layerPlace(layers[at]); },
+      host: layerHost
+    },
+    /* Text the way the autocomplete compares it, for a plugin that searches, so a
+       query finds the same things in both. */
+    norm: norm,
+    /* The sidebar's marker flight, for a plugin list that marks its current item
+       the same way, so the two move alike. */
+    flyMarker: flyMarker,
+    /* Sort a table by a column: the <th>, or the table and a column number. */
+    sort: function (target, column, dir) {
+      var node = resolve(target);
+      if (node && node.tagName === 'TABLE') {
+        var head = node.tHead && node.tHead.rows[0];
+        node = head ? head.cells[column] : null;
+      } else {
+        dir = column;
+      }
+      return node ? sortTable(node, dir) : null;
+    },
+    /* Seconds left on a countdown; or 'start', 'stop', 'restart', seconds, or the moment it ends. */
+    countdown: function (target, value) {
+      var node = resolve(target);
+      if (!node) return null;
+      if (value === undefined) return node.__insEnd ? countdownLeft(node) : node.__insLeft != null ? node.__insLeft : null;
+      return countdownAct(node, value);
+    },
+    /* A split's first pane share in percent, or set it. */
+    split: function (target, size) {
+      var split = resolve(target);
+      if (!split) return null;
+      return size === undefined ? splitNow(split) : splitSet(split, size, true);
+    },
+    /* 'saving', 'saved', 'error' or 'idle', with words of your own if you like. */
+    saveState: saveState,
+    /* The selected rows of a table; `true` or `false` selects or clears them all. */
+    selection: function (target, all) {
+      var table = resolve(target);
+      if (!table) return null;
+      if (all === true || all === false) { selectAll(table, all); return selectSync(table); }
+      return selectSync(table, true);
+    },
+    /* The current step, or go to one with no checks: a number, 'next', 'prev' or
+       'restart'. 'stay' ends a wait on the server without moving, after the page
+       has shown why the step was refused. */
+    wizard: function (target, step) {
+      var w = resolve(target);
+      if (w && !w.classList.contains('ins-wizard')) w = w.closest('.ins-wizard');
+      if (!w) return null;
+      if (step === undefined) return wizardIndex(w);
+      if (step === 'stay') { w.removeAttribute('aria-busy'); return wizardIndex(w); }
+      var cur = wizardIndex(w);
+      var dest = step === 'next' ? cur + 1 : step === 'prev' ? cur - 1 : step === 'restart' ? 0 : step;
+      return wizardGo(w, dest, { focus: typeof step === 'string' });
+    },
+    date: function (target, value) {
+      var input = resolve(target);
+      if (!input || !input.hasAttribute('data-ins-date-ready')) return null;
+      if (value === undefined) { var h = dateValue(input); return h ? h.value : null; }
+      setDate(input, value ? parseIso(value) : null);
+      return value;
+    },
+    /* Exposed because they are genuinely useful on their own, and because the
+       contrast maths is the part nobody should have to write twice. */
+    color: {
+      derive: derive,
+      shift: shift,
+      contrast: function (a, b) {
+        var x = hexToRgb(a), y = hexToRgb(b);
+        return (x && y) ? contrast(x, y) : null;
+      },
+      labelFor: labelFor
+    },
+    scrollTop: scrollTop
+  };
+}(window, document));
