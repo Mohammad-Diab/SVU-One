@@ -33,7 +33,7 @@ SVU One تطبيق مستقل لنظامَي Windows وAndroid، وليس منت
 ## المزامنة مع Google Drive (اختيارية)
 
 - لا تعمل إلا إذا ربطت حسابك في Google بنفسك من صفحة «المزامنة». يطلب التطبيق صلاحية واحدة فقط هي مجلد خاص بالتطبيق في Drive‏ (`drive.appdata`)، فلا يرى ملفاتك الأخرى في Drive ولا يستطيع الوصول إليها.
-- يحفظ التطبيق هناك ملفاً واحداً صغيراً فيه ما تختار مزامنته من: المواعيد التي أضفتها، والوظائف التي علّمتها مُسلَّمة، وتعديلات الجدول، والإشعارات المقروءة.
+- يحفظ التطبيق هناك ملفاً واحداً صغيراً فيه ما تختار مزامنته من: المواعيد التي أضفتها، والوظائف التي علّمتها مُسلَّمة، وتعديلات الجدول، والإشعارات المقروءة، وحالة قراءة البريد (أي الرسائل قرأتها، دون محتواها).
 - **لا يُرفع أبداً:** كلمة المرور، ولا الإعدادات، ولا الملفات والتسجيلات المنزّلة.
 - الملف محمي بحسابك في Google كسائر ما تحفظه في Drive، ولا يصل إليه إلا من يدخل حسابك. لا يُرسَل إلى مطوّر التطبيق ولا إلى أي جهة أخرى، وتغيير كلمة مرورك الجامعية لا يمسّه.
 - يُحفظ رمز الدخول إلى حسابك في Google مشفّراً على جهازك. يمكنك إيقاف المزامنة متى شئت من التطبيق، وإزالة صلاحيته من إعدادات حسابك في Google، وحذف بياناته من إعدادات Drive («إدارة التطبيقات»).
@@ -106,7 +106,7 @@ SVU One is an independent app for Windows and Android. It is not an official pro
 ## Syncing with Google Drive (optional)
 
 - It works only if you connect your Google account yourself from the «المزامنة» (Sync) page. The app asks for one permission only, a private folder for the app in Drive (`drive.appdata`), so it cannot see or reach your other files in Drive.
-- The app keeps one small file there with what you choose to sync of: the events you added, the assignments you marked as handed in, timetable changes, and read notices.
+- The app keeps one small file there with what you choose to sync of: the events you added, the assignments you marked as handed in, timetable changes, read notices, and which emails you have read (not their content).
 - **Never uploaded:** your password, your settings, or downloaded files and recordings.
 - The file is protected by your Google account, like anything else you keep in Drive: only someone who signs in to your account can reach it. It is never sent to the app's developer or anyone else, and changing your university password does not touch it.
 - The sign-in token for your Google account is kept encrypted on your device. You can stop syncing at any time in the app, remove the app's access in your Google account settings, and delete its data in Drive's settings («Manage apps»).
