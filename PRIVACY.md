@@ -1,6 +1,6 @@
 # سياسة خصوصية SVU One
 
-آخر تحديث: 18 تشرين الثاني 2026
+آخر تحديث: 21 تشرين الثاني 2026
 
 SVU One تطبيق مستقل لنظامَي Windows وAndroid، وليس منتجاً رسمياً من الجامعة الافتراضية السورية ولا يتبع لها. يجمع ما يحتاجه الطالب من مواقع الجامعة في مكان واحد على جهازه.
 
@@ -19,7 +19,7 @@ SVU One تطبيق مستقل لنظامَي Windows وAndroid، وليس منت
 
 **على Windows:** يُحفظ ذلك كله في مجلد التطبيق داخل حسابك على Windows‏ (`%LOCALAPPDATA%\SvuOne`). كلمة المرور والبيانات الدراسية والبريد تُحفظ مشفّرة بحماية Windows نفسها (DPAPI)، فلا تُقرأ إلا من حسابك على هذا الجهاز.
 
-**على Android:** يُحفظ ذلك كله في مساحة التطبيق الخاصة على الهاتف، ولا تصل إليها التطبيقات الأخرى. كلمة المرور والبيانات الدراسية تُحفظ مشفّرة (AES-256) بمفتاح يُنشأ في مخزن مفاتيح Android ولا يخرج منه. النسخ الاحتياطي التلقائي لبيانات التطبيق معطّل، فلا تُنسخ إلى أي مكان آخر.
+**على Android:** يُحفظ ذلك كله في مساحة التطبيق الخاصة على الهاتف، ولا تصل إليها التطبيقات الأخرى. كلمة المرور والبيانات الدراسية تُحفظ مشفّرة (AES-256) بمفتاح يُنشأ في مخزن مفاتيح Android ولا يخرج منه. النسخ الاحتياطي التلقائي لبيانات التطبيق معطّل. أما نقل البيانات إلى هاتف جديد عبر Android فقد ينقل الملفات غير المشفّرة، كالإعدادات ومرفقات البريد، ولا يمكن فتح كلمة المرور والبيانات المشفّرة على هاتف آخر، فتسجّل الدخول من جديد.
 
 ## إلى أين يتصل التطبيق
 
@@ -60,7 +60,7 @@ SVU One تطبيق مستقل لنظامَي Windows وAndroid، وليس منت
 
 ## حذف بياناتك
 
-- عند تسجيل الخروج اختر «احذف بياناتي» فتُحذف بيانات ذلك الحساب من الجهاز.
+- عند تسجيل الخروج اختر «احذف بياناتي» فتُحذف بيانات ذلك الحساب من الجهاز. تبقى الملفات التي نزّلتها ومرفقات البريد التي حفظتها حيث حُفظت.
 - **على Windows:** إزالة التطبيق لا تحذف بياناتك، حتى لا تضيع إن أعدت تثبيته. لحذفها كلها احذف المجلد `%LOCALAPPDATA%\SvuOne`.
 - **على Android:** إزالة التطبيق تحذف كل بياناته من الهاتف، وكذلك «محو البيانات» من إعدادات التطبيق في النظام. يبقى فقط ما حوّلته إلى فيديو في مجلد الأفلام.
 - ما رُفع بالمزامنة يُحذف من إعدادات Drive كما سبق.
@@ -73,7 +73,7 @@ SVU One تطبيق مستقل لنظامَي Windows وAndroid، وليس منت
 
 # SVU One Privacy Policy
 
-Last updated: 18 November 2026
+Last updated: 21 November 2026
 
 SVU One is an independent app for Windows and Android. It is not an official product of the Syrian Virtual University and is not part of it. It brings what a student needs from the university's sites into one place on their device.
 
@@ -92,7 +92,7 @@ SVU One is an independent app for Windows and Android. It is not an official pro
 
 **On Windows:** all of it is kept in the app's folder in your Windows profile (`%LOCALAPPDATA%\SvuOne`). The password, the study data and the mail are encrypted with Windows' own protection (DPAPI), so only your Windows account on this PC can read them.
 
-**On Android:** all of it is kept in the app's private storage on the phone, which other apps cannot reach. The password and the study data are encrypted (AES-256) with a key created in the Android Keystore that never leaves it. Automatic backup of the app's data is turned off, so it is not copied anywhere else.
+**On Android:** all of it is kept in the app's private storage on the phone, which other apps cannot reach. The password and the study data are encrypted (AES-256) with a key created in the Android Keystore that never leaves it. Automatic backup of the app's data is turned off. Android's transfer to a new phone may still move the unencrypted files, such as the settings and mail attachments; the password and the encrypted data cannot be opened on another phone, so you sign in again there.
 
 ## What the app connects to
 
@@ -133,7 +133,7 @@ The app checks the university's sites at spaced-out times and shows notification
 
 ## Deleting your data
 
-- When signing out, choose «احذف بياناتي» (delete my data) to remove that account's data from the device.
+- When signing out, choose «احذف بياناتي» (delete my data) to remove that account's data from the device. The files you downloaded and the mail attachments you saved stay where they were saved.
 - **On Windows:** uninstalling keeps your data, so nothing is lost if you install again. To remove all of it, delete the folder `%LOCALAPPDATA%\SvuOne`.
 - **On Android:** uninstalling the app removes all its data from the phone, and so does «Clear storage» in the system's app settings. Only the videos you converted stay, in the Movies folder.
 - What sync uploaded is deleted from Drive's settings, as above.
