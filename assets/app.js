@@ -67,6 +67,16 @@
       "direct": "أو التنزيل المباشر",
       "installer": "تنزيل",
       "requires": "Windows 10 أو أحدث",
+      "requiresAndroid": "Android 8 أو أحدث",
+      "siteVersion": "آخر تحديث {version}",
+      "mirrorTelegram": "لم يعمل التنزيل؟ نزّله من تيليغرام",
+      "andAlso": "وأيضاً",
+      "installApk": "كيف أثبّت ملف APK؟",
+      "qApk": "كيف أثبّت ملف APK على Android؟",
+      "aApkOpen": "نزّل الملف، ثم افتحه من الإشعارات أو من مجلد التنزيلات.",
+      "aApkAllow": "إن سألك الهاتف، اسمح بالتثبيت من هذا المصدر، ثم اضغط «تثبيت».",
+      "aApkUpdates": "نسخة APK لا تتحدث تلقائياً، فنزّل الملف الجديد مع كل إصدار. وحين يصل التطبيق إلى Google Play تستطيع أن تحدّثه من المتجر دون حذفه.",
+      "aApkRequires": "يعمل التطبيق على Android 8 أو أحدث.",
       "armHint": "لأجهزة ARM، يرجى التحقق من التوافق في متجر Microsoft.",
       "soon": "قريباً",
       "soonOther": "نسخة {platform} ستتوفر لاحقاً.",
@@ -75,6 +85,14 @@
       "apk": "تنزيل APK",
       "apkSoon": "تنزيل APK (قريباً)",
       "playSoon": "Google Play (قريباً)",
+      "playHelp": "ساعدنا للوصول إلى Google Play",
+      "playHelpSmall": "ساعدنا للوصول إلى",
+      "playHelpIntro": "يحتاج التطبيق إلى مختبرين على Google Play قبل أن يُنشر للجميع. إن كان معك هاتف أندرويد، انضم في خطوتين:",
+      "playStepGroup": "انضم إلى مجموعة المختبرين بحساب Google نفسه الذي على هاتفك.",
+      "playJoinGroup": "الانضمام إلى المجموعة",
+      "playStepOptIn": "افتح صفحة الاختبار واضغط «Become a tester»، ثم نزّل التطبيق من Google Play وأبقه على هاتفك 14 يوماً.",
+      "playOptIn": "فتح صفحة الاختبار",
+      "close": "إغلاق",
       "appStore": "التنزيل من App Store",
       "downloadPlatform": "تنزيل نسخة {platform}",
       "missingAsset": "التنزيل المباشر غير متاح حالياً. يمكنك استخدام متجر Microsoft.",
@@ -152,6 +170,16 @@
       "direct": "Or download directly",
       "installer": "Download",
       "requires": "Windows 10 or later",
+      "requiresAndroid": "Android 8 or later",
+      "siteVersion": "Last updated {version}",
+      "mirrorTelegram": "Download not working? Get it from Telegram",
+      "andAlso": "And also",
+      "installApk": "How do I install the APK?",
+      "qApk": "How do I install the APK on Android?",
+      "aApkOpen": "Download the file, then open it from the notification or the Downloads folder.",
+      "aApkAllow": "If the phone asks, allow installs from this source, then tap Install.",
+      "aApkUpdates": "The APK does not update itself, so download the new file with each release. When the app reaches Google Play, you can update it from the store without removing it.",
+      "aApkRequires": "The app runs on Android 8 or later.",
       "armHint": "For ARM devices, check compatibility in Microsoft Store.",
       "soon": "Coming soon",
       "soonOther": "The {platform} version is planned for later.",
@@ -160,6 +188,14 @@
       "apk": "Download APK",
       "apkSoon": "APK download (coming soon)",
       "playSoon": "Google Play (coming soon)",
+      "playHelp": "Help us get to Google Play",
+      "playHelpSmall": "Help us get to",
+      "playHelpIntro": "Google Play needs testers before the app can be published for everyone. If you have an Android phone, join in two steps:",
+      "playStepGroup": "Join the testers group with the same Google account as on your phone.",
+      "playJoinGroup": "Join the group",
+      "playStepOptIn": "Open the testing page and tap “Become a tester”, then install the app from Google Play and keep it on your phone for 14 days.",
+      "playOptIn": "Open the testing page",
+      "close": "Close",
       "appStore": "Download on the App Store",
       "downloadPlatform": "Download for {platform}",
       "missingAsset": "Direct download is currently unavailable. You can use Microsoft Store.",
@@ -175,7 +211,7 @@
       "notAvailable": "Currently unavailable"
     }
   };
-  const names = { windows: "Windows", android: "Android", macos: "macOS", linux: "Linux", ios: "iOS" };
+  const names = { windows: "Windows", android: "Android", linux: "Linux", macos: "macOS", ios: "iOS" };
   const symbols = { windows: "windows", android: "android", macos: "apple", linux: "linux", ios: "phone" };
   const readSetting = (key) => { try { return localStorage.getItem(key); } catch { return null; } };
   const saveSetting = (key, value) => { try { localStorage.setItem(key, value); } catch { /* Optional preference storage. */ } };
@@ -348,7 +384,20 @@
     $("#release-link").href = releaseURL;
     $("#release-link").title = t(releaseVerified ? "verified" : "lastKnown");
   }
+  // The site's own version (config.siteVersion) as «آخر تحديث», small under the footer's links; the signature stays the footer's last line.
+  function renderSiteVersion() {
+    const links = $(".footer-links");
+    if (!links || !config.siteVersion) return;
+    let node = $("#site-version");
+    if (!node) {
+      node = el("small", "site-version");
+      node.id = "site-version";
+      links.after(node);
+    }
+    node.textContent = t("siteVersion", { version: config.siteVersion });
+  }
   function render() {
+    renderSiteVersion();
     document.documentElement.lang = language;
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
     document.title = t(isDownloadPage ? "title" : "privacyTitle");
@@ -421,13 +470,16 @@
   function renderPlatformPane(content, platform) {
     const entry = config[platform];
     if (platform === "windows") return renderWindows(content);
+    if (platform === "android" && safeURL(entry.apk)) return renderAndroid(content, entry);
     if (!Object.values(entry).some(value => safeURL(value))) return renderSoon(content, platform);
     const heading = el("div", "platform-intro");
     heading.append(el("strong", "", names[platform]), el("span", "status ins-pill ins-pill--ok", t("available")));
     content.append(heading);
     const stack = el("div", "download-stack");
     if (platform === "android") {
+      stack.classList.add("download-stack--compact");   // the same size as the Windows pane's badge and download button
       if (safeURL(entry.store)) stack.append(link(t("googlePlay"), entry.store, "button primary", "store"));
+      else if (safeURL(config.playTesting?.group) && safeURL(config.playTesting?.optIn)) stack.append(playHelpButton());
       else stack.append(el("p", "unavailable-note", t("playSoon")));
       if (safeURL(entry.apk)) stack.append(link(t("apk"), entry.apk, "button " + (safeURL(entry.store) ? "secondary" : "primary"), "download"));
       else stack.append(el("p", "unavailable-note", t("apkSoon")));
@@ -436,6 +488,160 @@
     }
     content.append(stack);
     content.append(link(t("follow"), "https://t.me/SVUOne", "store-hint"));
+  }
+  // The Google Play mark in its own colours (only to say where the button leads), drawn inline: the sprite's icons are one-colour strokes.
+  function playLogo(className) {
+    const ns = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
+    svg.classList.add("play-logo");
+    if (className) svg.classList.add(className);
+    for (const [fill, d] of [
+      ["#00C3FF", "M3.6 1.9c-.3.3-.4.8-.4 1.4v17.4c0 .6.2 1.1.4 1.4l.1.1L13.5 12v-.2L3.7 1.8z"],
+      ["#FFC107", "M16.8 15.3 13.5 12v-.2l3.3-3.3.1.1 3.9 2.2c1.1.6 1.1 1.7 0 2.3l-3.9 2.2z"],
+      ["#F43249", "M16.9 15.2 13.5 11.9 3.6 21.8c.4.4 1 .4 1.7.1z"],
+      ["#00E676", "M16.9 8.6 5.3 2c-.7-.4-1.3-.3-1.7.1l9.9 9.8z"]]) {
+      const path = document.createElementNS(ns, "path");
+      path.setAttribute("fill", fill);
+      path.setAttribute("d", d);
+      svg.append(path);
+    }
+    return svg;
+  }
+  // Until the app is on Google Play: a button that opens how to join its closed test (the testers group, then the opt-in page).
+  function playHelpButton() {
+    // A badge like the Microsoft Store one on the Windows pane: the Play mark, a small line, then "Google Play" large.
+    const button = el("button", "play-badge");
+    button.type = "button";
+    button.setAttribute("aria-label", t("playHelp"));
+    const text = el("span", "play-badge-text");
+    const big = el("bdi", "play-badge-big", "Google Play");
+    big.dir = "ltr";
+    text.append(el("span", "play-badge-small", t("playHelpSmall")), big);
+    // Not on Google Play yet, said without words: a dashed "slot" badge, and the Play mark grey, filling with its colours from the bottom as the
+    // closed test's days pass (at least a sliver, never full: it fills only when the store link exists and this badge is gone).
+    const started = Date.parse(config.playTesting.started || "");
+    const days = Number(config.playTesting.days) || 14;
+    const progress = Number.isFinite(started) ? Math.min(.9, Math.max(.1, (Date.now() - started) / (days * 864e5))) : .1;
+    const mark = el("span", "play-mark");
+    mark.style.setProperty("--fill", (progress * 100).toFixed(1) + "%");
+    mark.append(playLogo("play-logo--grey"), playLogo("play-logo--fill"));
+    button.append(mark, text);
+    button.addEventListener("click", openPlayHelp);
+    return button;
+  }
+  function openPlayHelp() {
+    let dialog = $("#play-help");
+    if (!dialog) {
+      dialog = el("dialog", "ins-dialog ins-dialog--sm play-help");
+      dialog.id = "play-help";
+      dialog.tabIndex = -1;
+      dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); });
+      document.body.append(dialog);
+    }
+    const head = el("div", "play-head");
+    const emblem = el("span", "play-emblem");
+    emblem.append(playLogo());
+    const heading = el("div", "play-heading");
+    const title = el("h3", "play-title", t("playHelp"));
+    title.id = "play-help-title";
+    heading.append(title, el("p", "play-intro", t("playHelpIntro")));
+    const close = el("button", "ins-close play-close");
+    close.type = "button";
+    close.setAttribute("aria-label", t("close"));
+    close.addEventListener("click", () => dialog.close());
+    head.append(emblem, heading, close);
+    const steps = el("ol", "play-steps");
+    const step = (symbol, text, label, url) => {
+      const item = el("li", "play-step");
+      const marker = el("span", "play-marker");
+      marker.append(icon(symbol));
+      const card = el("div", "play-card");
+      const go = el("a", "button primary ins-btn ins-btn--primary play-go");
+      go.href = safeURL(url);
+      go.target = "_blank";
+      go.rel = "noopener noreferrer";
+      go.append(el("span", "", label), icon("external"));
+      // The address in full, so the student sees where the button leads; it breaks after a "/" (a <wbr>, never copied) rather than mid-word.
+      const address = el("bdi", "play-address");
+      address.dir = "ltr";
+      const parts = (new URL(url).host + new URL(url).pathname).split("/");
+      parts.forEach((part, index) => {
+        address.append(part + (index < parts.length - 1 ? "/" : ""));
+        if (index < parts.length - 1) address.append(document.createElement("wbr"));
+      });
+      card.append(el("p", "", text), go, address);
+      item.append(marker, card);
+      return item;
+    };
+    steps.append(
+      step("users", t("playStepGroup"), t("playJoinGroup"), config.playTesting.group),
+      step("flask", t("playStepOptIn"), t("playOptIn"), config.playTesting.optIn));
+    dialog.setAttribute("aria-labelledby", title.id);
+    dialog.dir = language === "ar" ? "rtl" : "ltr";
+    dialog.replaceChildren(head, steps);
+    if (!dialog.open) {
+      dialog.showModal();
+      dialog.focus();   // the dialog, not the close button: no focus ring on open
+    }
+  }
+  // "Download not working? Get it from Telegram": the release's files in the channel, for students the GitHub file server or the Store do not reach.
+  function telegramMirror() {
+    if (!safeURL(config.telegramFiles)) return null;
+    const node = el("a", "mirror-link");
+    node.href = safeURL(config.telegramFiles);
+    node.target = "_blank";
+    node.rel = "noopener noreferrer";
+    const logo = el("img", "telegram-logo");
+    logo.src = "assets/telegram.svg";
+    logo.alt = "";
+    logo.width = 18;
+    logo.height = 18;
+    node.append(logo, el("span", "", t("mirrorTelegram")));
+    return node;
+  }
+  // The Android pane, laid out as the Windows one. What downloads comes first: Google Play when the app is there (then the APK as the direct
+  // download); until then the APK, then a "help us reach Google Play" badge. A help link into the questions closes it.
+  function renderAndroid(content, entry) {
+    const heading = el("div", "platform-intro");
+    const name = el("strong", "", "Android");
+    name.dir = "ltr";
+    heading.append(name, el("span", "requirements", t("requiresAndroid")));
+    content.append(heading);
+    const group = el("div", "ins-btn-group download-split");
+    const apk = el("a", "ins-btn ins-btn--secondary download-main");
+    apk.href = safeURL(entry.apk);
+    const label = el("span", "download-main-label");
+    const kind = el("bdi", "", "Android APK");
+    kind.dir = "ltr";
+    label.append(el("span", "download-action", t("installer")), kind);
+    apk.setAttribute("aria-label", t("apk"));
+    apk.append(icon("download"), label);
+    group.append(apk);
+    const store = el("div", "download-stack download-stack--compact");
+    if (safeURL(entry.store)) {
+      store.append(link(t("googlePlay"), entry.store, "button primary", "store"));
+      content.append(store, el("div", "separator", t("direct")), group);
+    } else {
+      content.append(group);
+      if (safeURL(config.playTesting?.group) && safeURL(config.playTesting?.optIn)) {
+        store.append(playHelpButton());
+        content.append(el("div", "separator", t("andAlso")), store);
+      }
+    }
+    const help = el("a", "arch-help", t("installApk"));
+    help.href = "#install-apk";
+    help.addEventListener("click", () => {
+      const details = $("#install-apk");
+      runningAnimations.get(details)?.cancel();
+      delete details.dataset.expanded;
+      details.open = true;
+    });
+    content.append(help);
+    const mirror = telegramMirror();
+    if (mirror) content.append(mirror);
   }
   function renderWindows(content) {
     const heading = el("div", "platform-intro");
@@ -500,6 +706,8 @@
       details.open = true;
     });
     content.append(help);
+    const mirror = telegramMirror();
+    if (mirror) content.append(mirror);
   }
   function renderSoon(content, platform) {
     const soon = el("div", "soon-content");
@@ -530,8 +738,11 @@
     const index = buttons.indexOf(document.activeElement);
     if (index < 0) return;
     let next;
-    if (event.key === "ArrowRight") next = (index + 1) % buttons.length;
-    else if (event.key === "ArrowLeft") next = (index - 1 + buttons.length) % buttons.length;
+    // The tabs follow the page's direction (right to left in Arabic), so the arrows move the way they point.
+    const forward = document.documentElement.dir === "rtl" ? "ArrowLeft" : "ArrowRight";
+    const back = forward === "ArrowLeft" ? "ArrowRight" : "ArrowLeft";
+    if (event.key === forward) next = (index + 1) % buttons.length;
+    else if (event.key === back) next = (index - 1 + buttons.length) % buttons.length;
     else if (event.key === "Home") next = 0;
     else if (event.key === "End") next = buttons.length - 1;
     else return;

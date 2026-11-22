@@ -46,6 +46,9 @@
     <symbol id="play" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="4"/><path d="m10 8 6 4-6 4z"/></symbol>
     <symbol id="calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-14 4h3m4 0h3"/></symbol>
     <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.2A6.5 6.5 0 0 1 21.5 20"/></symbol>
+    <symbol id="flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.5 18.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3M7.5 14h9"/></symbol>
     <symbol id="globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></symbol>
   </svg>
 
@@ -76,11 +79,11 @@
 
         <section class="download-card ins-card" id="downloads" aria-labelledby="download-title">
           <div class="card-heading"><span class="download-emblem"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#download"/></svg></span><h2 id="download-title" data-i18n="downloadTitle">تنزيل التطبيق</h2></div>
-          <div class="platforms" role="tablist" aria-label="أنظمة التشغيل" data-i18n-aria="platforms" aria-orientation="horizontal" dir="ltr">
+          <div class="platforms" role="tablist" aria-label="أنظمة التشغيل" data-i18n-aria="platforms" aria-orientation="horizontal">
             <button type="button" role="tab" class="platform" id="platform-windows" data-platform="windows" aria-controls="platform-content" aria-selected="true" tabindex="0"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#windows"/></svg><span>Windows</span></button>
             <button type="button" role="tab" class="platform" id="platform-android" data-platform="android" aria-controls="platform-content" aria-selected="false" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#android"/></svg><span>Android</span></button>
-            <button type="button" role="tab" class="platform" id="platform-macos" data-platform="macos" aria-controls="platform-content" aria-selected="false" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#apple"/></svg><span>macOS</span></button>
             <button type="button" role="tab" class="platform" id="platform-linux" data-platform="linux" aria-controls="platform-content" aria-selected="false" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#linux"/></svg><span>Linux</span></button>
+            <button type="button" role="tab" class="platform" id="platform-macos" data-platform="macos" aria-controls="platform-content" aria-selected="false" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#apple"/></svg><span>macOS</span></button>
             <button type="button" role="tab" class="platform" id="platform-ios" data-platform="ios" aria-controls="platform-content" aria-selected="false" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#phone"/></svg><span>iOS</span></button>
           </div>
           <div id="platform-content" class="platform-content" role="tabpanel" aria-labelledby="platform-windows" tabindex="0"></div>
@@ -127,6 +130,17 @@
                 <li data-i18n="aArchitecture32">لنظام 32 بت، اختر Windows x86.</li>
               </ul>
               <p data-i18n="aArchitectureAI">ميزات الذكاء الاصطناعي متاحة في نسخة Windows x64 فقط.</p>
+            </div>
+          </details>
+          <details id="install-apk">
+            <summary data-i18n="qApk">كيف أثبّت ملف APK على Android؟</summary>
+            <div class="faq-answer">
+              <ul class="faq-choices">
+                <li data-i18n="aApkOpen">نزّل الملف، ثم افتحه من الإشعارات أو من مجلد التنزيلات.</li>
+                <li data-i18n="aApkAllow">إن سألك الهاتف، اسمح بالتثبيت من هذا المصدر، ثم اضغط «تثبيت».</li>
+              </ul>
+              <p data-i18n="aApkUpdates">نسخة APK لا تتحدث تلقائياً، فنزّل الملف الجديد مع كل إصدار. وحين يصل التطبيق إلى Google Play تستطيع أن تحدّثه من المتجر دون حذفه.</p>
+              <p data-i18n="aApkRequires">يعمل التطبيق على Android 8 أو أحدث.</p>
             </div>
           </details>
           <details>
