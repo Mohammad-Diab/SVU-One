@@ -5,7 +5,7 @@ window.SVU_CONFIG = {
   repository: "https://github.com/Mohammad-Diab/SVU-One",
   releaseApi: "https://api.github.com/repos/Mohammad-Diab/SVU-One/releases/latest",
   // Last known version; download URLs always resolve to the latest release.
-  fallbackVersion: "1.2.0",
+  fallbackVersion: "1.2.1",
   windows: {
     store: "https://apps.microsoft.com/detail/9P0MXPKXVJ01",
     x64: "https://github.com/Mohammad-Diab/SVU-One/releases/latest/download/SvuOne-Setup.exe",
@@ -15,10 +15,10 @@ window.SVU_CONFIG = {
   android: { apk: "https://github.com/Mohammad-Diab/SVU-One/releases/latest/download/SvuOne-Android.apk", store: null }, // TODO: Google Play
   // This site's own version, shown small in the footer so a report can say which page the student saw. Bump it with every change to the site
   // (date, then .2, .3 … for more changes the same day).
-  siteVersion: "2026-11-22",
+  siteVersion: "2026-11-23",
   // The second download place: the pinned Telegram post with this release's files (GitHub's file server and the Microsoft Store do not work from Syria).
   // Point it at the new post with every release.
-  telegramFiles: "https://t.me/SVUOne/15",
+  telegramFiles: "https://t.me/SVUOne/19",
   // Google Play closed test: while android.store is null, the Android tab offers a "help us reach Google Play" dialog with these two steps.
   playTesting: {
     group: "https://groups.google.com/g/svu-one-testers",
