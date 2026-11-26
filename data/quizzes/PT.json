@@ -1,0 +1,8260 @@
+{
+ "rules": 1,
+ "course": "PT",
+ "title": "أسئلة تحديد المستوى",
+ "credits": [
+  {
+   "name": "هكرات مزنوقين"
+  }
+ ],
+ "questions": [
+  {
+   "id": "pt-001",
+   "kind": "single",
+   "text": "The new line of trains ——— all the suburbs to the city center.",
+   "choices": [
+    "Refer",
+    "Connect",
+    "Conduct",
+    "Conclude"
+   ],
+   "answer": 1,
+   "why": "الفعل connect يعني يربط: الخط الجديد يربط الضواحي بمركز المدينة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-002",
+   "kind": "single",
+   "text": "The ——— of the forest will result in the ——— of many species.",
+   "choices": [
+    "Destructing/ disappearance",
+    "Destruction/ disappear",
+    "Destruction/ disappearance",
+    "Destruct/ disappear"
+   ],
+   "answer": 2,
+   "why": "بعد the يأتي اسم في الفراغين: destruction (الدمار) و disappearance (الاختفاء).",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-003",
+   "kind": "single",
+   "text": "She has been very kind ———.",
+   "choices": [
+    "Isn't she",
+    "Hasn't she",
+    "Doesn't she",
+    "Wasn't she"
+   ],
+   "answer": 1,
+   "why": "في السؤال الذيلي نكرر الفعل المساعد للجملة: has been فيكون الذيل hasn't she.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-004",
+   "kind": "single",
+   "text": "I do not like ———.",
+   "choices": [
+    "To take my photograph",
+    "Take photograph of myself",
+    "Having my photograph taken",
+    "My photograph been taken"
+   ],
+   "answer": 2,
+   "why": "بعد like يأتي المصدر بـ ing، وتركيب have something done يعني أن غيرك يفعله لك: having my photograph taken.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-005",
+   "kind": "single",
+   "text": "I made him ——— what I had told him.",
+   "choices": [
+    "Repeat",
+    "That he repeated",
+    "To repeat",
+    "Repeating"
+   ],
+   "answer": 0,
+   "why": "الفعل make يأتي بعده المفعول ثم المصدر بلا to: made him repeat.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-006",
+   "kind": "single",
+   "text": "He ——— live in the country than in the city.",
+   "choices": [
+    "Had better",
+    "Prefers",
+    "Would rather",
+    "Likes better to"
+   ],
+   "answer": 2,
+   "why": "التركيب would rather + المصدر بلا to + than للتفضيل بين أمرين.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-007",
+   "kind": "single",
+   "text": "My kitchen is very old. I am going to ——— it.",
+   "choices": [
+    "Modernize",
+    "Paint",
+    "New",
+    "Clean"
+   ],
+   "answer": 0,
+   "why": "المطبخ قديم فالمناسب modernize أي تحديثه؛ new صفة لا فعل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-008",
+   "kind": "single",
+   "text": "I am afraid I do not know where he lives. I wish I ———.",
+   "choices": [
+    "Do",
+    "Did",
+    "Were",
+    "Had known"
+   ],
+   "answer": 1,
+   "why": "التمني عن الحاضر يكون بالماضي البسيط: I wish I did أي I wish I knew؛ أما had known فعن الماضي.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-009",
+   "kind": "single",
+   "text": "A big crowd of demonstrators was ——— cuts in health spending.",
+   "choices": [
+    "Protesting against",
+    "Provoking",
+    "Protesting for",
+    "Refusing to"
+   ],
+   "answer": 0,
+   "why": "يحتج المتظاهرون على شيء: protest against، و protest for يعني المطالبة به.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-010",
+   "kind": "single",
+   "text": "Mike spent several years as a(n) ——— to a master-builder, so that he might learn the trade.",
+   "choices": [
+    "Apprentice",
+    "Applicant",
+    "Learner",
+    "Student"
+   ],
+   "answer": 0,
+   "why": "الكلمة apprentice تعني الصبي المتدرب عند صاحب حرفة ليتعلمها.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-011",
+   "kind": "single",
+   "text": "My chest hurts ——— I breathe. Do you think I've got Covid?",
+   "choices": [
+    "Wherever",
+    "Whenever",
+    "Whoever",
+    "Whatever"
+   ],
+   "answer": 1,
+   "why": "الأداة whenever تعني كلما أو في كل مرة: يؤلمني صدري كلما تنفست.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-012",
+   "kind": "single",
+   "text": "What do you do?",
+   "choices": [
+    "I'm from Italy",
+    "I'm a student",
+    "I'm fine, thank you"
+   ],
+   "answer": 1,
+   "why": "السؤال What do you do عن العمل أو الدراسة، فالجواب I'm a student.",
+   "topic": "المحادثة"
+  },
+  {
+   "id": "pt-013",
+   "kind": "single",
+   "text": "The incident has been witnessed by a number of ———.",
+   "choices": [
+    "passer-bys",
+    "Passer-by",
+    "Passers-bys",
+    "Passers-by"
+   ],
+   "answer": 3,
+   "why": "جمع passer-by هو passers-by: الجمع على الاسم الأساسي passer.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-014",
+   "kind": "single",
+   "text": "The boss listened to them with great patience ——— he was obviously infuriated.",
+   "choices": [
+    "However",
+    "Consequently",
+    "In spite of",
+    "Though"
+   ],
+   "answer": 3,
+   "why": "الأداة though تعني مع أنه وتربط جملتين متعارضتين؛ in spite of يتبعها اسم لا جملة.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-015",
+   "kind": "single",
+   "text": "How he manages to keep going with all this is ——— me.",
+   "choices": [
+    "Beneath",
+    "Beyond",
+    "Below",
+    "Beside"
+   ],
+   "answer": 1,
+   "why": "العبارة beyond me تعني فوق فهمي ولا أستطيع تفسيره.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-016",
+   "kind": "single",
+   "text": "Her condition is improving ———.",
+   "choices": [
+    "Steadly",
+    "Steady",
+    "Steadily",
+    "Steadiness"
+   ],
+   "answer": 2,
+   "why": "نصف الفعل improving بظرف: steadily أي بثبات.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-017",
+   "kind": "single",
+   "text": "Put on your raincoat ——— it rains.",
+   "choices": [
+    "Because",
+    "In any case",
+    "In case",
+    "For"
+   ],
+   "answer": 2,
+   "why": "الأداة in case تعني تحسبا لـ: البس المعطف تحسبا لنزول المطر.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-018",
+   "kind": "single",
+   "text": "I did not buy the sweater because it was not ———.",
+   "choices": [
+    "Washed",
+    "Washing",
+    "Washer",
+    "Washable"
+   ],
+   "answer": 3,
+   "why": "اللاحقة able تعطي معنى قابل لـ: washable أي يمكن غسله.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-019",
+   "kind": "single",
+   "text": "The new job will provide you with ——— experience. It is so helpful for your future as a programmer.",
+   "choices": [
+    "Praiseworthy",
+    "Invaluable",
+    "Admirable",
+    "Merit"
+   ],
+   "answer": 1,
+   "why": "الكلمة invaluable تعني لا تقدر بثمن أي مفيدة جدا، وليست عكس valuable.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-020",
+   "kind": "single",
+   "text": "The bridge ——— into the river without any warning. Lots of people were injured.",
+   "choices": [
+    "Submerged",
+    "Collapsed",
+    "Relapsed",
+    "Degenerated"
+   ],
+   "answer": 1,
+   "why": "الفعل collapse يعني انهار: انهار الجسر في النهر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-021",
+   "kind": "single",
+   "text": "Children would rather ———.",
+   "choices": [
+    "To play than to study",
+    "Play than study",
+    "Playing than studying",
+    "To play than studying"
+   ],
+   "answer": 1,
+   "why": "بعد would rather يأتي المصدر بلا to في الطرفين: play than study.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-022",
+   "kind": "single",
+   "text": "The weather changed ———. It suddenly started to rain.",
+   "choices": [
+    "Unexpected",
+    "Expectedly",
+    "Unexpectedly",
+    "unexpectancy"
+   ],
+   "answer": 2,
+   "why": "نصف الفعل changed بظرف: unexpectedly أي فجأة على غير توقع.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-023",
+   "kind": "single",
+   "text": "A funeral can ——— the feelings of regret and loss for the relatives.",
+   "choices": [
+    "Amplify",
+    "Extend",
+    "Develop",
+    "Exaggerate"
+   ],
+   "answer": 0,
+   "why": "الفعل amplify يعني يضخم أو يزيد شدة الشعور.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-024",
+   "kind": "single",
+   "text": "Peter ——— at six in the morning.",
+   "choices": [
+    "Gets up",
+    "Goes",
+    "Goes up"
+   ],
+   "answer": 0,
+   "why": "العبارة get up تعني ينهض من النوم، وفاعل مفرد فنقول gets up.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-025",
+   "kind": "single",
+   "text": "When they asked him about the new project, he said it was no ——— of theirs and wouldn't tell them anything.",
+   "choices": [
+    "Relation",
+    "relevance",
+    "influence",
+    "concern"
+   ],
+   "answer": 3,
+   "why": "العبارة no concern of theirs تعني ليس من شأنهم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-026",
+   "kind": "single",
+   "text": "His new appointment takes ——— from the beginning of next month.",
+   "choices": [
+    "position",
+    "place",
+    "part",
+    "effect"
+   ],
+   "answer": 3,
+   "why": "العبارة take effect تعني يصبح نافذا أو يبدأ العمل به.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-027",
+   "kind": "single",
+   "text": "If the fire alarm sounds, all residents are required to ——— in the courtyard.",
+   "choices": [
+    "unite",
+    "combine",
+    "assemble",
+    "mobilise"
+   ],
+   "answer": 2,
+   "why": "الفعل assemble يعني يتجمع في مكان واحد، وهو المستعمل عند إنذار الحريق.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-028",
+   "kind": "single",
+   "text": "I'm now going to give you ——— tips for running a successful online business.",
+   "choices": [
+    "unworthy",
+    "unprofitable",
+    "worthless",
+    "invaluable"
+   ],
+   "answer": 3,
+   "why": "الكلمة invaluable تعني قيمة جدا؛ worthless و unworthy بمعنى عديم القيمة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-029",
+   "kind": "single",
+   "text": "I noticed that there were two buttons ——— from his coat.",
+   "choices": [
+    "dropping",
+    "falling",
+    "missing",
+    "loosing"
+   ],
+   "answer": 2,
+   "why": "الكلمة missing تعني مفقود: زران مفقودان من معطفه.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-030",
+   "kind": "single",
+   "text": "Further research is needed to find out what side ——— this pill has on a person.",
+   "choices": [
+    "affects",
+    "suspects",
+    "defects",
+    "effects"
+   ],
+   "answer": 3,
+   "why": "الاسم side effects يعني الآثار الجانبية؛ affects فعل.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-031",
+   "kind": "single",
+   "text": "——— name is Robert.",
+   "choices": [
+    "Me",
+    "I",
+    "My"
+   ],
+   "answer": 2,
+   "why": "قبل الاسم name نستعمل صفة الملكية my.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-032",
+   "kind": "single",
+   "text": "They ——— from Spain.",
+   "choices": [
+    "is",
+    "are",
+    "do"
+   ],
+   "answer": 1,
+   "why": "الفاعل they جمع فيأخذ are.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-033",
+   "kind": "single",
+   "text": "——— are you from?",
+   "choices": [
+    "What",
+    "Who",
+    "Where"
+   ],
+   "answer": 2,
+   "why": "السؤال عن البلد يكون بـ where: Where are you from?",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-034",
+   "kind": "single",
+   "text": "What do you do? I'm ——— student.",
+   "choices": [
+    "the",
+    "a",
+    "an"
+   ],
+   "answer": 1,
+   "why": "قبل الاسم المفرد المعدود غير المحدد نستعمل a، و student يبدأ بصوت ساكن.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-035",
+   "kind": "single",
+   "text": "Peter ——— at seven o'clock.",
+   "choices": [
+    "goes up",
+    "gets",
+    "gets up"
+   ],
+   "answer": 2,
+   "why": "العبارة get up تعني ينهض من النوم، والفاعل مفرد فنقول gets up.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-036",
+   "kind": "single",
+   "text": "——— you like this DVD?",
+   "choices": [
+    "Are",
+    "Have",
+    "Do"
+   ],
+   "answer": 2,
+   "why": "السؤال في المضارع البسيط مع you يبدأ بـ do.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-037",
+   "kind": "single",
+   "text": "We ——— live in a flat.",
+   "choices": [
+    "don't",
+    "hasn't",
+    "doesn't"
+   ],
+   "answer": 0,
+   "why": "النفي في المضارع البسيط مع we يكون بـ don't.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-038",
+   "kind": "single",
+   "text": "Wednesday, Thursday, Friday, ———.",
+   "choices": [
+    "Saturday",
+    "Tuesday",
+    "Monday"
+   ],
+   "answer": 0,
+   "why": "بعد الجمعة Friday يأتي السبت Saturday.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-039",
+   "kind": "single",
+   "text": "——— he play tennis?",
+   "choices": [
+    "Where",
+    "Does",
+    "Do"
+   ],
+   "answer": 1,
+   "why": "السؤال في المضارع البسيط مع he يبدأ بـ does والفعل بلا s.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-040",
+   "kind": "single",
+   "text": "Have you ——— a car?",
+   "choices": [
+    "any",
+    "have",
+    "got"
+   ],
+   "answer": 2,
+   "why": "التركيب have got يعني يملك: Have you got a car?",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-041",
+   "kind": "single",
+   "text": "We don't have ——— butter.",
+   "choices": [
+    "a",
+    "any",
+    "got"
+   ],
+   "answer": 1,
+   "why": "في النفي مع الاسم غير المعدود نستعمل any.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-042",
+   "kind": "single",
+   "text": "——— some money here.",
+   "choices": [
+    "There're",
+    "There",
+    "There's"
+   ],
+   "answer": 2,
+   "why": "الكلمة money غير معدودة فنستعمل there is أي there's.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-043",
+   "kind": "single",
+   "text": "We ——— got a garage.",
+   "choices": [
+    "haven't",
+    "hasn't",
+    "don't"
+   ],
+   "answer": 0,
+   "why": "مع we نقول haven't got؛ hasn't للمفرد الغائب.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-044",
+   "kind": "single",
+   "text": "Those shoes are very ———.",
+   "choices": [
+    "expensive",
+    "a lot",
+    "cost"
+   ],
+   "answer": 0,
+   "why": "الصفة expensive تعني غالي الثمن وتأتي بعد very.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-045",
+   "kind": "single",
+   "text": "Have you got a pen? Yes, I ———.",
+   "choices": [
+    "am",
+    "have",
+    "got"
+   ],
+   "answer": 1,
+   "why": "الجواب المختصر يكرر الفعل المساعد: Have you got...? Yes, I have.",
+   "topic": "المحادثة"
+  },
+  {
+   "id": "pt-046",
+   "kind": "single",
+   "text": "It is a busy, ——— city.",
+   "choices": [
+    "traffic",
+    "quite",
+    "noisy"
+   ],
+   "answer": 2,
+   "why": "المطلوب صفة للمدينة: noisy أي صاخبة؛ traffic اسم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-047",
+   "kind": "single",
+   "text": "They ——— at home yesterday.",
+   "choices": [
+    "was",
+    "are",
+    "were"
+   ],
+   "answer": 2,
+   "why": "الماضي من be مع they هو were.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-048",
+   "kind": "single",
+   "text": "I ——— there for a long time.",
+   "choices": [
+    "lived",
+    "living",
+    "live"
+   ],
+   "answer": 0,
+   "why": "الحدث انتهى في الماضي فنستعمل الماضي البسيط lived.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-049",
+   "kind": "single",
+   "text": "He didn't ——— glasses.",
+   "choices": [
+    "put",
+    "wear",
+    "take"
+   ],
+   "answer": 1,
+   "why": "نقول wear glasses أي يرتدي نظارة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-050",
+   "kind": "single",
+   "text": "The restaurant was ——— busy.",
+   "choices": [
+    "very",
+    "a lot",
+    "many"
+   ],
+   "answer": 0,
+   "why": "قبل الصفة busy نستعمل very للتوكيد.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-051",
+   "kind": "single",
+   "text": "Do you like the red ———?",
+   "choices": [
+    "it",
+    "that",
+    "one"
+   ],
+   "answer": 2,
+   "why": "الكلمة one تحل محل اسم مذكور سابقا: the red one.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-052",
+   "kind": "single",
+   "text": "He ——— to Brazil on business.",
+   "choices": [
+    "go",
+    "goed",
+    "went"
+   ],
+   "answer": 2,
+   "why": "الماضي البسيط من go شاذ: went.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-053",
+   "kind": "single",
+   "text": "Yesterday was the ——— of April.",
+   "choices": [
+    "third",
+    "three",
+    "day three"
+   ],
+   "answer": 0,
+   "why": "التاريخ يقرأ بالعدد الترتيبي: the third of April.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-054",
+   "kind": "single",
+   "text": "She's got ——— hair.",
+   "choices": [
+    "dark, long",
+    "long and dark",
+    "long dark"
+   ],
+   "answer": 2,
+   "why": "ترتيب الصفات: الطول قبل اللون، فنقول long dark hair.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-055",
+   "kind": "single",
+   "text": "I ——— play football at the weekend.",
+   "choices": [
+    "usually",
+    "use",
+    "usual"
+   ],
+   "answer": 0,
+   "why": "الظرف usually يأتي قبل الفعل ليدل على العادة.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-056",
+   "kind": "single",
+   "text": "I ——— in an armchair at the moment.",
+   "choices": [
+    "sitting",
+    "'m sitting",
+    "sit"
+   ],
+   "answer": 1,
+   "why": "الحدث يجري الآن at the moment فنستعمل المضارع المستمر: I'm sitting.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-057",
+   "kind": "single",
+   "text": "My brother is older ——— me.",
+   "choices": [
+    "then",
+    "that",
+    "than"
+   ],
+   "answer": 2,
+   "why": "بعد صيغة المقارنة older نستعمل than.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-058",
+   "kind": "single",
+   "text": "Their car is ——— biggest on the road.",
+   "choices": [
+    "than",
+    "this",
+    "the"
+   ],
+   "answer": 2,
+   "why": "صيغة التفضيل biggest يسبقها the.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-059",
+   "kind": "single",
+   "text": "It's the ——— interesting of his films.",
+   "choices": [
+    "more",
+    "much",
+    "most"
+   ],
+   "answer": 2,
+   "why": "التفضيل مع الصفات الطويلة يكون بـ the most: the most interesting.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-060",
+   "kind": "single",
+   "text": "The phone's ringing: ——— answer it.",
+   "choices": [
+    "I'll",
+    "I",
+    "will"
+   ],
+   "answer": 0,
+   "why": "القرار الفوري لحظة الكلام يكون بـ will: I'll answer it.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-061",
+   "kind": "single",
+   "text": "Do you ——— classical or rock music?",
+   "choices": [
+    "rather",
+    "prefer",
+    "more"
+   ],
+   "answer": 1,
+   "why": "الفعل prefer يعني يفضل ويأخذ مفعولا مباشرا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-062",
+   "kind": "single",
+   "text": "He has ——— breakfast.",
+   "choices": [
+    "ate",
+    "eaten",
+    "eat"
+   ],
+   "answer": 1,
+   "why": "بعد has في المضارع التام يأتي التصريف الثالث: eaten.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-063",
+   "kind": "single",
+   "text": "The ——— have seen it before.",
+   "choices": [
+    "childs",
+    "child",
+    "children"
+   ],
+   "answer": 2,
+   "why": "جمع child شاذ: children.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-064",
+   "kind": "single",
+   "text": "I've never met an actor ———.",
+   "choices": [
+    "before",
+    "already",
+    "after"
+   ],
+   "answer": 0,
+   "why": "في نهاية جملة المضارع التام المنفية بـ never نستعمل before.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-065",
+   "kind": "single",
+   "text": "——— is very good exercise.",
+   "choices": [
+    "Swim",
+    "To swim",
+    "Swimming"
+   ],
+   "answer": 2,
+   "why": "الفاعل في أول الجملة يكون اسما، ومن الفعل نستعمل صيغة ing: Swimming.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-066",
+   "kind": "single",
+   "text": "Have you ——— been on a winter sports holiday?",
+   "choices": [
+    "always",
+    "ever",
+    "soon"
+   ],
+   "answer": 1,
+   "why": "في سؤال المضارع التام عن التجربة نستعمل ever.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-067",
+   "kind": "single",
+   "text": "I can't ——— another language.",
+   "choices": [
+    "speaking",
+    "speak",
+    "to speak"
+   ],
+   "answer": 1,
+   "why": "بعد الفعل الناقص can يأتي المصدر بلا to: speak.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-068",
+   "kind": "single",
+   "text": "They ——— pay for the tickets.",
+   "choices": [
+    "haven't to",
+    "don't have",
+    "don't have to"
+   ],
+   "answer": 2,
+   "why": "النفي من have to يكون don't have to أي لا يلزم.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-069",
+   "kind": "single",
+   "text": "——— old is their car?",
+   "choices": [
+    "What",
+    "When",
+    "How"
+   ],
+   "answer": 2,
+   "why": "السؤال عن العمر يكون بـ how old.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-070",
+   "kind": "single",
+   "text": "Are you ——— for one or two weeks?",
+   "choices": [
+    "staying",
+    "stayed",
+    "stay"
+   ],
+   "answer": 0,
+   "why": "الخطة المستقبلية المرتبة تعبر بالمضارع المستمر: Are you staying...?",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-071",
+   "kind": "single",
+   "text": "Stephen ——— to visit his parents.",
+   "choices": [
+    "will",
+    "going",
+    "is going"
+   ],
+   "answer": 2,
+   "why": "النية المستقبلية: be going to، ومع المفرد is going to.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-072",
+   "kind": "single",
+   "text": "I don't ——— getting up early.",
+   "choices": [
+    "not like",
+    "want",
+    "enjoy"
+   ],
+   "answer": 2,
+   "why": "الفعل enjoy يأتي بعده الفعل بـ ing: I don't enjoy getting up early.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-073",
+   "kind": "single",
+   "text": "We ——— like to see the mountains.",
+   "choices": [
+    "would",
+    "will",
+    "are"
+   ],
+   "answer": 0,
+   "why": "التعبير المهذب عن الرغبة: would like.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-074",
+   "kind": "single",
+   "text": "They ——— ever check their emails.",
+   "choices": [
+    "hard",
+    "harder",
+    "hardly"
+   ],
+   "answer": 2,
+   "why": "الظرف hardly يعني نادرا ما؛ hard يعني بجد.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-075",
+   "kind": "single",
+   "text": "They won't come, ——— they?",
+   "choices": [
+    "won't",
+    "come",
+    "will"
+   ],
+   "answer": 2,
+   "why": "الجملة منفية بـ won't فيكون الذيل مثبتا: will they?",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-076",
+   "kind": "single",
+   "text": "He ——— know how to spell it.",
+   "choices": [
+    "doesn't",
+    "hasn't",
+    "don't"
+   ],
+   "answer": 0,
+   "why": "النفي في المضارع البسيط مع he يكون doesn't.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-077",
+   "kind": "single",
+   "text": "Carla ——— to the radio all morning.",
+   "choices": [
+    "listening",
+    "heard",
+    "listened"
+   ],
+   "answer": 2,
+   "why": "الحدث في الماضي all morning فنستعمل الماضي listened مع to.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-078",
+   "kind": "single",
+   "text": "They ——— come to the cinema with us.",
+   "choices": [
+    "doesn't",
+    "not",
+    "didn't"
+   ],
+   "answer": 2,
+   "why": "النفي في الماضي البسيط يكون didn't مع كل الضمائر.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-079",
+   "kind": "single",
+   "text": "I like this song. ——— do I.",
+   "choices": [
+    "Either",
+    "So",
+    "Neither"
+   ],
+   "answer": 1,
+   "why": "الموافقة على جملة مثبتة تكون So do I.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-080",
+   "kind": "single",
+   "text": "We ——— them at eight o'clock.",
+   "choices": [
+    "meet",
+    "'re meet",
+    "'re meeting"
+   ],
+   "answer": 2,
+   "why": "الموعد المرتب في المستقبل يعبر بالمضارع المستمر: We're meeting.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-081",
+   "kind": "single",
+   "text": "They are going ——— in America next month.",
+   "choices": [
+    "to be",
+    "will be",
+    "be",
+    "being"
+   ],
+   "answer": 0,
+   "why": "بعد going يأتي to + المصدر: going to be.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-082",
+   "kind": "single",
+   "text": "This is the cinema ——— we saw the film.",
+   "choices": [
+    "when",
+    "which",
+    "that",
+    "where"
+   ],
+   "answer": 3,
+   "why": "الضمير الموصول للمكان هو where.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-083",
+   "kind": "single",
+   "text": "Have you ever ——— in a jazz band?",
+   "choices": [
+    "seen",
+    "played",
+    "listened",
+    "wanted"
+   ],
+   "answer": 1,
+   "why": "نقول play in a band أي يعزف في فرقة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-084",
+   "kind": "single",
+   "text": "I'm ——— when I'm with you.",
+   "choices": [
+    "happyer",
+    "happier than",
+    "happier",
+    "the happy"
+   ],
+   "answer": 2,
+   "why": "صيغة المقارنة من happy هي happier، ولا حاجة لـ than هنا لأنه لا مقارن به.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-085",
+   "kind": "single",
+   "text": "This is ——— than I thought.",
+   "choices": [
+    "bad",
+    "badder",
+    "worse",
+    "worst"
+   ],
+   "answer": 2,
+   "why": "المقارنة من bad شاذة: worse ثم than.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-086",
+   "kind": "single",
+   "text": "Can you tell me the way ———?",
+   "choices": [
+    "to the bank",
+    "is the bank",
+    "where is bank",
+    "of the bank"
+   ],
+   "answer": 0,
+   "why": "نقول the way to المكان: the way to the bank.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-087",
+   "kind": "single",
+   "text": "Do you know what ———?",
+   "choices": [
+    "time is it",
+    "time is",
+    "time is now",
+    "time it is"
+   ],
+   "answer": 3,
+   "why": "في السؤال غير المباشر يأتي الفاعل قبل الفعل: what time it is.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-088",
+   "kind": "single",
+   "text": "Were you ——— to open the door?",
+   "choices": [
+    "could",
+    "can",
+    "able",
+    "possible"
+   ],
+   "answer": 2,
+   "why": "التركيب be able to يعني يستطيع: Were you able to...?",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-089",
+   "kind": "single",
+   "text": "Everybody ——— wear a seat belt in the car.",
+   "choices": [
+    "must",
+    "mustn't",
+    "don't have to",
+    "doesn't have to"
+   ],
+   "answer": 0,
+   "why": "الفعل must للإلزام؛ ومع everybody (مفرد) لا يصح don't.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-090",
+   "kind": "single",
+   "text": "Tom has lived in this town ——— three years.",
+   "choices": [
+    "since",
+    "from",
+    "after",
+    "for"
+   ],
+   "answer": 3,
+   "why": "مع المدة الزمنية نستعمل for، ومع نقطة البداية since.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-091",
+   "kind": "single",
+   "text": "We ——— work in that factory.",
+   "choices": [
+    "use to",
+    "was",
+    "used to",
+    "then"
+   ],
+   "answer": 2,
+   "why": "التركيب used to يعبر عن عادة في الماضي انتهت.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-092",
+   "kind": "single",
+   "text": "I think it ——— be sunny tomorrow.",
+   "choices": [
+    "will probably",
+    "probably",
+    "can",
+    "will to"
+   ],
+   "answer": 0,
+   "why": "الظرف probably يأتي بعد will في الجملة المثبتة.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-093",
+   "kind": "single",
+   "text": "He ——— like his brother.",
+   "choices": [
+    "look",
+    "isn't",
+    "isn't look",
+    "can look"
+   ],
+   "answer": 1,
+   "why": "الكلمة like هنا حرف بمعنى يشبه، فنحتاج فعل be: He isn't like his brother.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-094",
+   "kind": "single",
+   "text": "——— does your boyfriend look like?",
+   "choices": [
+    "How",
+    "What",
+    "Why",
+    "Which"
+   ],
+   "answer": 1,
+   "why": "السؤال عن المظهر: What does he look like?",
+   "topic": "المحادثة"
+  },
+  {
+   "id": "pt-095",
+   "kind": "single",
+   "text": "I've got ——— many problems.",
+   "choices": [
+    "too",
+    "a",
+    "enough",
+    "really"
+   ],
+   "answer": 0,
+   "why": "التركيب too many يعني أكثر من اللازم مع المعدود.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-096",
+   "kind": "single",
+   "text": "If we get up in time, ——— catch the train.",
+   "choices": [
+    "we catch",
+    "we caught",
+    "we had caught",
+    "we'll catch"
+   ],
+   "answer": 3,
+   "why": "الشرط الأول: if + مضارع، والجواب will + المصدر.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-097",
+   "kind": "single",
+   "text": "They ——— to go to France for a year.",
+   "choices": [
+    "decide",
+    "deciding",
+    "decided",
+    "to decide"
+   ],
+   "answer": 2,
+   "why": "الفعل decide يأتي بعده to + المصدر، والزمن ماض: decided.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-098",
+   "kind": "single",
+   "text": "I'm working ——— to pass my exam.",
+   "choices": [
+    "hardly",
+    "much",
+    "hard",
+    "good"
+   ],
+   "answer": 2,
+   "why": "الظرف من hard هو hard نفسه؛ hardly تعني نادرا.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-099",
+   "kind": "single",
+   "text": "I'm writing ——— ask you to explain.",
+   "choices": [
+    "for",
+    "in order to",
+    "because",
+    "because of"
+   ],
+   "answer": 1,
+   "why": "للتعبير عن الهدف: in order to + المصدر.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-100",
+   "kind": "single",
+   "text": "He said that most problems ——— by teenagers.",
+   "choices": [
+    "cause",
+    "caused",
+    "were caused",
+    "were causing"
+   ],
+   "answer": 2,
+   "why": "المشاكل تسبب فالجملة مبنية للمجهول: were caused.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-101",
+   "kind": "single",
+   "text": "What ——— to do at the weekend?",
+   "choices": [
+    "have you like",
+    "are you liking",
+    "do you like",
+    "is you like"
+   ],
+   "answer": 2,
+   "why": "السؤال في المضارع البسيط: What do you like to do?",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-102",
+   "kind": "single",
+   "text": "Football ——— in most countries.",
+   "choices": [
+    "plays",
+    "players",
+    "is played",
+    "is playing"
+   ],
+   "answer": 2,
+   "why": "كرة القدم تلعب فالجملة مبنية للمجهول: is played.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-103",
+   "kind": "single",
+   "text": "Who was ——— the door?",
+   "choices": [
+    "at",
+    "on",
+    "in",
+    "of"
+   ],
+   "answer": 0,
+   "why": "نقول at the door أي عند الباب.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-104",
+   "kind": "single",
+   "text": "We ——— lunch when you telephoned.",
+   "choices": [
+    "was having",
+    "had",
+    "were having",
+    "are having"
+   ],
+   "answer": 2,
+   "why": "حدث مستمر في الماضي قطعه حدث آخر: الماضي المستمر were having.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-105",
+   "kind": "single",
+   "text": "Your work is ——— better.",
+   "choices": [
+    "being",
+    "doing",
+    "getting",
+    "falling"
+   ],
+   "answer": 2,
+   "why": "العبارة get better تعني يتحسن: is getting better.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-106",
+   "kind": "single",
+   "text": "She could play the piano ——— she could walk.",
+   "choices": [
+    "during",
+    "while",
+    "as well",
+    "before"
+   ],
+   "answer": 3,
+   "why": "الأداة before تعني قبل أن: عزفت البيانو قبل أن تمشي.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-107",
+   "kind": "single",
+   "text": "The train was cancelled, so we ———.",
+   "choices": [
+    "couldn't go",
+    "wasn't go",
+    "didn't went",
+    "mustn't go"
+   ],
+   "answer": 0,
+   "why": "بعد could يأتي المصدر بلا to: couldn't go.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-108",
+   "kind": "single",
+   "text": "The problem was ——— solved.",
+   "choices": [
+    "easy",
+    "easy to",
+    "an easy",
+    "easily"
+   ],
+   "answer": 3,
+   "why": "نصف الفعل solved بظرف: easily.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-109",
+   "kind": "single",
+   "text": "It was a difficult journey, but I ——— get home.",
+   "choices": [
+    "could",
+    "managed to",
+    "at last",
+    "was"
+   ],
+   "answer": 1,
+   "why": "التعبير manage to يعني تمكن من الفعل رغم الصعوبة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-110",
+   "kind": "single",
+   "text": "We had not ——— heard the news.",
+   "choices": [
+    "already",
+    "always",
+    "yet",
+    "today"
+   ],
+   "answer": 2,
+   "why": "الكلمة yet تستعمل مع النفي في الأزمنة التامة.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-111",
+   "kind": "single",
+   "text": "We arrived at the station, but the bus ——— earlier.",
+   "choices": [
+    "has left",
+    "had leave",
+    "has leave",
+    "had left"
+   ],
+   "answer": 3,
+   "why": "حدث سبق حدثا آخر في الماضي: الماضي التام had left.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-112",
+   "kind": "single",
+   "text": "We can ——— walk or go by car.",
+   "choices": [
+    "both",
+    "rather",
+    "either",
+    "neither"
+   ],
+   "answer": 2,
+   "why": "التركيب either ... or يعني إما ... أو.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-113",
+   "kind": "single",
+   "text": "If I ——— enough money, I'd buy a new car.",
+   "choices": [
+    "had",
+    "would",
+    "did",
+    "shall"
+   ],
+   "answer": 0,
+   "why": "الشرط الثاني: if + الماضي البسيط، والجواب would.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-114",
+   "kind": "single",
+   "text": "It ——— correctly.",
+   "choices": [
+    "hasn't done",
+    "hasn't been done",
+    "hasn't been do",
+    "not been done"
+   ],
+   "answer": 1,
+   "why": "العمل ينجز فالجملة مبنية للمجهول في المضارع التام: hasn't been done.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-115",
+   "kind": "single",
+   "text": "The accident wouldn't have happened, if you had been more ———.",
+   "choices": [
+    "careful",
+    "carefully",
+    "careless",
+    "caring"
+   ],
+   "answer": 0,
+   "why": "بعد been more نحتاج صفة: careful أي حذر.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-116",
+   "kind": "single",
+   "text": "It ——— be possible some time in the future.",
+   "choices": [
+    "can",
+    "hope",
+    "may",
+    "is"
+   ],
+   "answer": 2,
+   "why": "الفعل may يعبر عن الاحتمال في المستقبل.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-117",
+   "kind": "single",
+   "text": "Schools then ——— having more children in the class.",
+   "choices": [
+    "was used to",
+    "were used to",
+    "was use to",
+    "were use to"
+   ],
+   "answer": 1,
+   "why": "التركيب be used to + ing يعني معتاد على، و schools جمع فنقول were used to.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-118",
+   "kind": "single",
+   "text": "We ——— to go to work at six in the morning.",
+   "choices": [
+    "must",
+    "would",
+    "had",
+    "did"
+   ],
+   "answer": 2,
+   "why": "الماضي من have to هو had to.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-119",
+   "kind": "single",
+   "text": "They ——— an old photograph of the place.",
+   "choices": [
+    "came up",
+    "came across",
+    "came into",
+    "came after"
+   ],
+   "answer": 1,
+   "why": "العبارة come across تعني وجد صدفة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-120",
+   "kind": "single",
+   "text": "I ——— I had been able to meet her.",
+   "choices": [
+    "hope",
+    "want",
+    "think",
+    "wish"
+   ],
+   "answer": 3,
+   "why": "التمني عن الماضي: wish + الماضي التام had been able.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-121",
+   "kind": "single",
+   "text": "We'll have taken our exams ——— this time next month.",
+   "choices": [
+    "by",
+    "on",
+    "during",
+    "for"
+   ],
+   "answer": 0,
+   "why": "مع المستقبل التام نستعمل by بمعنى قبل أو بحلول: by this time next month.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-122",
+   "kind": "single",
+   "text": "I will do badly in my work, ——— try harder.",
+   "choices": [
+    "if I'm not",
+    "if I wasn't",
+    "if I haven't",
+    "if I don't"
+   ],
+   "answer": 3,
+   "why": "الشرط الأول: جملة if بالمضارع البسيط والجواب will، فنقول if I don't try.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-123",
+   "kind": "single",
+   "text": "I ——— wasted my time when I was at university.",
+   "choices": [
+    "regret",
+    "shouldn't",
+    "ought not to",
+    "shouldn't have"
+   ],
+   "answer": 3,
+   "why": "الندم على فعل ماض: shouldn't have + التصريف الثالث.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-124",
+   "kind": "single",
+   "text": "This is going to be my chance to ——— any difficulties.",
+   "choices": [
+    "repair",
+    "sort out",
+    "solve",
+    "improve"
+   ],
+   "answer": 1,
+   "why": "العبارة sort out difficulties تعني يحل المشكلات ويتغلب عليها.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-125",
+   "kind": "single",
+   "text": "It was difficult at first, but I soon ——— it.",
+   "choices": [
+    "got used to",
+    "get used to",
+    "changed to",
+    "used to"
+   ],
+   "answer": 0,
+   "why": "التركيب get used to + اسم يعني اعتاد على، وفي الماضي got used to.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-126",
+   "kind": "single",
+   "text": "How did you manage to cook ——— a good meal?",
+   "choices": [
+    "so",
+    "that",
+    "absolutely",
+    "such"
+   ],
+   "answer": 3,
+   "why": "قبل اسم مفرد معدود مع صفة نستعمل such a: such a good meal.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-127",
+   "kind": "single",
+   "text": "The solution had been found, ——— we hadn't realised it.",
+   "choices": [
+    "however",
+    "therefore",
+    "although",
+    "even"
+   ],
+   "answer": 2,
+   "why": "الأداة although تعني مع أن وتربط جملتين متعارضتين.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-128",
+   "kind": "single",
+   "text": "She ——— what I had been doing all that time.",
+   "choices": [
+    "asked to me",
+    "asked for me",
+    "asked with me",
+    "asked me"
+   ],
+   "answer": 3,
+   "why": "الفعل ask يأخذ المفعول مباشرة بلا حرف جر: asked me.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-129",
+   "kind": "single",
+   "text": "They ——— heard us coming, we were making a lot of noise.",
+   "choices": [
+    "must have",
+    "must",
+    "might",
+    "could"
+   ],
+   "answer": 0,
+   "why": "الاستنتاج المؤكد عن الماضي: must have + التصريف الثالث.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-130",
+   "kind": "single",
+   "text": "He ——— to help me with the decorating.",
+   "choices": [
+    "suggested",
+    "offered",
+    "invited",
+    "told"
+   ],
+   "answer": 1,
+   "why": "الفعل offer to يعني عرض أن يفعل شيئا بنفسه؛ suggest لا يأتي بعده to.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-131",
+   "kind": "single",
+   "text": "——— COVID-19 will spread in the near future was discussed in the meeting.",
+   "choices": [
+    "Whether or not",
+    "The question of"
+   ],
+   "answer": 0,
+   "why": "الأداة whether or not تبدأ جملة اسمية تكون فاعلا: ما إذا كان الوباء سينتشر.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-132",
+   "kind": "single",
+   "text": "He says he can climb trees exactly ——— a monkey.",
+   "choices": [
+    "like",
+    "as"
+   ],
+   "answer": 0,
+   "why": "قبل الاسم نستعمل like للتشبيه، أما as فيتبعها فعل أو تعني بصفته.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-133",
+   "kind": "single",
+   "text": "All the children enjoyed going to school ——— from Harry.",
+   "choices": [
+    "Apart",
+    "Except"
+   ],
+   "answer": 0,
+   "why": "العبارة apart from تعني باستثناء؛ except لا يتبعها from عادة.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-134",
+   "kind": "single",
+   "text": "He wasn't ——— to lift the box.",
+   "choices": [
+    "strong enough",
+    "couldn't",
+    "enough strong"
+   ],
+   "answer": 0,
+   "why": "الكلمة enough تأتي بعد الصفة: strong enough to.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-135",
+   "kind": "single",
+   "text": "Helena ——— we all go out for dinner.",
+   "choices": [
+    "suggested that",
+    "invited to"
+   ],
+   "answer": 0,
+   "why": "الفعل suggest that يأتي بعده فاعل وفعل: suggested that we all go out.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-136",
+   "kind": "single",
+   "text": "You told me you were with your friend but that was a ———. You were with that annoying girl.",
+   "choices": [
+    "Lie",
+    "Lied",
+    "Lying"
+   ],
+   "answer": 0,
+   "why": "بعد a نحتاج اسما: a lie أي كذبة؛ lied و lying فعلان.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-137",
+   "kind": "single",
+   "text": "I travelled ——— business for a few days last month.",
+   "choices": [
+    "On",
+    "At",
+    "In",
+    "Through"
+   ],
+   "answer": 0,
+   "why": "نقول on business أي في رحلة عمل.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-138",
+   "kind": "single",
+   "text": "The elevator is out of ——— today. We have already called the fixer.",
+   "choices": [
+    "Order",
+    "Work",
+    "Intake",
+    "power"
+   ],
+   "answer": 0,
+   "why": "العبارة out of order تعني معطل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-139",
+   "kind": "single",
+   "text": "This is the ——— beautiful novel I have ever read.",
+   "choices": [
+    "Good",
+    "More",
+    "Much",
+    "Most"
+   ],
+   "answer": 3,
+   "why": "التفضيل مع الصفات الطويلة: the most beautiful، ويتبعه المضارع التام مع ever.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-140",
+   "kind": "single",
+   "text": "I don't know how we are going to get to the airport. We will have to ——— for a taxi to come.",
+   "choices": [
+    "plan",
+    "arrange",
+    "book",
+    "hire"
+   ],
+   "answer": 1,
+   "why": "العبارة arrange for something to happen تعني رتب لحدوث شيء؛ book يأخذ المفعول مباشرة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-141",
+   "kind": "single",
+   "text": "If you don't like the soup, why don't you ——— to the waiter and he can bring you another one.",
+   "choices": [
+    "complain",
+    "protest",
+    "criticise",
+    "insult"
+   ],
+   "answer": 0,
+   "why": "الفعل complain يعني يشتكي، ويأتي بعده to للشخص.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-142",
+   "kind": "single",
+   "text": "If you were a more ——— person, you would not have left me waiting for you in the rain for an hour.",
+   "choices": [
+    "polite",
+    "considerate",
+    "kind",
+    "humorous"
+   ],
+   "answer": 1,
+   "why": "الكلمة considerate تعني يراعي مشاعر الآخرين.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-143",
+   "kind": "single",
+   "text": "Oh I am so ———! Let's go and rent a video or something.",
+   "choices": [
+    "boring",
+    "fed up",
+    "tired",
+    "unhappy"
+   ],
+   "answer": 1,
+   "why": "العبارة fed up تعني ضجران؛ boring تصف الشيء الممل لا الشخص الضجر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-144",
+   "kind": "single",
+   "text": "I don't think Alan is ———. Sherie is at home with him.",
+   "choices": [
+    "lonely",
+    "solitary",
+    "unsociable",
+    "alone"
+   ],
+   "answer": 3,
+   "why": "الكلمة alone تعني وحده بلا أحد؛ lonely تعني يشعر بالوحدة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-145",
+   "kind": "single",
+   "text": "His uncle owns four computer companies and lives in a big ——— out in the country.",
+   "choices": [
+    "mansion",
+    "bungalow",
+    "apartment",
+    "hut"
+   ],
+   "answer": 0,
+   "why": "الكلمة mansion تعني قصرا كبيرا يناسب صاحب أربع شركات.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-146",
+   "kind": "single",
+   "text": "I am afraid this car doesn't have enough ——— to get up that hill. We will have to walk up!",
+   "choices": [
+    "motor",
+    "power",
+    "charge",
+    "engine"
+   ],
+   "answer": 1,
+   "why": "الكلمة power تعني القوة اللازمة لصعود التل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-147",
+   "kind": "single",
+   "text": "The company didn't have any ——— opening shops in Paris and Marseilles so they closed after only three months.",
+   "choices": [
+    "profit",
+    "success",
+    "victory",
+    "winnings"
+   ],
+   "answer": 1,
+   "why": "العبارة have success doing تعني ينجح في فعل شيء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-148",
+   "kind": "single",
+   "text": "The post office? Well, walk ——— this road for about half a kilometre and it is on your left.",
+   "choices": [
+    "across",
+    "along",
+    "under",
+    "over"
+   ],
+   "answer": 1,
+   "why": "الحرف along يعني على امتداد الطريق.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-149",
+   "kind": "single",
+   "text": "Did you hear that Rita and George have ———? She says it was all his fault.",
+   "choices": [
+    "broken up",
+    "woken up",
+    "run out",
+    "given up"
+   ],
+   "answer": 0,
+   "why": "العبارة break up تعني انفصل الزوجان أو الصديقان.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-150",
+   "kind": "single",
+   "text": "What about six o'clock. Will that time ——— you?",
+   "choices": [
+    "match",
+    "suit",
+    "approve",
+    "agree"
+   ],
+   "answer": 1,
+   "why": "الفعل suit يعني يناسب: هل يناسبك هذا الموعد؟",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-151",
+   "kind": "single",
+   "text": "The film was a great ———. It made 75 million dollars.",
+   "choices": [
+    "hope",
+    "money",
+    "success",
+    "bank"
+   ],
+   "answer": 2,
+   "why": "الفيلم حقق 75 مليون دولار فهو success أي نجاح.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-152",
+   "kind": "single",
+   "text": "How long is it? The ——— must be very exact.",
+   "choices": [
+    "side",
+    "longing",
+    "area",
+    "measurement"
+   ],
+   "answer": 3,
+   "why": "الكلمة measurement تعني القياس، والسؤال عن الطول.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-153",
+   "kind": "single",
+   "text": "There are pictures of ——— in the newspapers everyday. I really don't want to see them.",
+   "choices": [
+    "peace",
+    "freedom",
+    "people",
+    "violence"
+   ],
+   "answer": 3,
+   "why": "الكلمة violence تعني العنف، وهو ما لا يريد رؤيته.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-154",
+   "kind": "single",
+   "text": "You will find all the ——— you want here. It is a good place to stay.",
+   "choices": [
+    "law",
+    "peace",
+    "war",
+    "argument"
+   ],
+   "answer": 1,
+   "why": "الكلمة peace تعني الهدوء والسكينة في مكان مريح للإقامة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-155",
+   "kind": "single",
+   "text": "I am worried about the children's ——— on the street.",
+   "choices": [
+    "freedom",
+    "sanction",
+    "safety",
+    "noise"
+   ],
+   "answer": 2,
+   "why": "الكلمة safety تعني السلامة، وهي ما يقلق الأهل على الأطفال في الشارع.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-156",
+   "kind": "single",
+   "text": "My brother ——— 65 kilos.",
+   "choices": [
+    "weighs",
+    "masses",
+    "makes",
+    "pulls"
+   ],
+   "answer": 0,
+   "why": "الفعل weigh يعني يزن: يزن 65 كيلو.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-157",
+   "kind": "single",
+   "text": "The people demonstrated for more ———.",
+   "choices": [
+    "government",
+    "freedom",
+    "oppression",
+    "life"
+   ],
+   "answer": 1,
+   "why": "يتظاهر الناس من أجل المزيد من الحرية freedom.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-158",
+   "kind": "single",
+   "text": "This documentation is not ———. You might be arrested for this.",
+   "choices": [
+    "criminal",
+    "legal",
+    "formal",
+    "incorrect"
+   ],
+   "answer": 1,
+   "why": "الكلمة legal تعني قانوني؛ الوثيقة غير قانونية فقد يعتقل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-159",
+   "kind": "single",
+   "text": "I do not know which one to ———.",
+   "choices": [
+    "choice",
+    "choose",
+    "chose",
+    "choosy"
+   ],
+   "answer": 1,
+   "why": "بعد to يأتي الفعل بصيغة المصدر: to choose.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-160",
+   "kind": "single",
+   "text": "My boss needs my ——— on that paper.",
+   "choices": [
+    "mark",
+    "signature",
+    "acceptation",
+    "refuse"
+   ],
+   "answer": 1,
+   "why": "الكلمة signature تعني التوقيع على الورقة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-161",
+   "kind": "single",
+   "text": "He gave the police the ——— of the stolen goods.",
+   "choices": [
+    "shape",
+    "shadow",
+    "description",
+    "explanation"
+   ],
+   "answer": 2,
+   "why": "الكلمة description تعني الوصف: أعطى الشرطة وصف المسروقات.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-162",
+   "kind": "single",
+   "text": "I don't like the ——— of the furniture in this room.",
+   "choices": [
+    "way",
+    "staying",
+    "compliment",
+    "arrangement"
+   ],
+   "answer": 3,
+   "why": "الكلمة arrangement تعني ترتيب الأثاث.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-163",
+   "kind": "single",
+   "text": "It doesn't matter. It is of no ———.",
+   "choices": [
+    "learning",
+    "importance",
+    "significant",
+    "work"
+   ],
+   "answer": 1,
+   "why": "بعد of no نحتاج اسما: of no importance أي لا أهمية له؛ significant صفة.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-164",
+   "kind": "single",
+   "text": "It is very difficult to ——— this machine.",
+   "choices": [
+    "make",
+    "do",
+    "operate",
+    "work"
+   ],
+   "answer": 2,
+   "why": "الفعل operate يعني يشغل الآلة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-165",
+   "kind": "single",
+   "text": "They don't get on well. They are having a(n) ——— now.",
+   "choices": [
+    "talking",
+    "war",
+    "fighting",
+    "argument"
+   ],
+   "answer": 3,
+   "why": "الكلمة argument تعني جدالا وخلافا بالكلام، ونقول have an argument.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-166",
+   "kind": "single",
+   "text": "I think I will ——— about this bad service.",
+   "choices": [
+    "complain",
+    "think",
+    "consider",
+    "explain"
+   ],
+   "answer": 0,
+   "why": "الفعل complain about يعني يشتكي من الخدمة السيئة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-167",
+   "kind": "single",
+   "text": "The ——— of train will be 15 minutes late.",
+   "choices": [
+    "coming",
+    "use",
+    "departure",
+    "time"
+   ],
+   "answer": 2,
+   "why": "الكلمة departure تعني موعد المغادرة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-168",
+   "kind": "single",
+   "text": "We cannot ——— children under 14 to go to movies without their parents.",
+   "choices": [
+    "let",
+    "make",
+    "have",
+    "permit"
+   ],
+   "answer": 3,
+   "why": "الفعل permit يأتي بعده المفعول ثم to؛ let لا يأخذ to.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-169",
+   "kind": "single",
+   "text": "I'd like to ——— you on passing your exam.",
+   "choices": [
+    "congratulate",
+    "thank",
+    "excuse",
+    "let"
+   ],
+   "answer": 0,
+   "why": "الفعل congratulate on يعني يهنئ بـ.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-170",
+   "kind": "single",
+   "text": "Will you take the job? We must have a quick ———.",
+   "choices": [
+    "mind",
+    "decision",
+    "deciding",
+    "manner"
+   ],
+   "answer": 1,
+   "why": "التعبير make/have a quick decision يعني قرار سريع؛ deciding ليس اسما هنا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-171",
+   "kind": "single",
+   "text": "You look rather ———. Why don't you see a doctor?",
+   "choices": [
+    "unhealthy",
+    "tired",
+    "unpleasant",
+    "fair"
+   ],
+   "answer": 0,
+   "why": "الكلمة unhealthy تعني يبدو مريضا، ولذلك ينصح بزيارة الطبيب.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-172",
+   "kind": "single",
+   "text": "It was a(n) ——— film. I nearly fell asleep.",
+   "choices": [
+    "interesting",
+    "boring",
+    "exciting",
+    "relaxing"
+   ],
+   "answer": 1,
+   "why": "الصفة boring بـ ing تصف الشيء الممل الذي جعلني أنام.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-173",
+   "kind": "single",
+   "text": "We felt very ——— on holiday.",
+   "choices": [
+    "relaxed",
+    "relaxing",
+    "rest",
+    "unrest"
+   ],
+   "answer": 0,
+   "why": "الصفة relaxed بـ ed تصف شعور الشخص.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-174",
+   "kind": "single",
+   "text": "It was a very ——— football match.",
+   "choices": [
+    "silly",
+    "exciting",
+    "bored",
+    "deep"
+   ],
+   "answer": 1,
+   "why": "الصفة exciting بـ ing تصف المباراة المثيرة.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-175",
+   "kind": "single",
+   "text": "Thanks to modern technology, a visit to the dentist is now often quite ———.",
+   "choices": [
+    "harmless",
+    "helpful",
+    "painless",
+    "tasty"
+   ],
+   "answer": 2,
+   "why": "الكلمة painless تعني بلا ألم، وهو ما وفرته التقنية الحديثة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-176",
+   "kind": "single",
+   "text": "The government is trying to help ——— families.",
+   "choices": [
+    "rich",
+    "social",
+    "small",
+    "homeless"
+   ],
+   "answer": 3,
+   "why": "الكلمة homeless تعني بلا مأوى، والحكومة تساعد هذه الأسر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-177",
+   "kind": "single",
+   "text": "Thank you for the books. They will be very ——— for my studies.",
+   "choices": [
+    "harmful",
+    "useful",
+    "tasteful",
+    "hopeful"
+   ],
+   "answer": 1,
+   "why": "الكلمة useful تعني مفيد للدراسة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-178",
+   "kind": "single",
+   "text": "The Sahara is a ———.",
+   "choices": [
+    "river",
+    "continent",
+    "desert",
+    "canal"
+   ],
+   "answer": 2,
+   "why": "الصحراء الكبرى desert أي صحراء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-179",
+   "kind": "single",
+   "text": "Shoes are usually made of ———.",
+   "choices": [
+    "leather",
+    "wool",
+    "paper",
+    "iron"
+   ],
+   "answer": 0,
+   "why": "الأحذية تصنع عادة من الجلد leather.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-180",
+   "kind": "single",
+   "text": "His father always remembers to say 'please' and 'thank you'. He is very ———.",
+   "choices": [
+    "impolite",
+    "polite",
+    "rude",
+    "talkative"
+   ],
+   "answer": 1,
+   "why": "الكلمة polite تعني مهذب، يقول من فضلك وشكرا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-181",
+   "kind": "single",
+   "text": "My sister is very careful about her appearance and how she arranges her desk and her room. She is a(n) ——— lady.",
+   "choices": [
+    "tidy",
+    "silly",
+    "unsociable",
+    "cautious"
+   ],
+   "answer": 0,
+   "why": "الكلمة tidy تعني مرتب ومنظم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-182",
+   "kind": "single",
+   "text": "He always has good hopes for the future. He thinks everything will be fine. He is very ———.",
+   "choices": [
+    "rude",
+    "pessimistic",
+    "optimistic",
+    "quiet"
+   ],
+   "answer": 2,
+   "why": "الكلمة optimistic تعني متفائل؛ pessimistic عكسها.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-183",
+   "kind": "single",
+   "text": "Jake has a lot of common sense. He always knows the correct thing to do. He is a ——— boy.",
+   "choices": [
+    "sensitive",
+    "sensual",
+    "sensible",
+    "nonsense"
+   ],
+   "answer": 2,
+   "why": "الكلمة sensible تعني عاقل وحكيم؛ sensitive تعني حساس.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-184",
+   "kind": "single",
+   "text": "Lora only thinks about herself. She is ———.",
+   "choices": [
+    "naughty",
+    "selfish",
+    "patient",
+    "genius"
+   ],
+   "answer": 1,
+   "why": "الكلمة selfish تعني أناني يفكر في نفسه فقط.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-185",
+   "kind": "single",
+   "text": "He is always happy and smiling. He is very ———.",
+   "choices": [
+    "cheerful",
+    "hard-headed",
+    "funny",
+    "intelligent"
+   ],
+   "answer": 0,
+   "why": "الكلمة cheerful تعني مبتهج دائم الابتسام.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-186",
+   "kind": "single",
+   "text": "Madison doesn't like work. He is ———.",
+   "choices": [
+    "happy",
+    "poor",
+    "rich",
+    "lazy"
+   ],
+   "answer": 3,
+   "why": "الكلمة lazy تعني كسول لا يحب العمل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-187",
+   "kind": "single",
+   "text": "My brother wants to get an important job in a high position. He is very ———.",
+   "choices": [
+    "stubborn",
+    "learned",
+    "ambitious",
+    "talkative"
+   ],
+   "answer": 2,
+   "why": "الكلمة ambitious تعني طموح.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-188",
+   "kind": "single",
+   "text": "My friend loves to talk to people and tell them what he thinks. He is ———.",
+   "choices": [
+    "ugly",
+    "talkative",
+    "strong",
+    "sad"
+   ],
+   "answer": 1,
+   "why": "الكلمة talkative تعني كثير الكلام.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-189",
+   "kind": "single",
+   "text": "Peter never gets upset or annoyed when things go wrong. He is a very ——— man.",
+   "choices": [
+    "hard-working",
+    "attractive",
+    "easy-going",
+    "mad"
+   ],
+   "answer": 2,
+   "why": "الكلمة easy-going تعني هادئ الطبع لا ينزعج بسهولة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-190",
+   "kind": "single",
+   "text": "He gets very annoyed if he has to wait for anything. He doesn't like waiting. He is very ———.",
+   "choices": [
+    "sociable",
+    "industrious",
+    "hard",
+    "impatient"
+   ],
+   "answer": 3,
+   "why": "الكلمة impatient تعني نافد الصبر لا يحب الانتظار.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-191",
+   "kind": "single",
+   "text": "He likes new things and new places, even if they are difficult or dangerous. He is ———.",
+   "choices": [
+    "adventurous",
+    "selfish",
+    "clever",
+    "mean"
+   ],
+   "answer": 0,
+   "why": "الكلمة adventurous تعني مغامر يحب الجديد ولو كان خطرا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-192",
+   "kind": "single",
+   "text": "She loves meeting people and going to parties. She is a very ——— person.",
+   "choices": [
+    "shy",
+    "ignorant",
+    "learned",
+    "sociable"
+   ],
+   "answer": 3,
+   "why": "الكلمة sociable تعني اجتماعي يحب لقاء الناس.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-193",
+   "kind": "single",
+   "text": "The music was too ———.",
+   "choices": [
+    "loud",
+    "small",
+    "wrong",
+    "incorrect"
+   ],
+   "answer": 0,
+   "why": "الكلمة loud تعني صاخب أو عالي الصوت.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-194",
+   "kind": "single",
+   "text": "Mark is a ——— boy. Everyone likes him.",
+   "choices": [
+    "hard",
+    "polite",
+    "rude",
+    "bad"
+   ],
+   "answer": 1,
+   "why": "الكلمة polite تعني مهذب، ولذلك يحبه الجميع.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-195",
+   "kind": "single",
+   "text": "He is a ——— man. I do not want to speak to him.",
+   "choices": [
+    "clever",
+    "gently",
+    "stupid",
+    "handsome"
+   ],
+   "answer": 2,
+   "why": "الكلمة stupid تعني أحمق، ولذلك لا يريد محادثته؛ gently ظرف.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-196",
+   "kind": "single",
+   "text": "The weather was ———. I hated it.",
+   "choices": [
+    "beautiful",
+    "wet",
+    "dry",
+    "nasty"
+   ],
+   "answer": 3,
+   "why": "الكلمة nasty تعني سيئ وكريه، ويناسب أنه كره الطقس.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-197",
+   "kind": "single",
+   "text": "My belt is too ———. I couldn't loosen it.",
+   "choices": [
+    "hard",
+    "soft",
+    "useful",
+    "tight"
+   ],
+   "answer": 3,
+   "why": "الكلمة tight تعني ضيق ومشدود فلم يستطع إرخاءه.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-198",
+   "kind": "single",
+   "text": "He was ———. He wasn't set free.",
+   "choices": [
+    "guilty",
+    "easy",
+    "cheap",
+    "weak"
+   ],
+   "answer": 0,
+   "why": "الكلمة guilty تعني مذنب، ولذلك لم يطلق سراحه.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-199",
+   "kind": "single",
+   "text": "The bottle is ———. Throw it away.",
+   "choices": [
+    "necessary",
+    "flexible",
+    "tiny",
+    "empty"
+   ],
+   "answer": 3,
+   "why": "الكلمة empty تعني فارغ، ولذلك ترمى الزجاجة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-200",
+   "kind": "single",
+   "text": "It was ——— news. I couldn't stand it.",
+   "choices": [
+    "terrible",
+    "wonderful",
+    "clean",
+    "short"
+   ],
+   "answer": 0,
+   "why": "الكلمة terrible تعني فظيع، ولذلك لم يحتمل الخبر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-201",
+   "kind": "single",
+   "text": "That is a(n) ——— meeting.",
+   "choices": [
+    "own",
+    "private",
+    "strict",
+    "safe"
+   ],
+   "answer": 1,
+   "why": "الكلمة private تعني خاص أو مغلق؛ تقال عن الاجتماع.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-202",
+   "kind": "single",
+   "text": "The knife was very ———. I cut my finger.",
+   "choices": [
+    "huge",
+    "dirty",
+    "ordinary",
+    "sharp"
+   ],
+   "answer": 3,
+   "why": "الكلمة sharp تعني حاد، ولذلك جرح إصبعه.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-203",
+   "kind": "single",
+   "text": "It was a(n) ——— meal.",
+   "choices": [
+    "powerful",
+    "tolerant",
+    "light",
+    "white"
+   ],
+   "answer": 2,
+   "why": "التعبير a light meal يعني وجبة خفيفة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-204",
+   "kind": "single",
+   "text": "She felt ——— about her exam.",
+   "choices": [
+    "interested",
+    "ignorant",
+    "ugly",
+    "nervous"
+   ],
+   "answer": 3,
+   "why": "الكلمة nervous تعني متوتر وقلق قبل الامتحان.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-205",
+   "kind": "single",
+   "text": "She wore ——— clothes at the party.",
+   "choices": [
+    "difficult",
+    "huge",
+    "formal",
+    "sad"
+   ],
+   "answer": 2,
+   "why": "التعبير formal clothes يعني ملابس رسمية.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-206",
+   "kind": "single",
+   "text": "The paper is very ———.",
+   "choices": [
+    "thin",
+    "weak",
+    "guilty",
+    "easy"
+   ],
+   "answer": 0,
+   "why": "الكلمة thin تعني رقيق، وتقال عن الورق.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-207",
+   "kind": "single",
+   "text": "What a(n) ——— street! Two cars can't pass through together.",
+   "choices": [
+    "easy",
+    "ugly",
+    "large",
+    "narrow"
+   ],
+   "answer": 3,
+   "why": "الكلمة narrow تعني ضيق، فلا تمر سيارتان معا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-208",
+   "kind": "single",
+   "text": "You can ——— the quality of the sound by using the other controls.",
+   "choices": [
+    "adapt",
+    "adjust",
+    "adore",
+    "alarm"
+   ],
+   "answer": 1,
+   "why": "الفعل adjust يعني يضبط أو يعدل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-209",
+   "kind": "single",
+   "text": "Put a cassette in the machine and ——— the 'start' button.",
+   "choices": [
+    "block",
+    "tick",
+    "click",
+    "press"
+   ],
+   "answer": 3,
+   "why": "نقول press a button أي يضغط الزر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-210",
+   "kind": "single",
+   "text": "——— your hands above your head.",
+   "choices": [
+    "raise",
+    "rise",
+    "rice",
+    "rays"
+   ],
+   "answer": 0,
+   "why": "الفعل raise يعني يرفع شيئا وله مفعول؛ rise يعني يرتفع بلا مفعول.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-211",
+   "kind": "single",
+   "text": "Excuse me. Could you ——— me the way to the town hall?",
+   "choices": [
+    "let",
+    "put",
+    "talk",
+    "tell"
+   ],
+   "answer": 3,
+   "why": "نقول tell someone the way أي يدله على الطريق.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-212",
+   "kind": "single",
+   "text": "Not more books! There aren't enough ——— to put them on.",
+   "choices": [
+    "leaves",
+    "cases",
+    "spaces",
+    "shelves"
+   ],
+   "answer": 3,
+   "why": "الكلمة shelves جمع shelf أي رفوف توضع عليها الكتب.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-213",
+   "kind": "single",
+   "text": "Don't forget your ———. It's very cold outside.",
+   "choices": [
+    "gloves",
+    "underwear",
+    "umbrella",
+    "scissors"
+   ],
+   "answer": 0,
+   "why": "الكلمة gloves تعني القفازات، وتلبس في البرد.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-214",
+   "kind": "single",
+   "text": "There are eleven players in a football ———.",
+   "choices": [
+    "game",
+    "pitch",
+    "team",
+    "group"
+   ],
+   "answer": 2,
+   "why": "الكلمة team تعني الفريق، وفي فريق كرة القدم أحد عشر لاعبا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-215",
+   "kind": "single",
+   "text": "What's wrong with your foot? - One of my ——— hurts.",
+   "choices": [
+    "fingers",
+    "heels",
+    "wrists",
+    "toes"
+   ],
+   "answer": 3,
+   "why": "الكلمة toes تعني أصابع القدم؛ fingers أصابع اليد.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-216",
+   "kind": "single",
+   "text": "Bill's a ——— so he travels all over the world.",
+   "choices": [
+    "baker",
+    "butcher",
+    "sailor",
+    "driver"
+   ],
+   "answer": 2,
+   "why": "الكلمة sailor تعني بحار يسافر حول العالم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-217",
+   "kind": "single",
+   "text": "The ——— will help you if you can't find the book you want.",
+   "choices": [
+    "porter",
+    "agent",
+    "librarian",
+    "operator"
+   ],
+   "answer": 2,
+   "why": "الكلمة librarian تعني أمين المكتبة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-218",
+   "kind": "single",
+   "text": "I must book a ——— for our game of tennis tomorrow.",
+   "choices": [
+    "field",
+    "court",
+    "green",
+    "team"
+   ],
+   "answer": 1,
+   "why": "الكلمة court تعني ملعب التنس، ونحجزه للعب.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-219",
+   "kind": "single",
+   "text": "My car won't start. Could you give me a ——— to town?",
+   "choices": [
+    "bus",
+    "car",
+    "hand",
+    "lift"
+   ],
+   "answer": 3,
+   "why": "التعبير give someone a lift يعني يوصله بسيارته.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-220",
+   "kind": "single",
+   "text": "Do you take ——— in your tea?",
+   "choices": [
+    "spoon",
+    "pepper",
+    "salt",
+    "sugar"
+   ],
+   "answer": 3,
+   "why": "يوضع السكر sugar في الشاي.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-221",
+   "kind": "single",
+   "text": "This doll is a present for my ———. I hope she likes it.",
+   "choices": [
+    "husband",
+    "nephew",
+    "niece",
+    "uncle"
+   ],
+   "answer": 2,
+   "why": "الكلمة niece تعني ابنة الأخ أو الأخت، والضمير she يدل على أنثى.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-222",
+   "kind": "single",
+   "text": "I'll look in my ——— and see if I'm free on Wednesday.",
+   "choices": [
+    "diary",
+    "dictionary",
+    "briefcase",
+    "calendar"
+   ],
+   "answer": 0,
+   "why": "الكلمة diary تعني المفكرة التي تسجل فيها المواعيد.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-223",
+   "kind": "single",
+   "text": "Which do you ———, cream or milk?",
+   "choices": [
+    "rather",
+    "eat",
+    "prefer",
+    "wear"
+   ],
+   "answer": 2,
+   "why": "الفعل prefer يعني يفضل: أيهما تفضل؟",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-224",
+   "kind": "single",
+   "text": "You can hang your jacket in the ———.",
+   "choices": [
+    "bedspread",
+    "chest of drawers",
+    "hanger",
+    "wardrobe"
+   ],
+   "answer": 3,
+   "why": "الكلمة wardrobe تعني خزانة الملابس.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-225",
+   "kind": "single",
+   "text": "The shopping center is now a pedestrian ———.",
+   "choices": [
+    "Arrival",
+    "palace",
+    "pavement",
+    "precinct"
+   ],
+   "answer": 3,
+   "why": "التعبير pedestrian precinct يعني منطقة مخصصة للمشاة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-226",
+   "kind": "single",
+   "text": "Could you ——— a photo of me in front of this building?",
+   "choices": [
+    "check",
+    "make",
+    "paint",
+    "take"
+   ],
+   "answer": 3,
+   "why": "نقول take a photo أي يلتقط صورة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-227",
+   "kind": "single",
+   "text": "The ice is very ——— so don't walk on it.",
+   "choices": [
+    "high",
+    "low",
+    "thick",
+    "thin"
+   ],
+   "answer": 3,
+   "why": "الكلمة thin تعني رقيق، والجليد الرقيق خطر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-228",
+   "kind": "single",
+   "text": "Carol speaks so fast that it's ——— to understand her.",
+   "choices": [
+    "difficult",
+    "easy",
+    "slow",
+    "wrong"
+   ],
+   "answer": 0,
+   "why": "الكلمة difficult تعني صعب، لأنها تتكلم بسرعة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-229",
+   "kind": "single",
+   "text": "The mechanic hopes to ——— our car by this evening.",
+   "choices": [
+    "make",
+    "renew",
+    "repair",
+    "wander"
+   ],
+   "answer": 2,
+   "why": "الفعل repair يعني يصلح.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-230",
+   "kind": "single",
+   "text": "My ——— says I need stronger glasses.",
+   "choices": [
+    "chemist",
+    "conductor",
+    "keeper",
+    "optician"
+   ],
+   "answer": 3,
+   "why": "الكلمة optician تعني أخصائي النظارات.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-231",
+   "kind": "single",
+   "text": "Are you ready to go? - Not ———. Give me 10 minutes.",
+   "choices": [
+    "for me",
+    "very much",
+    "very many",
+    "yet"
+   ],
+   "answer": 3,
+   "why": "التعبير not yet يعني ليس بعد.",
+   "topic": "المحادثة"
+  },
+  {
+   "id": "pt-232",
+   "kind": "single",
+   "text": "How much does she earn? - That's none of your ———!",
+   "choices": [
+    "business",
+    "decision",
+    "information",
+    "role"
+   ],
+   "answer": 0,
+   "why": "التعبير none of your business يعني ليس من شأنك.",
+   "topic": "المحادثة"
+  },
+  {
+   "id": "pt-233",
+   "kind": "single",
+   "text": "The police are looking for the ——— of a red Ford.",
+   "choices": [
+    "detective",
+    "instructor",
+    "owner",
+    "rider"
+   ],
+   "answer": 2,
+   "why": "الكلمة owner تعني مالك السيارة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-234",
+   "kind": "single",
+   "text": "I've already got a ——— at a hotel in the town centre.",
+   "choices": [
+    "prescription",
+    "property",
+    "reserve",
+    "reservation"
+   ],
+   "answer": 3,
+   "why": "الكلمة reservation تعني حجزا في الفندق؛ reserve فعل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-235",
+   "kind": "single",
+   "text": "The next ——— of the show is at seven thirty.",
+   "choices": [
+    "event",
+    "performance",
+    "stall",
+    "game"
+   ],
+   "answer": 1,
+   "why": "الكلمة performance تعني العرض المسرحي.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-236",
+   "kind": "single",
+   "text": "You can't eat that pear. It isn't ——— yet.",
+   "choices": [
+    "best",
+    "pale",
+    "ripe",
+    "mature"
+   ],
+   "answer": 2,
+   "why": "الكلمة ripe تعني ناضج، وتقال عن الفاكهة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-237",
+   "kind": "single",
+   "text": "Can you ——— the coffee and I'll get the biscuits.",
+   "choices": [
+    "depart",
+    "disturb",
+    "feed",
+    "pour"
+   ],
+   "answer": 3,
+   "why": "الفعل pour يعني يصب السائل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-238",
+   "kind": "single",
+   "text": "Should I wear my sandals or my ———?",
+   "choices": [
+    "cardigan",
+    "shorts",
+    "trainers",
+    "scarves"
+   ],
+   "answer": 2,
+   "why": "الكلمة trainers تعني حذاء رياضي، وهو بديل الصندل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-239",
+   "kind": "single",
+   "text": "Shirley tried to stop the car but the ——— didn't work.",
+   "choices": [
+    "brakes",
+    "crossroads",
+    "tires",
+    "controls"
+   ],
+   "answer": 0,
+   "why": "الكلمة brakes تعني مكابح السيارة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-240",
+   "kind": "single",
+   "text": "The referee and the two teams ran out onto the ———.",
+   "choices": [
+    "circus",
+    "course",
+    "observatory",
+    "pitch"
+   ],
+   "answer": 3,
+   "why": "الكلمة pitch تعني أرض الملعب.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-241",
+   "kind": "single",
+   "text": "You need some ——— coffee to wake you up.",
+   "choices": [
+    "awake",
+    "hard",
+    "brown",
+    "strong"
+   ],
+   "answer": 3,
+   "why": "التعبير strong coffee يعني قهوة ثقيلة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-242",
+   "kind": "single",
+   "text": "His suitcase was quite ——— so I could easily carry it.",
+   "choices": [
+    "cheap",
+    "heavy",
+    "light",
+    "short"
+   ],
+   "answer": 2,
+   "why": "الكلمة light تعني خفيف، ولذلك حملها بسهولة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-243",
+   "kind": "single",
+   "text": "When did you ——— smoking? - About two years ago.",
+   "choices": [
+    "cut off",
+    "give up",
+    "make up",
+    "throw away"
+   ],
+   "answer": 1,
+   "why": "العبارة give up تعني يقلع عن عادة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-244",
+   "kind": "single",
+   "text": "The plane ——— late because of the terrible weather.",
+   "choices": [
+    "blew up",
+    "grew up",
+    "went on",
+    "took off"
+   ],
+   "answer": 3,
+   "why": "العبارة take off تعني تقلع الطائرة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-245",
+   "kind": "single",
+   "text": "The ——— at the hospital told me not to worry about my leg.",
+   "choices": [
+    "accountant",
+    "director",
+    "lodger",
+    "specialist"
+   ],
+   "answer": 3,
+   "why": "الكلمة specialist تعني الطبيب المختص.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-246",
+   "kind": "single",
+   "text": "The President is a very ——— man. Everyone does what he says.",
+   "choices": [
+    "circular",
+    "direct",
+    "painful",
+    "powerful"
+   ],
+   "answer": 3,
+   "why": "الكلمة powerful تعني قوي النفوذ، ولذلك يطيعه الجميع.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-247",
+   "kind": "single",
+   "text": "We had to ——— the match because of the bad weather.",
+   "choices": [
+    "call back",
+    "call off",
+    "think over",
+    "find out"
+   ],
+   "answer": 1,
+   "why": "العبارة call off تعني يلغي.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-248",
+   "kind": "single",
+   "text": "Pat was surprised when her boss didn't ——— the meal.",
+   "choices": [
+    "buy",
+    "pay",
+    "pay for",
+    "spend"
+   ],
+   "answer": 2,
+   "why": "العبارة pay for تعني يدفع ثمن شيء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-249",
+   "kind": "single",
+   "text": "All Michael ate was two thin ——— of bread.",
+   "choices": [
+    "rolls",
+    "loaves",
+    "slices",
+    "snacks"
+   ],
+   "answer": 2,
+   "why": "الكلمة slices تعني شرائح الخبز.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-250",
+   "kind": "single",
+   "text": "With this ——— I can get to the windows on the first floor.",
+   "choices": [
+    "index",
+    "ladder",
+    "lager",
+    "step"
+   ],
+   "answer": 1,
+   "why": "الكلمة ladder تعني سلم متنقل للوصول إلى النوافذ.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-251",
+   "kind": "single",
+   "text": "You can ——— a bus just outside the station.",
+   "choices": [
+    "beat",
+    "catch",
+    "keep",
+    "meet"
+   ],
+   "answer": 1,
+   "why": "نقول catch a bus أي يركب الحافلة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-252",
+   "kind": "single",
+   "text": "Take your overcoat with you ——— it gets cold.",
+   "choices": [
+    "although",
+    "in case",
+    "unless",
+    "until"
+   ],
+   "answer": 1,
+   "why": "الأداة in case تعني تحسبا لـ.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-253",
+   "kind": "single",
+   "text": "I'd like to ——— this cheque, please.",
+   "choices": [
+    "Cash",
+    "change",
+    "pay for",
+    "spend"
+   ],
+   "answer": 0,
+   "why": "الفعل cash a cheque يعني يصرف الشيك نقدا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-254",
+   "kind": "single",
+   "text": "The police put ——— on the robbers to stop them getting away.",
+   "choices": [
+    "handcuffs",
+    "make-up",
+    "saddles",
+    "stretchers"
+   ],
+   "answer": 0,
+   "why": "الكلمة handcuffs تعني الأصفاد.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-255",
+   "kind": "single",
+   "text": "Jimmy sent his mother a ——— of flowers for her birthday.",
+   "choices": [
+    "bar",
+    "bunch",
+    "pack",
+    "packet"
+   ],
+   "answer": 1,
+   "why": "التعبير a bunch of flowers يعني باقة ورد.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-256",
+   "kind": "single",
+   "text": "It's raining. ——— take your umbrella with you.",
+   "choices": [
+    "Are you going",
+    "Let's",
+    "You'd better",
+    "Would you like"
+   ],
+   "answer": 2,
+   "why": "التعبير you'd better يعني من الأفضل أن، ويأتي بعده المصدر بلا to.",
+   "topic": "المحادثة"
+  },
+  {
+   "id": "pt-257",
+   "kind": "single",
+   "text": "There's nothing good on television. Let's ——— a video.",
+   "choices": [
+    "carry",
+    "hire",
+    "invite",
+    "phone"
+   ],
+   "answer": 1,
+   "why": "الفعل hire يعني يستأجر شريط الفيديو.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-258",
+   "kind": "single",
+   "text": "Make sure the knife is really ——— before you cut the meat.",
+   "choices": [
+    "flat",
+    "sharp",
+    "sliced",
+    "thick"
+   ],
+   "answer": 1,
+   "why": "الكلمة sharp تعني حاد، والسكين الحادة تقطع اللحم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-259",
+   "kind": "single",
+   "text": "Thanks very much! I'm very ——— for your help.",
+   "choices": [
+    "generous",
+    "grateful",
+    "full",
+    "sorry"
+   ],
+   "answer": 1,
+   "why": "الكلمة grateful تعني ممتن لمساعدتك.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-260",
+   "kind": "single",
+   "text": "I like the color of the jacket but the ——— are too short.",
+   "choices": [
+    "buttons",
+    "heels",
+    "collars",
+    "sleeves"
+   ],
+   "answer": 3,
+   "why": "الكلمة sleeves تعني أكمام السترة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-261",
+   "kind": "single",
+   "text": "Can you just ——— that all the windows are shut?",
+   "choices": [
+    "catch",
+    "check",
+    "control",
+    "reclaim"
+   ],
+   "answer": 1,
+   "why": "الفعل check يعني يتحقق من أن النوافذ مغلقة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-262",
+   "kind": "single",
+   "text": "Which ——— does our flight leave from? - Number 12.",
+   "choices": [
+    "carriageway",
+    "exit",
+    "gate",
+    "ground"
+   ],
+   "answer": 2,
+   "why": "الكلمة gate تعني بوابة الصعود إلى الطائرة في المطار.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-263",
+   "kind": "single",
+   "text": "Look at my sweater! It ——— when I washed it.",
+   "choices": [
+    "boiled",
+    "cut",
+    "missed",
+    "stretched"
+   ],
+   "answer": 3,
+   "why": "الفعل stretch يعني تمدد واتسع، وهو ما حدث للكنزة بعد الغسل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-264",
+   "kind": "single",
+   "text": "Wear a ——— to protect your head in case there's an accident.",
+   "choices": [
+    "brooch",
+    "crash helmet",
+    "glove",
+    "cap"
+   ],
+   "answer": 1,
+   "why": "التعبير crash helmet يعني خوذة تحمي الرأس.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-265",
+   "kind": "single",
+   "text": "Could you ——— your name at the bottom of the letter?",
+   "choices": [
+    "answer",
+    "cross",
+    "lay",
+    "sign"
+   ],
+   "answer": 3,
+   "why": "الفعل sign يعني يوقع اسمه أسفل الرسالة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-266",
+   "kind": "single",
+   "text": "James is a terrible cook. He can't even ——— an egg!",
+   "choices": [
+    "blow",
+    "boil",
+    "lay",
+    "smoke"
+   ],
+   "answer": 1,
+   "why": "نقول boil an egg أي يسلق بيضة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-267",
+   "kind": "single",
+   "text": "Surely they aren't ——— enough to buy such a large car!",
+   "choices": [
+    "cautious",
+    "well",
+    "poor",
+    "wealthy"
+   ],
+   "answer": 3,
+   "why": "الكلمة wealthy تعني غني، ويلزم الغنى لشراء سيارة كبيرة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-268",
+   "kind": "single",
+   "text": "There isn't any water coming out of this ———.",
+   "choices": [
+    "heel",
+    "lock",
+    "shelf",
+    "tap"
+   ],
+   "answer": 3,
+   "why": "الكلمة tap تعني صنبور الماء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-269",
+   "kind": "single",
+   "text": "I've put on ———. I eat too many cakes.",
+   "choices": [
+    "gloves",
+    "mixture",
+    "waist",
+    "weight"
+   ],
+   "answer": 3,
+   "why": "التعبير put on weight يعني زاد وزنه.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-270",
+   "kind": "single",
+   "text": "Put your suitcase up on the luggage ———.",
+   "choices": [
+    "lounge",
+    "park",
+    "rack",
+    "store"
+   ],
+   "answer": 2,
+   "why": "التعبير luggage rack يعني رف الأمتعة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-271",
+   "kind": "single",
+   "text": "You could hear the crowd shouting in the local football ———.",
+   "choices": [
+    "ground",
+    "park",
+    "pool",
+    "station"
+   ],
+   "answer": 0,
+   "why": "التعبير football ground يعني ملعب كرة القدم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-272",
+   "kind": "single",
+   "text": "That'll ——— children! Stop shouting!",
+   "choices": [
+    "do",
+    "fit",
+    "help",
+    "make"
+   ],
+   "answer": 0,
+   "why": "التعبير that'll do يعني يكفي هذا، ويقال لإيقاف تصرف مزعج.",
+   "topic": "المحادثة"
+  },
+  {
+   "id": "pt-273",
+   "kind": "single",
+   "text": "I can't tell you now. I'll ——— you know later.",
+   "choices": [
+    "get",
+    "let",
+    "make",
+    "tell"
+   ],
+   "answer": 1,
+   "why": "التعبير let someone know يعني يعلمه، و let يأتي بعده المصدر بلا to.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-274",
+   "kind": "single",
+   "text": "Give me a ——— some time. You know my phone number.",
+   "choices": [
+    "date",
+    "line",
+    "post",
+    "ring"
+   ],
+   "answer": 3,
+   "why": "التعبير give someone a ring يعني يتصل به هاتفيا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-275",
+   "kind": "single",
+   "text": "The bus was so ——— that we couldn't all get on.",
+   "choices": [
+    "crowded",
+    "deep",
+    "thick",
+    "various"
+   ],
+   "answer": 0,
+   "why": "الكلمة crowded تعني مزدحم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-276",
+   "kind": "single",
+   "text": "We have a ——— climate so the winters are never very cold.",
+   "choices": [
+    "bright",
+    "fair",
+    "high",
+    "mild"
+   ],
+   "answer": 3,
+   "why": "الكلمة mild تعني معتدل، وتقال عن المناخ.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-277",
+   "kind": "single",
+   "text": "It's so ——— in here. Don't you ever clean this room?",
+   "choices": [
+    "cloudy",
+    "dark",
+    "dusty",
+    "misty"
+   ],
+   "answer": 2,
+   "why": "الكلمة dusty تعني مغبر، لأن الغرفة لا تنظف.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-278",
+   "kind": "single",
+   "text": "If you ask a ——— price for your car, I'm sure you'll sell it.",
+   "choices": [
+    "helpful",
+    "mild",
+    "reasonable",
+    "shiny"
+   ],
+   "answer": 2,
+   "why": "التعبير reasonable price يعني سعرا معقولا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-279",
+   "kind": "single",
+   "text": "No, don't wear blue. It doesn't ——— you.",
+   "choices": [
+    "fit",
+    "notice",
+    "suit",
+    "talk"
+   ],
+   "answer": 2,
+   "why": "الفعل suit يعني يليق باللون أو الملابس؛ fit يعني يناسب المقاس.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-280",
+   "kind": "single",
+   "text": "The ——— climbed up the tree and we couldn't see it any more.",
+   "choices": [
+    "deer",
+    "rabbit",
+    "squirrel",
+    "tortoise"
+   ],
+   "answer": 2,
+   "why": "السنجاب squirrel يتسلق الأشجار.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-281",
+   "kind": "single",
+   "text": "Can you ——— me the time, please?",
+   "choices": [
+    "say",
+    "tell",
+    "speak",
+    "talk"
+   ],
+   "answer": 1,
+   "why": "نقول tell someone the time أي يخبره بالوقت.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-282",
+   "kind": "single",
+   "text": "Do you know how ——— it is from Ashgabat to Mary? It's 370 km.",
+   "choices": [
+    "many",
+    "much",
+    "far",
+    "often"
+   ],
+   "answer": 2,
+   "why": "السؤال عن المسافة يكون بـ how far.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-283",
+   "kind": "single",
+   "text": "Can I ——— your phone, please? I must call my parents.",
+   "choices": [
+    "borrow",
+    "use",
+    "take",
+    "lend"
+   ],
+   "answer": 1,
+   "why": "الفعل use يعني يستعمل الهاتف في مكانه؛ borrow يعني يأخذه ليعيده لاحقا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-284",
+   "kind": "single",
+   "text": "Don't go. I'm going to ——— some coffee.",
+   "choices": [
+    "make",
+    "cook",
+    "boil",
+    "prepare"
+   ],
+   "answer": 0,
+   "why": "نقول make coffee أي يعد القهوة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-285",
+   "kind": "single",
+   "text": "I am ——— my wife to drive a car.",
+   "choices": [
+    "learning",
+    "showing",
+    "practicing",
+    "teaching"
+   ],
+   "answer": 3,
+   "why": "الفعل teach someone to do يعني يعلمه؛ learn للمتعلم نفسه.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-286",
+   "kind": "single",
+   "text": "I had to keep my son home from school today because he had a ——— of 38.",
+   "choices": [
+    "fever",
+    "headache",
+    "temperature",
+    "heat"
+   ],
+   "answer": 2,
+   "why": "التعبير a temperature of 38 يعني حرارة جسمه 38 درجة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-287",
+   "kind": "single",
+   "text": "When we were in Spain last year we ——— at a wonderful hotel overlooking the beach.",
+   "choices": [
+    "Stayed",
+    "stopped",
+    "lived",
+    "left"
+   ],
+   "answer": 0,
+   "why": "الفعل stay at a hotel يعني ينزل في فندق.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-288",
+   "kind": "single",
+   "text": "Is there anything ——— you'd like me to get you?",
+   "choices": [
+    "else",
+    "more",
+    "extra",
+    "much"
+   ],
+   "answer": 0,
+   "why": "الكلمة else بعد anything تعني شيئا آخر.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-289",
+   "kind": "single",
+   "text": "Most banks will ——— people money to buy a house.",
+   "choices": [
+    "lend",
+    "borrow",
+    "give",
+    "take"
+   ],
+   "answer": 0,
+   "why": "الفعل lend يعني يقرض؛ borrow يعني يقترض.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-290",
+   "kind": "single",
+   "text": "My friend has a ——— job at a chemist's.",
+   "choices": [
+    "half-time",
+    "spare-time",
+    "empty-time",
+    "part-time"
+   ],
+   "answer": 3,
+   "why": "التعبير part-time job يعني عمل بدوام جزئي.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-291",
+   "kind": "single",
+   "text": "——— have you been learning English?",
+   "choices": [
+    "For how long time",
+    "How long",
+    "How long time",
+    "How many time"
+   ],
+   "answer": 1,
+   "why": "السؤال عن المدة يكون بـ how long.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-292",
+   "kind": "single",
+   "text": "I hate doing the ——— especially cleaning the windows.",
+   "choices": [
+    "homework",
+    "housework",
+    "jobs",
+    "house-jobs"
+   ],
+   "answer": 1,
+   "why": "الكلمة housework تعني أعمال المنزل؛ homework واجب مدرسي.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-293",
+   "kind": "single",
+   "text": "You mustn't be angry with her. It wasn't her ——— that she was late.",
+   "choices": [
+    "blame",
+    "error",
+    "mistake",
+    "fault"
+   ],
+   "answer": 3,
+   "why": "التعبير it wasn't her fault يعني لم يكن الذنب ذنبها.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-294",
+   "kind": "single",
+   "text": "She ——— to take her neighbor to court if he didn't stop making so much noise.",
+   "choices": [
+    "promised",
+    "threatened",
+    "offered",
+    "suggested"
+   ],
+   "answer": 1,
+   "why": "الفعل threaten يعني يهدد، والسياق تهديد بالمحكمة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-295",
+   "kind": "single",
+   "text": "You can count ——— me if you ever want any help.",
+   "choices": [
+    "in",
+    "on",
+    "up",
+    "by"
+   ],
+   "answer": 1,
+   "why": "العبارة count on يعني يعتمد على.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-296",
+   "kind": "single",
+   "text": "Each ——— of the family had to take it in turns to do the washing up.",
+   "choices": [
+    "individual",
+    "character",
+    "member",
+    "person"
+   ],
+   "answer": 2,
+   "why": "التعبير a member of the family يعني فرد من العائلة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-297",
+   "kind": "single",
+   "text": "Don't ——— my speech when I am talking.",
+   "choices": [
+    "cut",
+    "interrupt",
+    "divide",
+    "separate"
+   ],
+   "answer": 1,
+   "why": "الفعل interrupt يعني يقاطع المتكلم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-298",
+   "kind": "single",
+   "text": "You can borrow money this time but don't make a ——— of it.",
+   "choices": [
+    "habit",
+    "feeling",
+    "help",
+    "learning"
+   ],
+   "answer": 0,
+   "why": "التعبير make a habit of it يعني يجعله عادة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-299",
+   "kind": "single",
+   "text": "I always write my daily activities in my ———.",
+   "choices": [
+    "weekly",
+    "daily",
+    "diary",
+    "minutely"
+   ],
+   "answer": 2,
+   "why": "الكلمة diary تعني دفتر اليوميات أو المفكرة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-300",
+   "kind": "single",
+   "text": "James and Jim are twins. They were ——— at birth and they didn't meet until they were both thirty nine.",
+   "choices": [
+    "left",
+    "deserted",
+    "separated",
+    "abandoned"
+   ],
+   "answer": 2,
+   "why": "الفعل separate يعني فرقا عند الولادة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-301",
+   "kind": "single",
+   "text": "What do we call someone whose job is to repair taps and baths?",
+   "choices": [
+    "tailor",
+    "carpenter",
+    "bricklayer",
+    "plumber"
+   ],
+   "answer": 3,
+   "why": "الكلمة plumber تعني السباك الذي يصلح الحنفيات والأحواض.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-302",
+   "kind": "single",
+   "text": "When I was away on business, my neighbours looked after my home. Which phrase means the same as \"looked after\"?",
+   "choices": [
+    "pick out",
+    "give up",
+    "take care of",
+    "settle down"
+   ],
+   "answer": 2,
+   "why": "العبارة look after تعني take care of أي يعتني بـ.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-303",
+   "kind": "single",
+   "text": "——— it was difficult, they managed to find somewhere they all liked.",
+   "choices": [
+    "Although",
+    "Before",
+    "Since",
+    "As soon as"
+   ],
+   "answer": 0,
+   "why": "الأداة although تعني مع أن وتربط بين أمرين متعارضين.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-304",
+   "kind": "single",
+   "text": "Anyone who gets free rides in other people's cars as a way of travelling cheaply is called ———.",
+   "choices": [
+    "passenger",
+    "traveler",
+    "goner",
+    "hitchhiker"
+   ],
+   "answer": 3,
+   "why": "الكلمة hitchhiker تعني من يسافر مجانا في سيارات الآخرين.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-305",
+   "kind": "single",
+   "text": "When you pay no attention to anybody or to act as if you don't see him/her, you ——— him/her.",
+   "choices": [
+    "ignore",
+    "view",
+    "notice",
+    "watch"
+   ],
+   "answer": 0,
+   "why": "الفعل ignore يعني يتجاهل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-306",
+   "kind": "single",
+   "text": "He was bitten by a mosquito, but he made things worse by ——— the bite all the time.",
+   "choices": [
+    "stoking",
+    "scratching",
+    "rubbing",
+    "scraping"
+   ],
+   "answer": 1,
+   "why": "الفعل scratch يعني يحك موضع اللدغة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-307",
+   "kind": "single",
+   "text": "——— is a white and black striped horse.",
+   "choices": [
+    "zebra",
+    "donkey",
+    "horse",
+    "tiger"
+   ],
+   "answer": 0,
+   "why": "الحمار الوحشي zebra حصان مخطط بالأبيض والأسود.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-308",
+   "kind": "single",
+   "text": "——— is a male cow.",
+   "choices": [
+    "sheep",
+    "bull",
+    "hippopotamus",
+    "cow"
+   ],
+   "answer": 1,
+   "why": "الكلمة bull تعني الثور ذكر البقر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-309",
+   "kind": "single",
+   "text": "The best animal friend of humans is known to be the ———.",
+   "choices": [
+    "dog",
+    "shark",
+    "zebra",
+    "panda"
+   ],
+   "answer": 0,
+   "why": "الكلب dog يعرف بأنه أفضل صديق للإنسان.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-310",
+   "kind": "single",
+   "text": "The young of kangaroo grows up in its mother's ———.",
+   "choices": [
+    "sack",
+    "bag",
+    "pocket",
+    "pouch"
+   ],
+   "answer": 3,
+   "why": "الكلمة pouch تعني جيب الكنغر الذي يكبر فيه صغيره.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-311",
+   "kind": "single",
+   "text": "A camel has a ——— on its back.",
+   "choices": [
+    "trunk",
+    "horn",
+    "pouch",
+    "hump"
+   ],
+   "answer": 3,
+   "why": "الكلمة hump تعني سنام الجمل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-312",
+   "kind": "single",
+   "text": "——— is a piece of cloth used for drying something.",
+   "choices": [
+    "tie",
+    "flannel",
+    "toilet paper",
+    "towel"
+   ],
+   "answer": 3,
+   "why": "الكلمة towel تعني منشفة للتجفيف.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-313",
+   "kind": "single",
+   "text": "——— is a piece of cloth you use in the bathroom to wash yourself.",
+   "choices": [
+    "toilet paper",
+    "towel",
+    "flannel",
+    "scales"
+   ],
+   "answer": 2,
+   "why": "الكلمة flannel تعني ليفة أو قطعة قماش للاغتسال.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-314",
+   "kind": "single",
+   "text": "My friend weighs 120 kilograms, and he has ——— which help him to know how much he weighs.",
+   "choices": [
+    "comb",
+    "scales",
+    "razor",
+    "watch"
+   ],
+   "answer": 1,
+   "why": "الكلمة scales تعني الميزان.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-315",
+   "kind": "single",
+   "text": "——— is a substance that you use to wash yourself with.",
+   "choices": [
+    "soap",
+    "towel",
+    "flannel",
+    "tile"
+   ],
+   "answer": 0,
+   "why": "الكلمة soap تعني الصابون.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-316",
+   "kind": "single",
+   "text": "——— is a brush for cleaning your teeth.",
+   "choices": [
+    "toothbrush",
+    "hairbrush",
+    "paintbrush",
+    "toothpaste"
+   ],
+   "answer": 0,
+   "why": "الكلمة toothbrush تعني فرشاة الأسنان؛ toothpaste معجون الأسنان.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-317",
+   "kind": "single",
+   "text": "——— is a sharp instrument for removing hair, especially from a man's face.",
+   "choices": [
+    "scissors",
+    "razor",
+    "comb",
+    "shaving-foam"
+   ],
+   "answer": 1,
+   "why": "الكلمة razor تعني شفرة الحلاقة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-318",
+   "kind": "single",
+   "text": "——— is a thing that you stand under to wash your whole body.",
+   "choices": [
+    "Toilet",
+    "sink",
+    "bathtub",
+    "shower"
+   ],
+   "answer": 3,
+   "why": "الكلمة shower تعني الدش الذي نقف تحته.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-319",
+   "kind": "single",
+   "text": "——— is a bar that you use to hang things on.",
+   "choices": [
+    "towel-rail",
+    "sink",
+    "bathtub",
+    "laundry basket"
+   ],
+   "answer": 0,
+   "why": "الكلمة towel-rail تعني قضيب تعليق المناشف.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-320",
+   "kind": "single",
+   "text": "——— is a piece of plastic or metal that you use to make your hair tidy.",
+   "choices": [
+    "comb",
+    "razor",
+    "razor-blade",
+    "scissors"
+   ],
+   "answer": 0,
+   "why": "الكلمة comb تعني المشط.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-321",
+   "kind": "single",
+   "text": "——— is a long large container that you fill with water to sit in and wash yourself.",
+   "choices": [
+    "laundry basket",
+    "bathtub",
+    "sink",
+    "toilet"
+   ],
+   "answer": 1,
+   "why": "الكلمة bathtub تعني حوض الاستحمام.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-322",
+   "kind": "single",
+   "text": "——— is a soft hat with a curved part sticking out at the front.",
+   "choices": [
+    "cap",
+    "umbrella",
+    "scarf",
+    "boot"
+   ],
+   "answer": 0,
+   "why": "الكلمة cap تعني قبعة لها حافة بارزة من الأمام.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-323",
+   "kind": "single",
+   "text": "Yesterday we didn't have electricity, but we had some ———. We lit them to produce light.",
+   "choices": [
+    "batteries",
+    "candles",
+    "papers",
+    "fires"
+   ],
+   "answer": 1,
+   "why": "الكلمة candles تعني الشموع التي تشعل للإضاءة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-324",
+   "kind": "single",
+   "text": "Cut some bread with a ———.",
+   "choices": [
+    "spoon",
+    "fork",
+    "knife",
+    "plate"
+   ],
+   "answer": 2,
+   "why": "الكلمة knife تعني السكين التي يقطع بها الخبز.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-325",
+   "kind": "single",
+   "text": "The table was covered with a table ———.",
+   "choices": [
+    "rug",
+    "mat",
+    "carpet",
+    "cloth"
+   ],
+   "answer": 3,
+   "why": "التعبير tablecloth يعني غطاء الطاولة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-326",
+   "kind": "single",
+   "text": "He looked at the ——— and realized that it was 3:00 AM.",
+   "choices": [
+    "clock",
+    "water",
+    "fire",
+    "window"
+   ],
+   "answer": 0,
+   "why": "الكلمة clock تعني الساعة التي نعرف منها الوقت.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-327",
+   "kind": "single",
+   "text": "We eat soup from a ———.",
+   "choices": [
+    "knife",
+    "fork",
+    "bowl",
+    "lampshade"
+   ],
+   "answer": 2,
+   "why": "الكلمة bowl تعني الوعاء الذي يؤكل منه الحساء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-328",
+   "kind": "single",
+   "text": "I drank orange juice from a ———.",
+   "choices": [
+    "glass",
+    "pot",
+    "spoon",
+    "plate"
+   ],
+   "answer": 0,
+   "why": "الكلمة glass تعني الكأس التي نشرب منها.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-329",
+   "kind": "single",
+   "text": "There weren't any ——— between our gardens and it was very difficult to separate them from each other.",
+   "choices": [
+    "field",
+    "rock",
+    "hedge",
+    "grass"
+   ],
+   "answer": 2,
+   "why": "الكلمة hedge تعني سياج من الشجيرات بين الحدائق.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-330",
+   "kind": "single",
+   "text": "Total area of wheat ——— is 19670 km2.",
+   "choices": [
+    "sea",
+    "field",
+    "lake",
+    "beach"
+   ],
+   "answer": 1,
+   "why": "التعبير wheat field يعني حقل قمح.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-331",
+   "kind": "single",
+   "text": "The water is stored in a ——— before it is supplied to people's houses.",
+   "choices": [
+    "reservoir",
+    "sea",
+    "lake",
+    "river"
+   ],
+   "answer": 0,
+   "why": "الكلمة reservoir تعني خزان مياه كبير.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-332",
+   "kind": "single",
+   "text": "——— is a very high hill.",
+   "choices": [
+    "cliff",
+    "rock",
+    "plateau",
+    "mountain"
+   ],
+   "answer": 3,
+   "why": "الكلمة mountain تعني الجبل وهو تل عال جدا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-333",
+   "kind": "single",
+   "text": "——— is a large area of flat land that is higher than the land around it.",
+   "choices": [
+    "plateau",
+    "desert",
+    "mountain",
+    "field"
+   ],
+   "answer": 0,
+   "why": "الكلمة plateau تعني الهضبة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-334",
+   "kind": "single",
+   "text": "——— is a large rock, especially one found in the mountains.",
+   "choices": [
+    "Island",
+    "stone",
+    "boulder",
+    "hill"
+   ],
+   "answer": 2,
+   "why": "الكلمة boulder تعني صخرة كبيرة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-335",
+   "kind": "single",
+   "text": "My mother's sister is my ———.",
+   "choices": [
+    "niece",
+    "uncle",
+    "nephew",
+    "aunt"
+   ],
+   "answer": 3,
+   "why": "أخت الأم هي aunt أي الخالة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-336",
+   "kind": "single",
+   "text": "My female parent is my ———.",
+   "choices": [
+    "grandmother",
+    "father",
+    "daughter",
+    "mother"
+   ],
+   "answer": 3,
+   "why": "الوالد الأنثى هي mother أي الأم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-337",
+   "kind": "single",
+   "text": "My uncle's or aunt's child is my ———.",
+   "choices": [
+    "cousin",
+    "niece",
+    "nephew",
+    "brother-in-law"
+   ],
+   "answer": 0,
+   "why": "ابن العم أو الخال هو cousin.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-338",
+   "kind": "single",
+   "text": "My sister's husband is my ———.",
+   "choices": [
+    "brother",
+    "brother-in-law",
+    "cousin",
+    "nephew"
+   ],
+   "answer": 1,
+   "why": "زوج الأخت هو brother-in-law.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-339",
+   "kind": "single",
+   "text": "My sister's daughter is my ———.",
+   "choices": [
+    "niece",
+    "nephew",
+    "cousin",
+    "sister-in-law"
+   ],
+   "answer": 0,
+   "why": "ابنة الأخت هي niece.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-340",
+   "kind": "single",
+   "text": "My sister's son is my ———.",
+   "choices": [
+    "niece",
+    "nephew",
+    "cousin",
+    "sister-in-law"
+   ],
+   "answer": 1,
+   "why": "ابن الأخت هو nephew.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-341",
+   "kind": "single",
+   "text": "He broke his leg, so the doctor put a ——— around his broken leg.",
+   "choices": [
+    "cast",
+    "ointment",
+    "medicine",
+    "plaster"
+   ],
+   "answer": 0,
+   "why": "الكلمة cast تعني الجبيرة حول الساق المكسورة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-342",
+   "kind": "single",
+   "text": "He had had a big hole in his tooth before the dentist made ——— in the hole.",
+   "choices": [
+    "injection",
+    "cast",
+    "filling",
+    "medicine"
+   ],
+   "answer": 2,
+   "why": "الكلمة filling تعني حشوة السن.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-343",
+   "kind": "single",
+   "text": "The doctor gave the patient a ——— on which the medicine the patient should take was written.",
+   "choices": [
+    "prescription",
+    "medicine",
+    "capsule",
+    "cast"
+   ],
+   "answer": 0,
+   "why": "الكلمة prescription تعني الوصفة الطبية.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-344",
+   "kind": "single",
+   "text": "The baby is ———. Her diaper needs changing.",
+   "choices": [
+    "thirsty",
+    "dry",
+    "sleepy",
+    "wet",
+    "cold"
+   ],
+   "answer": 3,
+   "why": "الكلمة wet تعني مبلل، ولذلك يحتاج الحفاض إلى تغيير.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-345",
+   "kind": "single",
+   "text": "The lawyer's ——— was unusually high.",
+   "choices": [
+    "fare",
+    "account",
+    "price",
+    "fee"
+   ],
+   "answer": 3,
+   "why": "الكلمة fee تعني أجر المحامي أو الطبيب؛ fare أجرة النقل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-346",
+   "kind": "single",
+   "text": "The famous pianist Abdurrahmanovich is ——— with the İstanbul Metropolitan Orchestra tonight.",
+   "choices": [
+    "harmonizing",
+    "conducting",
+    "becoming",
+    "dealing",
+    "playing"
+   ],
+   "answer": 4,
+   "why": "عازف البيانو يعزف playing مع الأوركسترا؛ conducting للقائد.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-347",
+   "kind": "single",
+   "text": "Last year a lot of women preferred long skirts. But, this year short skirts are in ——— again.",
+   "choices": [
+    "fashion",
+    "absence",
+    "respect",
+    "popular",
+    "reply"
+   ],
+   "answer": 0,
+   "why": "التعبير in fashion يعني رائج في الموضة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-348",
+   "kind": "single",
+   "text": "We had to climb ——— a steep path to reach the house on the top of the hill.",
+   "choices": [
+    "onto",
+    "up",
+    "into",
+    "down",
+    "up to"
+   ],
+   "answer": 1,
+   "why": "نقول climb up a path أي يصعد الطريق.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-349",
+   "kind": "single",
+   "text": "He is not a skilled worker. He doesn't ——— much.",
+   "choices": [
+    "win",
+    "gain",
+    "earn",
+    "pay",
+    "afford"
+   ],
+   "answer": 2,
+   "why": "الفعل earn يعني يكسب المال من العمل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-350",
+   "kind": "single",
+   "text": "We keep the ——— copies of all our reports in a special master file.",
+   "choices": [
+    "primitive",
+    "characteristic",
+    "elementary",
+    "original",
+    "elder"
+   ],
+   "answer": 3,
+   "why": "الكلمة original تعني الأصلية مقابل النسخ.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-351",
+   "kind": "single",
+   "text": "We do not have adequate information to make a decision. Adequate means ———.",
+   "choices": [
+    "healthy",
+    "enough",
+    "easy",
+    "wealthy",
+    "correct"
+   ],
+   "answer": 1,
+   "why": "الكلمة adequate تعني enough أي كاف.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-352",
+   "kind": "single",
+   "text": "Everywhere they ——— for water they struck oil.",
+   "choices": [
+    "dropped",
+    "bent",
+    "sank",
+    "dug",
+    "dripped"
+   ],
+   "answer": 3,
+   "why": "الفعل dig (ماضيه dug) يعني يحفر بحثا عن الماء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-353",
+   "kind": "single",
+   "text": "My memories of you are so warm and ——— that I am sure I can never forget you.",
+   "choices": [
+    "busy",
+    "deep",
+    "unkind",
+    "helpful",
+    "famous"
+   ],
+   "answer": 1,
+   "why": "التعبير deep memories يعني ذكريات عميقة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-354",
+   "kind": "single",
+   "text": "——— so much of their time together has deepened their friendship.",
+   "choices": [
+    "Arguing",
+    "Proving",
+    "Spending",
+    "Wasting",
+    "Saving"
+   ],
+   "answer": 2,
+   "why": "التعبير spend time يعني يقضي الوقت معا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-355",
+   "kind": "single",
+   "text": "Now, ——— the ball to the person on your right.",
+   "choices": [
+    "Pull",
+    "Throw",
+    "Jump",
+    "Burst",
+    "Catch"
+   ],
+   "answer": 1,
+   "why": "الفعل throw يعني يرمي الكرة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-356",
+   "kind": "single",
+   "text": "He had plenty of time to sit ——— the scenery.",
+   "choices": [
+    "or feel",
+    "and enjoy",
+    "to prove",
+    "to remind",
+    "or walk around"
+   ],
+   "answer": 1,
+   "why": "التركيب sit and enjoy يعني يجلس ويستمتع، والفعلان متعاطفان بـ and.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-357",
+   "kind": "single",
+   "text": "Philosophers try to find out the ——— of life.",
+   "choices": [
+    "sadness",
+    "length",
+    "uselessness",
+    "meaning",
+    "middle"
+   ],
+   "answer": 3,
+   "why": "التعبير the meaning of life يعني معنى الحياة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-358",
+   "kind": "single",
+   "text": "The winner of the competition is going to receive a ——— of 20 000 $.",
+   "choices": [
+    "fare",
+    "price",
+    "cost",
+    "prize",
+    "fee"
+   ],
+   "answer": 3,
+   "why": "الكلمة prize تعني الجائزة؛ price تعني السعر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-359",
+   "kind": "single",
+   "text": "Then it started to rain heavily and everyone ran for ———.",
+   "choices": [
+    "dryness",
+    "shadow",
+    "shelter",
+    "sunshine",
+    "guard"
+   ],
+   "answer": 2,
+   "why": "الكلمة shelter تعني مأوى من المطر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-360",
+   "kind": "single",
+   "text": "A man was struck by ——— and killed as he ran for shelter.",
+   "choices": [
+    "forecast",
+    "lightning",
+    "frost",
+    "thunder",
+    "thunderbolt"
+   ],
+   "answer": 1,
+   "why": "الكلمة lightning تعني البرق الذي يصعق؛ thunder هو صوت الرعد.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-361",
+   "kind": "single",
+   "text": "She ——— me up and gave me a friendly smile.",
+   "choices": [
+    "frightened",
+    "forgave",
+    "joked",
+    "thanked",
+    "woke"
+   ],
+   "answer": 4,
+   "why": "العبارة wake someone up تعني يوقظه، وماضيها woke.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-362",
+   "kind": "single",
+   "text": "The British ——— Fair opens in late September.",
+   "choices": [
+    "National",
+    "Global",
+    "Regional",
+    "Universal",
+    "International"
+   ],
+   "answer": 4,
+   "why": "التعبير international fair يعني معرضا دوليا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-363",
+   "kind": "single",
+   "text": "Listen! Do you hear that funny ——— coming from the kitchen?",
+   "choices": [
+    "noise",
+    "feeling",
+    "taste",
+    "smell",
+    "silence"
+   ],
+   "answer": 0,
+   "why": "نسمع الصوت noise؛ smell رائحة تشم لا تسمع.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-364",
+   "kind": "single",
+   "text": "Oh, he's so big-headed. I can't ——— him.",
+   "choices": [
+    "stand",
+    "shake",
+    "swear",
+    "spread",
+    "throw"
+   ],
+   "answer": 0,
+   "why": "التعبير can't stand someone يعني لا يطيقه.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-365",
+   "kind": "single",
+   "text": "Someone pushed him from ——— and he fell over.",
+   "choices": [
+    "behind",
+    "against",
+    "beyond",
+    "across",
+    "around"
+   ],
+   "answer": 0,
+   "why": "العبارة from behind تعني من الخلف.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-366",
+   "kind": "single",
+   "text": "A(n) ——— does oral translation from one language to another.",
+   "choices": [
+    "translator",
+    "reporter",
+    "transporter",
+    "secret agent",
+    "interpreter"
+   ],
+   "answer": 4,
+   "why": "الكلمة interpreter تعني المترجم الشفهي؛ translator للترجمة المكتوبة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-367",
+   "kind": "single",
+   "text": "He's such a kind, ——— man.",
+   "choices": [
+    "gentle",
+    "horrible",
+    "false",
+    "unpleasant",
+    "annoying"
+   ],
+   "answer": 0,
+   "why": "الكلمة gentle تعني لطيف ورقيق، وتوافق kind.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-368",
+   "kind": "single",
+   "text": "I have broken your ———, but don't worry; I'll fix it with this glue.",
+   "choices": [
+    "balcony",
+    "wallet",
+    "window",
+    "vase",
+    "TV screen"
+   ],
+   "answer": 3,
+   "why": "الكلمة vase تعني مزهرية يمكن لصقها بالغراء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-369",
+   "kind": "single",
+   "text": "He is so tight-fisted that he won't get himself even a ——— of shoelaces!",
+   "choices": [
+    "lot",
+    "single",
+    "few",
+    "pair",
+    "double"
+   ],
+   "answer": 3,
+   "why": "التعبير a pair of shoelaces يعني زوج من أربطة الحذاء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-370",
+   "kind": "single",
+   "text": "What a lovely T-shirt you're ———!",
+   "choices": [
+    "sowing",
+    "greeting",
+    "wearing",
+    "pleasing",
+    "sawing"
+   ],
+   "answer": 2,
+   "why": "الفعل wear يعني يرتدي.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-371",
+   "kind": "single",
+   "text": "Peter is a(n) ——— student. He always gets good grades.",
+   "choices": [
+    "elementary",
+    "standard",
+    "lazy",
+    "good-looking",
+    "hard-working"
+   ],
+   "answer": 4,
+   "why": "الكلمة hard-working تعني مجتهد، ولذلك ينال علامات جيدة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-372",
+   "kind": "single",
+   "text": "He crashed his car into a tree. It was badly ———.",
+   "choices": [
+    "injured",
+    "wounded",
+    "hurt",
+    "damaged",
+    "hopeless"
+   ],
+   "answer": 3,
+   "why": "الكلمة damaged تعني متضرر وتقال عن الأشياء؛ injured للأشخاص.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-373",
+   "kind": "single",
+   "text": "It was a(n) ——— question. I couldn't understand a word of it.",
+   "choices": [
+    "unnecessary",
+    "difficult",
+    "necessary",
+    "easy",
+    "essential"
+   ],
+   "answer": 1,
+   "why": "الكلمة difficult تعني صعب، فلم يفهم منه كلمة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-374",
+   "kind": "single",
+   "text": "Thank you for the dinner last night. I enjoyed it very much. It was ———.",
+   "choices": [
+    "expensive",
+    "excited",
+    "excellent",
+    "extreme",
+    "experienced"
+   ],
+   "answer": 2,
+   "why": "الكلمة excellent تعني ممتاز.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-375",
+   "kind": "single",
+   "text": "He suddenly came face to face with two ——— men and started to run away.",
+   "choices": [
+    "lonely",
+    "legless",
+    "armed",
+    "athletic",
+    "unlucky"
+   ],
+   "answer": 2,
+   "why": "الكلمة armed تعني مسلح، ولذلك هرب.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-376",
+   "kind": "single",
+   "text": "I sat through all those cold and ——— nights, just thinking of you.",
+   "choices": [
+    "certain",
+    "daily",
+    "selfish",
+    "injured",
+    "lonely"
+   ],
+   "answer": 4,
+   "why": "الكلمة lonely تعني موحش يشعر فيه بالوحدة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-377",
+   "kind": "single",
+   "text": "Stay away from that park after dark. It's too ———.",
+   "choices": [
+    "large",
+    "blind",
+    "stormy",
+    "dangerous",
+    "nervous"
+   ],
+   "answer": 3,
+   "why": "الكلمة dangerous تعني خطر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-378",
+   "kind": "single",
+   "text": "Believe me I feel truly ——— for your great kindness. How can I ever repay you?",
+   "choices": [
+    "cheerful",
+    "grateful",
+    "thoughtful",
+    "beautiful",
+    "shameful"
+   ],
+   "answer": 1,
+   "why": "الكلمة grateful تعني ممتن.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-379",
+   "kind": "single",
+   "text": "You can't expect every ——— man to become a computer specialist.",
+   "choices": [
+    "economic",
+    "rare",
+    "effective",
+    "average",
+    "interesting"
+   ],
+   "answer": 3,
+   "why": "التعبير the average man يعني الإنسان العادي.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-380",
+   "kind": "single",
+   "text": "You don't know this? How ——— you are!",
+   "choices": [
+    "opposite",
+    "ignorant",
+    "ungrateful",
+    "complicated",
+    "foreign"
+   ],
+   "answer": 1,
+   "why": "الكلمة ignorant تعني جاهل لا يعرف.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-381",
+   "kind": "single",
+   "text": "Come to Ireland, and ——— all these places where history lives on.",
+   "choices": [
+    "inform",
+    "define",
+    "memorize",
+    "mention",
+    "discover"
+   ],
+   "answer": 4,
+   "why": "الفعل discover يعني يكتشف الأماكن.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-382",
+   "kind": "single",
+   "text": "I'm ——— an answer within a few days.",
+   "choices": [
+    "expecting",
+    "hoping",
+    "excepting",
+    "waiting",
+    "accepting"
+   ],
+   "answer": 0,
+   "why": "الفعل expect يعني يتوقع ويأخذ مفعولا مباشرا؛ hope و wait يحتاجان for.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-383",
+   "kind": "single",
+   "text": "Keeping a diary is no doubt quite a useful personal ———.",
+   "choices": [
+    "custom",
+    "usage",
+    "tradition",
+    "habit",
+    "institution"
+   ],
+   "answer": 3,
+   "why": "الكلمة habit تعني عادة شخصية.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-384",
+   "kind": "single",
+   "text": "Excuse me. I'm a(n) ——— around here. Can you show me the way to the nearest post office, please?",
+   "choices": [
+    "explorer",
+    "foreigner",
+    "stranger",
+    "alien",
+    "tourist"
+   ],
+   "answer": 2,
+   "why": "التعبير I'm a stranger here يعني لا أعرف المكان.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-385",
+   "kind": "single",
+   "text": "How much do I ——— you?",
+   "choices": [
+    "buy from",
+    "owe",
+    "borrow",
+    "own to",
+    "lend from"
+   ],
+   "answer": 1,
+   "why": "الفعل owe يعني يدين بالمال: كم أدين لك؟",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-386",
+   "kind": "single",
+   "text": "There are many more television ——— today than there used to be twenty years ago.",
+   "choices": [
+    "passers-by",
+    "onlookers",
+    "spectators",
+    "viewers",
+    "sight-seers"
+   ],
+   "answer": 3,
+   "why": "الكلمة viewers تعني مشاهدي التلفاز؛ spectators مشاهدو المباريات.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-387",
+   "kind": "single",
+   "text": "The body structure of zebras is ——— that of donkeys.",
+   "choices": [
+    "the same as",
+    "the opposite of",
+    "unlike",
+    "similar to",
+    "different from"
+   ],
+   "answer": 3,
+   "why": "التعبير similar to يعني مشابه لـ.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-388",
+   "kind": "single",
+   "text": "Do be serious, please. This isn't a(n) ———.",
+   "choices": [
+    "joke",
+    "funny",
+    "puzzling",
+    "comical",
+    "humour"
+   ],
+   "answer": 0,
+   "why": "بعد a نحتاج اسما معدودا: a joke؛ funny صفة.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-389",
+   "kind": "single",
+   "text": "The ——— today is full of the news of the incident.",
+   "choices": [
+    "publisher",
+    "journalism",
+    "press",
+    "reporter",
+    "literature"
+   ],
+   "answer": 2,
+   "why": "الكلمة press تعني الصحافة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-390",
+   "kind": "single",
+   "text": "I'm going to take a(n) ——— abroad next summer.",
+   "choices": [
+    "sightseeing",
+    "travel",
+    "vocation",
+    "trip",
+    "excursion"
+   ],
+   "answer": 3,
+   "why": "التعبير take a trip abroad يعني يقوم برحلة إلى الخارج.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-391",
+   "kind": "single",
+   "text": "He was told by the doctors that he would need quite a long period of rest after such a serious ———.",
+   "choices": [
+    "epidemic",
+    "disease",
+    "recovery",
+    "complaint",
+    "illness"
+   ],
+   "answer": 4,
+   "why": "الكلمة illness تعني المرض الذي يمر به المريض.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-392",
+   "kind": "single",
+   "text": "I wouldn't say I am deeply in love with her, but I'm very ——— of her.",
+   "choices": [
+    "keen",
+    "friendly",
+    "fond",
+    "likeable",
+    "romantic"
+   ],
+   "answer": 2,
+   "why": "التعبير be fond of يعني يحب ويميل إلى.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-393",
+   "kind": "single",
+   "text": "He just sits there and ——— television most of the time.",
+   "choices": [
+    "stares",
+    "observes",
+    "glances",
+    "gazes",
+    "watches"
+   ],
+   "answer": 4,
+   "why": "نقول watch television أي يشاهد التلفاز.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-394",
+   "kind": "single",
+   "text": "He's travelling by himself. In other words, he's on his ———.",
+   "choices": [
+    "single",
+    "self",
+    "alone",
+    "own",
+    "lonely"
+   ],
+   "answer": 3,
+   "why": "التعبير on his own يعني وحده.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-395",
+   "kind": "single",
+   "text": "This whole place needs a(n) ——— cleaning. It's in a terrible mess.",
+   "choices": [
+    "fully",
+    "thorough",
+    "infinite",
+    "entirely",
+    "valid"
+   ],
+   "answer": 1,
+   "why": "قبل الاسم cleaning نحتاج صفة: thorough أي شامل؛ fully و entirely ظرفان.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-396",
+   "kind": "single",
+   "text": "——— of money prevented us from taking a holiday abroad this year.",
+   "choices": [
+    "Inflation",
+    "Presence",
+    "Lack",
+    "Being absent",
+    "Limit"
+   ],
+   "answer": 2,
+   "why": "الكلمة lack تعني نقص أو قلة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-397",
+   "kind": "single",
+   "text": "Sorry, it's much too expensive for me; I can't ——— it.",
+   "choices": [
+    "effort",
+    "comfort",
+    "support",
+    "import",
+    "afford"
+   ],
+   "answer": 4,
+   "why": "الفعل afford يعني يقدر على ثمن الشيء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-398",
+   "kind": "single",
+   "text": "The ——— of the play included a famous British film star.",
+   "choices": [
+    "playwright",
+    "scenery",
+    "cast",
+    "stage",
+    "acts"
+   ],
+   "answer": 2,
+   "why": "الكلمة cast تعني طاقم الممثلين.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-399",
+   "kind": "single",
+   "text": "The volcano is expected to ——— any day now.",
+   "choices": [
+    "excite",
+    "erupt",
+    "kick",
+    "expand",
+    "stimulate"
+   ],
+   "answer": 1,
+   "why": "الفعل erupt يعني يثور البركان.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-400",
+   "kind": "single",
+   "text": "It seems to me that they never gave a thought to ——— future problems when the plans were being laid down five years ago.",
+   "choices": [
+    "unbelievable",
+    "untrustworthy",
+    "probable",
+    "unreasonable",
+    "impossible"
+   ],
+   "answer": 2,
+   "why": "الكلمة probable تعني محتمل الحدوث.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-401",
+   "kind": "single",
+   "text": "My ——— objection to neurotics is that they are difficult to live with.",
+   "choices": [
+    "primarily",
+    "principle",
+    "priority",
+    "privileged",
+    "principal"
+   ],
+   "answer": 4,
+   "why": "قبل الاسم objection نحتاج صفة: principal أي الرئيسي؛ principle اسم بمعنى مبدأ.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-402",
+   "kind": "single",
+   "text": "Every substance has a melting point and a boiling point. The former is the temperature at which it changes from solid to liquid. The ——— is the temperature at which it changes from liquid to gas.",
+   "choices": [
+    "later",
+    "latest",
+    "late",
+    "last",
+    "latter"
+   ],
+   "answer": 4,
+   "why": "الكلمة latter تعني الأخير من اثنين مذكورين، وتقابل the former.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-403",
+   "kind": "single",
+   "text": "You could ——— being a little bit more friendly, couldn't you?",
+   "choices": [
+    "effort",
+    "comfort",
+    "support",
+    "please",
+    "afford"
+   ],
+   "answer": 4,
+   "why": "التعبير could afford to be يعني بوسعك أن تكون، أي لن يضرك ذلك.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-404",
+   "kind": "single",
+   "text": "People become quite ——— when it comes to discussing the differences between the sexes.",
+   "choices": [
+    "illogical",
+    "illiterate",
+    "illegible",
+    "illegal",
+    "illegitimate"
+   ],
+   "answer": 0,
+   "why": "الكلمة illogical تعني غير منطقي؛ illegible تعني غير مقروء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-405",
+   "kind": "single",
+   "text": "I think it was a gross ——— to condemn her.",
+   "choices": [
+    "impartiality",
+    "injustice",
+    "fairness",
+    "penalty",
+    "invasiveness"
+   ],
+   "answer": 1,
+   "why": "التعبير a gross injustice يعني ظلم فادح.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-406",
+   "kind": "single",
+   "text": "I resent your last remarks and certainly demand an apology. Sir, we're running a ——— business here!",
+   "choices": [
+    "remarkable",
+    "reciprocal",
+    "reluctant",
+    "respectable",
+    "representative"
+   ],
+   "answer": 3,
+   "why": "الكلمة respectable تعني محترم يليق بالسمعة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-407",
+   "kind": "single",
+   "text": "Both countries have declined to ——— the treaty on the nonproliferation of nuclear weapons, partly out of concern for the other's supposed intentions.",
+   "choices": [
+    "praise",
+    "assess",
+    "avoid",
+    "endorse",
+    "advocate"
+   ],
+   "answer": 3,
+   "why": "الفعل endorse يعني يصادق على أو يؤيد رسميا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-408",
+   "kind": "single",
+   "text": "Precautions of this sort are necessary, for it is next to impossible to ——— the exact nature of the difficulties which will confront us.",
+   "choices": [
+    "forewarn",
+    "forbid",
+    "forsake",
+    "fortify",
+    "foretell"
+   ],
+   "answer": 4,
+   "why": "الفعل foretell يعني يتنبأ مسبقا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-409",
+   "kind": "single",
+   "text": "She is very ———. You just couldn't make her walk past under a ladder.",
+   "choices": [
+    "credulous",
+    "religious",
+    "supernatural",
+    "deformed",
+    "superstitious"
+   ],
+   "answer": 4,
+   "why": "الكلمة superstitious تعني مؤمن بالخرافات، ومنها المرور تحت السلم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-410",
+   "kind": "single",
+   "text": "In the medical profession, men ——— women by two to one.",
+   "choices": [
+    "outlive",
+    "outdo",
+    "outshine",
+    "outnumber",
+    "outclass"
+   ],
+   "answer": 3,
+   "why": "الفعل outnumber يعني يفوق عددا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-411",
+   "kind": "single",
+   "text": "Severe difficulties must be ——— before cloning can be done with mammals and humans.",
+   "choices": [
+    "concluded",
+    "overcome",
+    "aggravated",
+    "endangered",
+    "guaranteed"
+   ],
+   "answer": 1,
+   "why": "الفعل overcome يعني يتغلب على الصعوبات.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-412",
+   "kind": "single",
+   "text": "He was quite contented; he led a(n) ——— life.",
+   "choices": [
+    "miserable",
+    "prosperously",
+    "happily",
+    "orderly",
+    "improper"
+   ],
+   "answer": 3,
+   "why": "قبل الاسم life نحتاج صفة: orderly أي منظم؛ happily ظرف.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-413",
+   "kind": "single",
+   "text": "The bridge is so immensely long that the shape of the earth had to be ——— by its designer as an essential part of the project.",
+   "choices": [
+    "taken into account",
+    "given an account of",
+    "given approval to",
+    "caught up with",
+    "kept in touch with"
+   ],
+   "answer": 0,
+   "why": "التعبير take into account يعني يأخذ في الحسبان.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-414",
+   "kind": "single",
+   "text": "Despite these overwhelmingly difficult trading conditions, the company has ——— produced outstanding results.",
+   "choices": [
+    "therefore",
+    "accordingly",
+    "nevertheless",
+    "consequently",
+    "otherwise"
+   ],
+   "answer": 2,
+   "why": "الأداة nevertheless تعني ومع ذلك، وتربط نتيجة غير متوقعة بسبب معاكس.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-415",
+   "kind": "single",
+   "text": "It suddenly ——— to me that Mr Izbul was the greatest dramatist ever who had never written a play!",
+   "choices": [
+    "occurred",
+    "dawned",
+    "predicted",
+    "presented",
+    "happened"
+   ],
+   "answer": 0,
+   "why": "التعبير it occurred to me يعني خطر ببالي؛ dawned يحتاج on.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-416",
+   "kind": "single",
+   "text": "Scientists admit they are still ——— by the new disease which is, superficially, not so different from so many other respiratory ailments.",
+   "choices": [
+    "slandered",
+    "massacred",
+    "bribed",
+    "checked",
+    "intrigued"
+   ],
+   "answer": 4,
+   "why": "الفعل intrigue يعني يثير الحيرة والفضول.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-417",
+   "kind": "single",
+   "text": "After visiting the Archaeological Museum in the morning, the manager kindly ——— us to lunch at a local shish-kebab restaurant.",
+   "choices": [
+    "threatened",
+    "approved",
+    "thrilled",
+    "treated",
+    "rewarded"
+   ],
+   "answer": 3,
+   "why": "التعبير treat someone to lunch يعني يدعوه إلى الغداء على حسابه.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-418",
+   "kind": "single",
+   "text": "I've listened to your argument. It's neither here nor there. In other words, it's quite ———.",
+   "choices": [
+    "irrelevant",
+    "resentful",
+    "rebellious",
+    "scornful",
+    "enormous"
+   ],
+   "answer": 0,
+   "why": "الكلمة irrelevant تعني لا علاقة له بالموضوع، ومثلها neither here nor there.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-419",
+   "kind": "single",
+   "text": "\"Have you anything to ———?\" said the young customs officer, looking straight at me in the eye.",
+   "choices": [
+    "declare",
+    "identify",
+    "remember",
+    "confirm",
+    "hide"
+   ],
+   "answer": 0,
+   "why": "الفعل declare يعني يصرح عن البضائع في الجمارك.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-420",
+   "kind": "single",
+   "text": "The discussion was mainly on the subject of the number of workers to be ———.",
+   "choices": [
+    "multiplied",
+    "conspired",
+    "consented",
+    "employed",
+    "presented"
+   ],
+   "answer": 3,
+   "why": "الفعل employ يعني يوظف.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-421",
+   "kind": "single",
+   "text": "The news of a new and more serious breach of the ceasefire received here last night has now been ———.",
+   "choices": [
+    "confirmed",
+    "installed",
+    "informed",
+    "contacted",
+    "mentioned"
+   ],
+   "answer": 0,
+   "why": "الفعل confirm يعني يؤكد صحة الخبر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-422",
+   "kind": "single",
+   "text": "The tube is then ——— into its place and secured with clips.",
+   "choices": [
+    "relieved",
+    "deceived",
+    "matured",
+    "inserted",
+    "insulted"
+   ],
+   "answer": 3,
+   "why": "الفعل insert يعني يدخل الشيء في مكانه.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-423",
+   "kind": "single",
+   "text": "Would to God you would ——— yourself of your disgusting habit of chain-smoking.",
+   "choices": [
+    "revenge",
+    "oppose",
+    "nurse",
+    "reduce",
+    "cure"
+   ],
+   "answer": 4,
+   "why": "التعبير cure yourself of a habit يعني يتخلص من عادة.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-424",
+   "kind": "single",
+   "text": "It'll take him a long time yet to fully ——— from the terrible blow he has received.",
+   "choices": [
+    "reappear",
+    "recover",
+    "cure",
+    "revise",
+    "treat"
+   ],
+   "answer": 1,
+   "why": "الفعل recover from يعني يتعافى من.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-425",
+   "kind": "single",
+   "text": "There was one final command he had hoped to give his soldiers all through his fighting years: \" ——— fire!\"",
+   "choices": [
+    "Remove",
+    "Melt",
+    "Drop",
+    "Cease",
+    "Miss"
+   ],
+   "answer": 3,
+   "why": "التعبير cease fire يعني أوقفوا إطلاق النار.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-426",
+   "kind": "single",
+   "text": "We ——— many a danger and difficulty on the way, but we managed to overcome them all in the end.",
+   "choices": [
+    "encouraged",
+    "enforced",
+    "endangered",
+    "encountered",
+    "embarrassed"
+   ],
+   "answer": 3,
+   "why": "الفعل encounter يعني يواجه الصعوبات أو يصادفها.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-427",
+   "kind": "single",
+   "text": "——— two spoonfuls of sugar in a large cup half filled with water. Then, add one spoonful of lemon juice.",
+   "choices": [
+    "Nourish",
+    "Dissolve",
+    "Involve",
+    "Create",
+    "Maintain"
+   ],
+   "answer": 1,
+   "why": "الفعل dissolve يعني يذيب السكر في الماء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-428",
+   "kind": "single",
+   "text": "He ——— his car in a head-on collision with a lorry, but came off it quite unhurt.",
+   "choices": [
+    "perfected",
+    "prevented",
+    "crashed",
+    "endured",
+    "cracked"
+   ],
+   "answer": 2,
+   "why": "الفعل crash يعني يصطدم أو يحطم السيارة في حادث.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-429",
+   "kind": "single",
+   "text": "Don't forget to ——— my name in your letter.",
+   "choices": [
+    "slide",
+    "embrace",
+    "repent",
+    "regret",
+    "mention"
+   ],
+   "answer": 4,
+   "why": "الفعل mention يعني يذكر الاسم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-430",
+   "kind": "single",
+   "text": "The roof was ———. I had to call in a repairman.",
+   "choices": [
+    "leaking",
+    "rubbing",
+    "dropping",
+    "smashing",
+    "destroying"
+   ],
+   "answer": 0,
+   "why": "الفعل leak يعني يسرب الماء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-431",
+   "kind": "single",
+   "text": "Don't you ever care about the ——— masses? Don't you know that some 842 million people – 13% of the world's population – don't have enough food to eat each day?",
+   "choices": [
+    "feeding",
+    "reporting",
+    "donating",
+    "starving",
+    "planting"
+   ],
+   "answer": 3,
+   "why": "الكلمة starving تعني جائع حد الموت، ويوافق نقص الطعام.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-432",
+   "kind": "single",
+   "text": "I couldn't understand what had happened and when I apologised to him explaining how I couldn't hear him, he just ——— me and rode off.",
+   "choices": [
+    "argued",
+    "swore at",
+    "pledged",
+    "maltreated",
+    "witnessed"
+   ],
+   "answer": 1,
+   "why": "التعبير swear at someone يعني يشتمه.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-433",
+   "kind": "single",
+   "text": "One of my friends at work actually came up to me yesterday and asked if I had lost some weight. It's so nice when someone ——— this – especially when it happens to be a beautiful girl!",
+   "choices": [
+    "notices",
+    "criticizes",
+    "assesses",
+    "wows",
+    "condemns"
+   ],
+   "answer": 0,
+   "why": "الفعل notice يعني يلاحظ.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-434",
+   "kind": "single",
+   "text": "She's a very nice lady, slightly older than myself and happily ——— with two kids.",
+   "choices": [
+    "engaged",
+    "burdened",
+    "married",
+    "admired",
+    "appreciated"
+   ],
+   "answer": 2,
+   "why": "التعبير happily married يعني متزوج وسعيد.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-435",
+   "kind": "single",
+   "text": "That was the first time I had ever had to ——— a puncture.",
+   "choices": [
+    "blame",
+    "provoke",
+    "repair",
+    "offend",
+    "overreact to"
+   ],
+   "answer": 2,
+   "why": "التعبير repair a puncture يعني يصلح ثقب الإطار.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-436",
+   "kind": "single",
+   "text": "Several countries so far have offered to ——— between the two warring sides.",
+   "choices": [
+    "mediate",
+    "manipulate",
+    "emigrate",
+    "meditate",
+    "immigrate"
+   ],
+   "answer": 0,
+   "why": "الفعل mediate يعني يتوسط بين طرفين؛ meditate يعني يتأمل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-437",
+   "kind": "single",
+   "text": "In some cultures, when two people cut themselves to ——— their blood together, they become \"blood brothers\"",
+   "choices": [
+    "mingle",
+    "refund",
+    "abuse",
+    "shiver",
+    "sweat"
+   ],
+   "answer": 0,
+   "why": "الفعل mingle يعني يمزج أو يخلط.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-438",
+   "kind": "single",
+   "text": "The nation is ——— the loss of its great leader.",
+   "choices": [
+    "praising",
+    "mourning",
+    "revolting against",
+    "voting for",
+    "rehearsing"
+   ],
+   "answer": 1,
+   "why": "الفعل mourn يعني يحزن على فقيد.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-439",
+   "kind": "single",
+   "text": "We'll be ——— the ninetieth anniversary of the Republic in the coming year.",
+   "choices": [
+    "challenging",
+    "manufacturing",
+    "compensating",
+    "celebrating",
+    "correlating"
+   ],
+   "answer": 3,
+   "why": "الفعل celebrate يعني يحتفل بالذكرى.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-440",
+   "kind": "single",
+   "text": "I'm wondering which country ——— this year.",
+   "choices": [
+    "they have travelled",
+    "have they travelled to",
+    "they have travelled to",
+    "have they travelled"
+   ],
+   "answer": 2,
+   "why": "في السؤال غير المباشر يأتي الفاعل قبل الفعل، ونحتاج to لأن travel to country.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-441",
+   "kind": "single",
+   "text": "Lisa likes opera, which is lucky for me, because ——— too.",
+   "choices": [
+    "I do",
+    "I like",
+    "do I",
+    "I am"
+   ],
+   "answer": 0,
+   "why": "لتجنب تكرار الفعل like نستعمل الفعل المساعد: I do.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-442",
+   "kind": "single",
+   "text": "——— Peter? I ——— for him all morning.",
+   "choices": [
+    "Have you been seeing / have looked",
+    "Have you seen / 've been looking",
+    "Have you been seen / have been looking",
+    "Have you seing / 've looked"
+   ],
+   "answer": 1,
+   "why": "سؤال عن حدث تام: Have you seen، والحدث المستمر حتى الآن: have been looking.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-443",
+   "kind": "single",
+   "text": "Some actions that are habits for ———, may look weird to people from other nationalities.",
+   "choices": [
+    "the Japanese",
+    "the Japanese people",
+    "the Japaneses",
+    "Japaneses"
+   ],
+   "answer": 0,
+   "why": "الصفة مع the تدل على الشعب كله: the Japanese.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-444",
+   "kind": "single",
+   "text": "I don't understand why you always have to say ——— stupid things.",
+   "choices": [
+    "so",
+    "such",
+    "such a",
+    "so much"
+   ],
+   "answer": 1,
+   "why": "قبل الاسم الجمع مع صفة نستعمل such بلا a: such stupid things.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-445",
+   "kind": "single",
+   "text": "If I continue reading 50 pages every day, by the end of the month I ——— 8,000 pages.",
+   "choices": [
+    "will read",
+    "am going to read",
+    "will be reading",
+    "will have read"
+   ],
+   "answer": 3,
+   "why": "حدث سيكتمل قبل وقت في المستقبل: المستقبل التام will have read.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-446",
+   "kind": "single",
+   "text": "She wouldn't be helping you if she ——— your sister.",
+   "choices": [
+    "wouldn't be",
+    "wouldn't have been",
+    "isn't",
+    "weren't"
+   ],
+   "answer": 3,
+   "why": "الشرط الثاني عن حالة غير واقعية: if she weren't.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-447",
+   "kind": "single",
+   "text": "I wish I ——— come to the zoo with you next weekend, but I'm going to be busy.",
+   "choices": [
+    "could",
+    "would",
+    "had",
+    "will"
+   ],
+   "answer": 0,
+   "why": "التمني عن المستقبل بشيء غير ممكن: wish + could.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-448",
+   "kind": "single",
+   "text": "My parents were very ———. I expected they would buy me a better present.",
+   "choices": [
+    "disappointing",
+    "disappointed",
+    "disappoint",
+    "disappointingly"
+   ],
+   "answer": 0,
+   "why": "الصفة بـ ing تصف مصدر الشعور: والداي كانا مخيبين للأمل.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-449",
+   "kind": "single",
+   "text": "She regretted ———.",
+   "choices": [
+    "get married",
+    "to get married",
+    "having got married",
+    "to have got married"
+   ],
+   "answer": 2,
+   "why": "بعد regret للندم على فعل ماض نستعمل having + التصريف الثالث.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-450",
+   "kind": "single",
+   "text": "The weather was very hot the whole time. We ——— a month later when it's cooler.",
+   "choices": [
+    "shouldn't have gone",
+    "should have gone",
+    "must have gone",
+    "can't have gone"
+   ],
+   "answer": 1,
+   "why": "الندم أو اللوم على الماضي: should have + التصريف الثالث.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-451",
+   "kind": "single",
+   "text": "I'd rather ——— for me at the station.",
+   "choices": [
+    "you waited",
+    "you wait",
+    "you to wait",
+    "you waiting"
+   ],
+   "answer": 0,
+   "why": "بعد would rather مع فاعل آخر نستعمل الماضي البسيط: I'd rather you waited.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-452",
+   "kind": "single",
+   "text": "The robbers ——— have escaped.",
+   "choices": [
+    "are thought that they",
+    "it's thought that they",
+    "are thought to",
+    "are thought that"
+   ],
+   "answer": 2,
+   "why": "المبني للمجهول مع الأفعال think و say: are thought to + المصدر.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-453",
+   "kind": "single",
+   "text": "I must go to the doctor and ——— before I go on holiday.",
+   "choices": [
+    "test my blood pressure",
+    "have my blood pressure tested",
+    "have tested my blood pressure",
+    "get to test my blood pressure"
+   ],
+   "answer": 1,
+   "why": "التركيب have something done يعني أن غيرك يفعله لك.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-454",
+   "kind": "single",
+   "text": "——— everything she said, I won't forgive her.",
+   "choices": [
+    "Despite of",
+    "Although",
+    "In spite of",
+    "However"
+   ],
+   "answer": 2,
+   "why": "التعبير in spite of يتبعه اسم؛ despite لا يأخذ of.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-455",
+   "kind": "single",
+   "text": "Your colleague talks a lot and you find it annoying. What could you say?",
+   "choices": [
+    "If only he'd been quiet",
+    "If only he'd be quiet",
+    "If only he were quiet",
+    "I wish he is quiet"
+   ],
+   "answer": 1,
+   "why": "التمني لتغيير سلوك مزعج: If only + would.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-456",
+   "kind": "single",
+   "text": "I hate ——— that I can't do something because I'm a girl. Boys say that a lot.",
+   "choices": [
+    "telling",
+    "to tell",
+    "having to tell",
+    "being told"
+   ],
+   "answer": 3,
+   "why": "المصدر بـ ing في المبني للمجهول: being told.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-457",
+   "kind": "single",
+   "text": "He looked ——— a ghost.",
+   "choices": [
+    "as though he had seen",
+    "as he had seen",
+    "like seeing",
+    "as if a"
+   ],
+   "answer": 0,
+   "why": "التعبير as though + جملة تعني كأن، والماضي التام لحدث سابق.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-458",
+   "kind": "single",
+   "text": "——— nor any of the workers offered to help us.",
+   "choices": [
+    "The manager",
+    "Neither the manager",
+    "Either the manager",
+    "None the manager"
+   ],
+   "answer": 1,
+   "why": "التركيب neither ... nor يعني لا ... ولا.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-459",
+   "kind": "single",
+   "text": "She couldn't remember how long they ——— when the accident happened.",
+   "choices": [
+    "had driven",
+    "were driving",
+    "had been driven",
+    "had been driving"
+   ],
+   "answer": 3,
+   "why": "حدث مستمر قبل حدث ماض: الماضي التام المستمر had been driving.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-460",
+   "kind": "single",
+   "text": "Murdoch's daughter ——— at the finish line when he completes his first marathon.",
+   "choices": [
+    "will have waited",
+    "will wait",
+    "will be waiting",
+    "is waiting"
+   ],
+   "answer": 2,
+   "why": "حدث سيكون جاريا في وقت محدد في المستقبل: will be waiting.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-461",
+   "kind": "single",
+   "text": "I'd rather he ——— with us, but he's already made a decision and is leaving at the end of the season.",
+   "choices": [
+    "stay",
+    "stayed",
+    "would stay",
+    "had stayed"
+   ],
+   "answer": 1,
+   "why": "بعد would rather مع فاعل آخر نستعمل الماضي البسيط: he stayed.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-462",
+   "kind": "single",
+   "text": "David denied ——— part in the robbery.",
+   "choices": [
+    "having taken",
+    "to take",
+    "take",
+    "to have taken"
+   ],
+   "answer": 0,
+   "why": "الفعل deny يتبعه ing، ولحدث ماض having + التصريف الثالث.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-463",
+   "kind": "single",
+   "text": "I wish I ——— a normal life, but my life now is a real nightmare.",
+   "choices": [
+    "could have",
+    "had had",
+    "have had",
+    "have"
+   ],
+   "answer": 0,
+   "why": "التمني عن الحاضر بالقدرة: wish + could.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-464",
+   "kind": "single",
+   "text": "——— I am with you; I can't stop smiling.",
+   "choices": [
+    "Whatever",
+    "However",
+    "Wherever",
+    "Whenever"
+   ],
+   "answer": 3,
+   "why": "الأداة whenever تعني كلما أو في أي وقت.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-465",
+   "kind": "single",
+   "text": "Do you have any idea of ———?",
+   "choices": [
+    "what is he talking about",
+    "about what he's talking",
+    "what is he talking",
+    "what he's talking about"
+   ],
+   "answer": 3,
+   "why": "في السؤال غير المباشر يأتي الفاعل قبل الفعل ويبقى حرف الجر في آخره.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-466",
+   "kind": "single",
+   "text": "A: \"Why didn't you go to the training session?\" B: \"I ——— to the training. John saw me there. Ask him.\"",
+   "choices": [
+    "didn't go",
+    "did go",
+    "did went",
+    "sure go"
+   ],
+   "answer": 1,
+   "why": "الفعل المساعد did قبل المصدر يؤكد الفعل في الماضي: I did go.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-467",
+   "kind": "single",
+   "text": "It was awesome to get ——— good response from the audience.",
+   "choices": [
+    "so much",
+    "such",
+    "such a",
+    "so"
+   ],
+   "answer": 2,
+   "why": "قبل اسم مفرد معدود مع صفة نستعمل such a.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-468",
+   "kind": "single",
+   "text": "——— a hammer to kill his neighbour.",
+   "choices": [
+    "He is believed to use",
+    "He is believed to have used",
+    "It is believed to have used",
+    "He is believed that he used"
+   ],
+   "answer": 1,
+   "why": "المبني للمجهول عن حدث ماض: He is believed to have used.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-469",
+   "kind": "single",
+   "text": "I ———. I've hired a very good decorator.",
+   "choices": [
+    "'m redecorating my kitchen",
+    "will be redecorating my kitchen",
+    "will have my kitchen redecorate",
+    "'m having my kitchen redecorated"
+   ],
+   "answer": 3,
+   "why": "التركيب have something done: أنا لا أفعله بنفسي بل يفعله غيري.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-470",
+   "kind": "single",
+   "text": "How many ——— the exam?",
+   "choices": [
+    "students passed",
+    "students did pass",
+    "did pass",
+    "did students pass"
+   ],
+   "answer": 0,
+   "why": "حين يكون السؤال عن الفاعل لا نستعمل do: How many students passed?",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-471",
+   "kind": "single",
+   "text": "A: \"I won't finish on time.\" B: \" ———.\"",
+   "choices": [
+    "So won't I",
+    "Neither do I",
+    "Neither won't I",
+    "Neither will I"
+   ],
+   "answer": 3,
+   "why": "الموافقة على جملة منفية: Neither + فعل مساعد مثبت + فاعل.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-472",
+   "kind": "single",
+   "text": "The longer you practice every day, ———.",
+   "choices": [
+    "the best you will get",
+    "better you'll get",
+    "the better you'll get",
+    "you'll get better"
+   ],
+   "answer": 2,
+   "why": "التركيب the + مقارنة ... the + مقارنة يعني كلما ... كلما.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-473",
+   "kind": "single",
+   "text": "She is ——— woman.",
+   "choices": [
+    "an American young intelligent",
+    "a young intelligent American",
+    "an intelligent young American",
+    "an intelligent American young"
+   ],
+   "answer": 2,
+   "why": "ترتيب الصفات: الرأي ثم العمر ثم الجنسية: an intelligent young American.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-474",
+   "kind": "single",
+   "text": "I'm lucky to be surrounded by ——— fascinating people.",
+   "choices": [
+    "such a",
+    "so",
+    "so much",
+    "such"
+   ],
+   "answer": 3,
+   "why": "قبل الاسم الجمع مع صفة نستعمل such بلا a.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-475",
+   "kind": "single",
+   "text": "Alex ———.",
+   "choices": [
+    "was waiting at the station very anxiously last night",
+    "was waiting very anxiously at the station last night",
+    "was very anxiously waiting at the station last night",
+    "was waiting very anxiously last night at the station"
+   ],
+   "answer": 1,
+   "why": "ترتيب الظروف بعد الفعل: الحال ثم المكان ثم الزمان.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-476",
+   "kind": "single",
+   "text": "If they beat Manchester next weekend, they ——— ten successive games.",
+   "choices": [
+    "are winning",
+    "have won",
+    "will have won",
+    "will win"
+   ],
+   "answer": 2,
+   "why": "حدث سيكتمل قبل وقت في المستقبل: المستقبل التام will have won.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-477",
+   "kind": "single",
+   "text": "You can play outside when you ——— your lunch.",
+   "choices": [
+    "will have eaten",
+    "have eaten",
+    "are eating",
+    "eat"
+   ],
+   "answer": 1,
+   "why": "بعد when عن المستقبل نستعمل المضارع التام لا will.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-478",
+   "kind": "single",
+   "text": "——— the answer if she hadn't helped you?",
+   "choices": [
+    "Could you find",
+    "Had you found",
+    "Would you have found",
+    "Would you find"
+   ],
+   "answer": 2,
+   "why": "الشرط الثالث عن الماضي: would have + التصريف الثالث.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-479",
+   "kind": "single",
+   "text": "I wish he ——— treating us like idiots. Who does he think he is?",
+   "choices": [
+    "would stop",
+    "stopped",
+    "had stopped",
+    "stops"
+   ],
+   "answer": 0,
+   "why": "التمني لتغيير سلوك مزعج: wish + would.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-480",
+   "kind": "single",
+   "text": "I love cheese now, but I ——— like it as a child.",
+   "choices": [
+    "didn't used to",
+    "didn't use to",
+    "wasn't used to",
+    "usedn't to"
+   ],
+   "answer": 1,
+   "why": "النفي من used to يكون didn't use to بلا d.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-481",
+   "kind": "single",
+   "text": "It ——— easy to win the tournament. All the teams were really good.",
+   "choices": [
+    "mustn't have been",
+    "shouldn't have been",
+    "might not be",
+    "can't have been"
+   ],
+   "answer": 3,
+   "why": "الاستنتاج المنفي المؤكد عن الماضي: can't have been.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-482",
+   "kind": "single",
+   "text": "The attacker is thought ——— jumping from the second floor of the building.",
+   "choices": [
+    "to escaped",
+    "that he escaped",
+    "to have escaped",
+    "he has escaped"
+   ],
+   "answer": 2,
+   "why": "المبني للمجهول عن حدث ماض: is thought to have + التصريف الثالث.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-483",
+   "kind": "single",
+   "text": "——— said that is totally crazy.",
+   "choices": [
+    "Whoever",
+    "Whatever",
+    "However",
+    "Whenever"
+   ],
+   "answer": 0,
+   "why": "الأداة whoever تعني أي شخص أو من.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-484",
+   "kind": "single",
+   "text": "The new model comes in red or white but I don't like ——— of those colours.",
+   "choices": [
+    "either",
+    "neither",
+    "none",
+    "both"
+   ],
+   "answer": 0,
+   "why": "مع النفي نستعمل either بمعنى أي من الاثنين.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-485",
+   "kind": "single",
+   "text": "A: When is his birthday? B: It's ——— January 19th.",
+   "choices": [
+    "in",
+    "on",
+    "at",
+    "up"
+   ],
+   "answer": 1,
+   "why": "مع التاريخ المحدد بيوم نستعمل on.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-486",
+   "kind": "single",
+   "text": "Look at the helicopter ——— the air! It is pink!",
+   "choices": [
+    "in",
+    "up",
+    "on",
+    "at"
+   ],
+   "answer": 0,
+   "why": "نقول in the air أي في الجو.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-487",
+   "kind": "single",
+   "text": "Sally met John ——— the new cinema in Brooklyn, not ——— Ivy Street.",
+   "choices": [
+    "on / in",
+    "in / at",
+    "at / on",
+    "near / through"
+   ],
+   "answer": 2,
+   "why": "مع مكان محدد نستعمل at، ومع اسم الشارع on.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-488",
+   "kind": "single",
+   "text": "Marcy usually worked ——— the weekend ——— the past.",
+   "choices": [
+    "at / in",
+    "on / from",
+    "in / between",
+    "from / to"
+   ],
+   "answer": 0,
+   "why": "نقول at the weekend في البريطانية، و in the past.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-489",
+   "kind": "single",
+   "text": "I was ——— Paris for a business trip ——— Christmas.",
+   "choices": [
+    "on / to",
+    "at / in",
+    "in / at",
+    "from / on"
+   ],
+   "answer": 2,
+   "why": "مع المدن in، ومع الأعياد at: at Christmas.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-490",
+   "kind": "single",
+   "text": "Ryan often goes to bed ——— midnight ——— Sundays.",
+   "choices": [
+    "between / near",
+    "on / in",
+    "in / at",
+    "at / on"
+   ],
+   "answer": 3,
+   "why": "مع الساعة at، ومع الأيام on.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-491",
+   "kind": "single",
+   "text": "Nelson always sits ——— Margaret in the classroom and their desk is ——— Clara and Mandy's.",
+   "choices": [
+    "next to / behind",
+    "among / near",
+    "across / between",
+    "behind / along"
+   ],
+   "answer": 0,
+   "why": "التعبير next to يعني بجانب، و behind يعني خلف.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-492",
+   "kind": "single",
+   "text": "The man is sitting at his desk ——— the middle of the room and a light bulb is hanging ——— his head.",
+   "choices": [
+    "onto / under",
+    "in / over",
+    "on / through",
+    "by / across"
+   ],
+   "answer": 1,
+   "why": "نقول in the middle، و over his head أي فوق رأسه.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-493",
+   "kind": "single",
+   "text": "Stacy travelled ——— one continent to another ——— bicycle last year.",
+   "choices": [
+    "into / along",
+    "out of / onto",
+    "from / by",
+    "up / down"
+   ],
+   "answer": 2,
+   "why": "التركيب from ... to للمسافة، و by مع وسيلة النقل: by bicycle.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-494",
+   "kind": "single",
+   "text": "I am travelling to India ——— two weeks and I am going to stay there ——— the winter, too.",
+   "choices": [
+    "on / at",
+    "in / in",
+    "at / in",
+    "next to / on"
+   ],
+   "answer": 1,
+   "why": "التعبير in two weeks يعني بعد أسبوعين، و in the winter مع الفصول.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-495",
+   "kind": "single",
+   "text": "A: Where is the vacuum cleaner? I can't find it. B: It is ——— the door, but you need to take it ——— its box.",
+   "choices": [
+    "behind / out of",
+    "on / through",
+    "next to / along",
+    "besides / across"
+   ],
+   "answer": 0,
+   "why": "الحرف behind يعني خلف، و out of يعني إخراجه من.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-496",
+   "kind": "single",
+   "text": "The cock jumped ——— the fence ——— the farm and began crowing.",
+   "choices": [
+    "across / up",
+    "along / down",
+    "among / over",
+    "onto / around"
+   ],
+   "answer": 3,
+   "why": "الحرف onto للحركة إلى سطح، و around يعني حول.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-497",
+   "kind": "single",
+   "text": "Eric visited his aunt at the hospital ——— the morning and called one of his neighbours ——— noon.",
+   "choices": [
+    "in / at",
+    "on / in",
+    "at / on",
+    "in / on"
+   ],
+   "answer": 0,
+   "why": "نقول in the morning، و at noon.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-498",
+   "kind": "single",
+   "text": "A: Some Indians have a red mark ——— their two eyebrows. B: Yes, it is called a \"bindi\".",
+   "choices": [
+    "through",
+    "onto",
+    "from",
+    "between"
+   ],
+   "answer": 3,
+   "why": "الحرف between يعني بين شيئين.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-499",
+   "kind": "single",
+   "text": "Her great-grandfather wrote a special dictionary ——— the 20th century and you can find it in some libraries ——— present.",
+   "choices": [
+    "at / on",
+    "on / in",
+    "in / at",
+    "from / near"
+   ],
+   "answer": 2,
+   "why": "مع القرون in، والتعبير at present يعني حاليا.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-500",
+   "kind": "single",
+   "text": "A: The black van ——— the bank transports money. B: And there is a man ——— it. He is wearing a uniform. It must be the driver.",
+   "choices": [
+    "under / along",
+    "through / near",
+    "next to / among",
+    "in front of / beside"
+   ],
+   "answer": 3,
+   "why": "التعبير in front of يعني أمام، و beside يعني بجانب.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-501",
+   "kind": "single",
+   "text": "He first walked ——— the street when the traffic light turned green and then started to walk ——— the pavement.",
+   "choices": [
+    "across / along",
+    "onto / through",
+    "over / down",
+    "around / out of"
+   ],
+   "answer": 0,
+   "why": "الحرف across يعني يعبر من جهة لأخرى، و along يعني على امتداد.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-502",
+   "kind": "single",
+   "text": "A: When did your cousins visit you? B: Christmas Day ——— dawn.",
+   "choices": [
+    "In / on",
+    "On / at",
+    "At / in",
+    "From / to"
+   ],
+   "answer": 1,
+   "why": "مع اليوم المحدد on، ومع الفجر at: at dawn.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-503",
+   "kind": "single",
+   "text": "A: Can you see the turtle ——— the flowers? B: Yes, it is coming ——— its shell. It is not afraid of us!",
+   "choices": [
+    "at / through",
+    "near / across",
+    "in / onto",
+    "among / out of"
+   ],
+   "answer": 3,
+   "why": "الحرف among يعني بين أشياء كثيرة، و out of يعني يخرج من.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-504",
+   "kind": "single",
+   "text": "Stamp collecting is one of the world's most popular ———.",
+   "choices": [
+    "customs",
+    "hobbies",
+    "institutions",
+    "traditions",
+    "usages"
+   ],
+   "answer": 1,
+   "why": "الكلمة hobbies تعني هوايات، وجمع الطوابع هواية.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-505",
+   "kind": "single",
+   "text": "How much do you ——— it? How much is that in Turkish liras?",
+   "choices": [
+    "accept",
+    "sell",
+    "purchase",
+    "expect",
+    "charge for"
+   ],
+   "answer": 4,
+   "why": "التعبير charge for يعني يطلب ثمنا مقابل الشيء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-506",
+   "kind": "single",
+   "text": "Don't you ——— any interest in national politics?",
+   "choices": [
+    "acquire",
+    "give",
+    "take",
+    "remember",
+    "bring"
+   ],
+   "answer": 2,
+   "why": "التعبير take an interest in يعني يهتم بـ.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-507",
+   "kind": "single",
+   "text": "People with no previous ——— need not apply.",
+   "choices": [
+    "experiment",
+    "experience",
+    "inexperience",
+    "experiments",
+    "experimentation"
+   ],
+   "answer": 1,
+   "why": "الكلمة experience تعني الخبرة؛ experiment تعني تجربة علمية.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-508",
+   "kind": "single",
+   "text": "For a politician to demand the resignation of someone who's just on the mend from such a serious ——— is the lowest of the low.",
+   "choices": [
+    "illness",
+    "disease",
+    "epidemic",
+    "recovery",
+    "prescription"
+   ],
+   "answer": 0,
+   "why": "الكلمة illness تعني المرض الذي يتعافى منه الشخص.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-509",
+   "kind": "single",
+   "text": "I ——— to receiving your letters day by day with ever-growing impatience.",
+   "choices": [
+    "wait anxiously",
+    "look forward",
+    "get disappointed",
+    "expect cheerfully",
+    "eagerly hope"
+   ],
+   "answer": 1,
+   "why": "التعبير look forward to يتبعه ing: يتطلع إلى.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-510",
+   "kind": "single",
+   "text": "A lot of people lose their jobs in times of economic depression and ——— quickly increases to record levels.",
+   "choices": [
+    "employment",
+    "unemployment",
+    "production",
+    "consumption",
+    "investments"
+   ],
+   "answer": 1,
+   "why": "الكلمة unemployment تعني البطالة، وتزيد في الكساد.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-511",
+   "kind": "single",
+   "text": "\"A more detailed examination will be needed to ——— the exact nature of the tumour,\" said the doctor.",
+   "choices": [
+    "regulate",
+    "restore",
+    "determine",
+    "develop",
+    "reduce"
+   ],
+   "answer": 2,
+   "why": "الفعل determine يعني يحدد بدقة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-512",
+   "kind": "single",
+   "text": "The İzmir-Çeşme motorway was blocked because of an accident ——— two lorries.",
+   "choices": [
+    "containing",
+    "dealing with",
+    "involving",
+    "including",
+    "combining"
+   ],
+   "answer": 2,
+   "why": "الكلمة involving تعني يشمل أو تورط فيه، وتقال عن الحوادث.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-513",
+   "kind": "single",
+   "text": "His doctor told him that he must stay away from hard work and take it ——— for a couple of weeks after such a serious illness.",
+   "choices": [
+    "comfortably",
+    "easy",
+    "medically",
+    "easily",
+    "comfortable"
+   ],
+   "answer": 1,
+   "why": "التعبير take it easy يعني يرتاح ولا يجهد نفسه.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-514",
+   "kind": "single",
+   "text": "A surprise prize will now be ——— ——— the winner by the Minister himself.",
+   "choices": [
+    "possessed / by",
+    "received / from",
+    "thrown / at",
+    "forwarded / toward",
+    "presented / to"
+   ],
+   "answer": 4,
+   "why": "التعبير present something to someone يعني يقدم شيئا لشخص.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-515",
+   "kind": "single",
+   "text": "You'd be wise to accept my ———.",
+   "choices": [
+    "apologize",
+    "advice",
+    "devise",
+    "practise",
+    "advise"
+   ],
+   "answer": 1,
+   "why": "بعد my نحتاج اسما: advice أي نصيحة؛ advise فعل.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-516",
+   "kind": "single",
+   "text": "His friends urged him to ——— away from the İMKB, but he never ——— any attention to them.",
+   "choices": [
+    "stay / paid",
+    "step / prepared",
+    "go / received",
+    "drive / thought",
+    "jump / called"
+   ],
+   "answer": 0,
+   "why": "التعبير stay away from يعني يبتعد عن، و pay attention يعني ينتبه.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-517",
+   "kind": "single",
+   "text": "The company ——— gourmet olive oil.",
+   "choices": [
+    "consumes",
+    "tastes",
+    "discovers",
+    "produces",
+    "invents"
+   ],
+   "answer": 3,
+   "why": "الفعل produce يعني ينتج.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-518",
+   "kind": "single",
+   "text": "\"The critic has to ——— the public; the artist has to ——— the critic.\" (Oscar Wilde)",
+   "choices": [
+    "borrow from",
+    "demonstrate",
+    "educate",
+    "recover",
+    "consult"
+   ],
+   "answer": 2,
+   "why": "الفعل educate يعني يثقف أو يعلم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-519",
+   "kind": "single",
+   "text": "One of the passengers fainted because of the intense heat, but a little rubbing of her hands soon brought her ———.",
+   "choices": [
+    "toward",
+    "within",
+    "under",
+    "round",
+    "through"
+   ],
+   "answer": 3,
+   "why": "التعبير bring someone round يعني يعيده إلى وعيه.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-520",
+   "kind": "single",
+   "text": "This legend has been ——— down from generation to generation.",
+   "choices": [
+    "handed",
+    "banded",
+    "branded",
+    "hanged",
+    "hunged"
+   ],
+   "answer": 0,
+   "why": "العبارة hand down تعني يتوارث جيلا بعد جيل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-521",
+   "kind": "single",
+   "text": "The poet had written several ——— before completing the final version.",
+   "choices": [
+    "originals",
+    "drafts",
+    "poems",
+    "novels",
+    "rehearsals"
+   ],
+   "answer": 1,
+   "why": "الكلمة drafts تعني المسودات قبل النسخة النهائية.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-522",
+   "kind": "single",
+   "text": "E-mails are normally ——— seconds after they have been sent.",
+   "choices": [
+    "delivered",
+    "copied",
+    "erased",
+    "transformed",
+    "inspected"
+   ],
+   "answer": 0,
+   "why": "الفعل deliver يعني يوصل الرسالة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-523",
+   "kind": "single",
+   "text": "He fell on his knees, ——— for mercy.",
+   "choices": [
+    "demanding",
+    "resisting",
+    "protesting",
+    "respecting",
+    "begging"
+   ],
+   "answer": 4,
+   "why": "التعبير beg for mercy يعني يتوسل الرحمة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-524",
+   "kind": "single",
+   "text": "Every working person must pay income ———.",
+   "choices": [
+    "payment",
+    "price",
+    "wage",
+    "tax",
+    "salary"
+   ],
+   "answer": 3,
+   "why": "التعبير income tax يعني ضريبة الدخل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-525",
+   "kind": "single",
+   "text": "It is quite ——— that they had already made up their minds about it.",
+   "choices": [
+    "chance",
+    "opportunity",
+    "possibility",
+    "probable",
+    "probability"
+   ],
+   "answer": 3,
+   "why": "بعد quite نحتاج صفة: probable أي محتمل؛ البقية أسماء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-526",
+   "kind": "single",
+   "text": "The patient was ——— examined by three fully-qualified doctors.",
+   "choices": [
+    "thoroughly",
+    "fondly",
+    "suggestively",
+    "softly",
+    "shyly"
+   ],
+   "answer": 0,
+   "why": "الظرف thoroughly يعني بدقة وشمول.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-527",
+   "kind": "single",
+   "text": "The house was completely ——— by tall trees.",
+   "choices": [
+    "supported",
+    "sacrificed",
+    "surrendered",
+    "suspended",
+    "surrounded"
+   ],
+   "answer": 4,
+   "why": "الفعل surround يعني يحيط بـ.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-528",
+   "kind": "single",
+   "text": "A hand grenade ——— just a few meters from where he was lying.",
+   "choices": [
+    "zoomed",
+    "exposed",
+    "knocked",
+    "achieved",
+    "exploded"
+   ],
+   "answer": 4,
+   "why": "الفعل explode يعني ينفجر.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-529",
+   "kind": "single",
+   "text": "A piece of shrapnel sliced his right cheek as a hand grenade ——— him down.",
+   "choices": [
+    "zoomed",
+    "exposed",
+    "knocked",
+    "concluded",
+    "exploded"
+   ],
+   "answer": 2,
+   "why": "العبارة knock someone down تعني يطرحه أرضا.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-530",
+   "kind": "single",
+   "text": "Don't forget to let me know if anything unusual ——— on the way.",
+   "choices": [
+    "seems",
+    "presents",
+    "happens",
+    "acts",
+    "prevents"
+   ],
+   "answer": 2,
+   "why": "الفعل happen يعني يحدث.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-531",
+   "kind": "single",
+   "text": "It's a ——— to see him so completely ignored by his former friends and associates.",
+   "choices": [
+    "shameful",
+    "ashamed",
+    "shame",
+    "shameless",
+    "shyness"
+   ],
+   "answer": 2,
+   "why": "التعبير it's a shame يعني من المؤسف؛ shame هنا اسم.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-532",
+   "kind": "single",
+   "text": "I'm ——— to hearing from you soon.",
+   "choices": [
+    "waiting anxiously",
+    "looking forward",
+    "getting disappointed",
+    "expecting eagerly",
+    "hoping cheerful"
+   ],
+   "answer": 1,
+   "why": "التعبير look forward to يتبعه ing: أتطلع إلى سماع أخبارك.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-533",
+   "kind": "single",
+   "text": "You don't think you can ——— these facts from the public forever, do you?",
+   "choices": [
+    "cover",
+    "secret",
+    "hide",
+    "hinder",
+    "prevent"
+   ],
+   "answer": 2,
+   "why": "التعبير hide something from يعني يخفي شيئا عن.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-534",
+   "kind": "single",
+   "text": "A: How many times must I repeat this? I'm late because I had a(n) ——— on my way here. B: Oh, yes? Are you quite sure it wasn't a mental ———?",
+   "choices": [
+    "falldown",
+    "breakdown",
+    "countdown",
+    "downfall",
+    "upside down"
+   ],
+   "answer": 1,
+   "why": "الكلمة breakdown تعني تعطل السيارة، و mental breakdown انهيار عصبي.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-535",
+   "kind": "single",
+   "text": "So far, some fifty people have ——— for the two vacancies we have.",
+   "choices": [
+    "applied",
+    "been appointed",
+    "approved",
+    "advertised",
+    "addressed"
+   ],
+   "answer": 0,
+   "why": "التعبير apply for يعني يتقدم لوظيفة.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-536",
+   "kind": "single",
+   "text": "Have you any idea as to who's going to ——— over the meeting?",
+   "choices": [
+    "protect",
+    "present",
+    "provide",
+    "preserve",
+    "preside"
+   ],
+   "answer": 4,
+   "why": "التعبير preside over يعني يترأس الاجتماع.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-537",
+   "kind": "single",
+   "text": "She ——— on the beach while her son splashed at the water's edge.",
+   "choices": [
+    "laid",
+    "lay",
+    "lain",
+    "lied",
+    "was laying"
+   ],
+   "answer": 1,
+   "why": "الفعل lie بمعنى يستلقي ماضيه lay؛ laid ماضي lay بمعنى يضع.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-538",
+   "kind": "single",
+   "text": "When two ——— sit talking, their conversation soon becomes focused on women.",
+   "choices": [
+    "spinsters",
+    "fathers-in-law",
+    "bachelors",
+    "brothers-in-law",
+    "brides"
+   ],
+   "answer": 2,
+   "why": "الكلمة bachelors تعني العزاب من الرجال.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-539",
+   "kind": "single",
+   "text": "When you are in Rome, you'll have to ——— yourself to the ways and customs of the Romans.",
+   "choices": [
+    "adapt",
+    "act",
+    "imitate",
+    "alter",
+    "adopt"
+   ],
+   "answer": 0,
+   "why": "التعبير adapt yourself to يعني يتكيف مع.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-540",
+   "kind": "single",
+   "text": "He ——— lives in the house where he was born.",
+   "choices": [
+    "already",
+    "yet",
+    "still",
+    "every"
+   ],
+   "answer": 2,
+   "why": "الكلمة still تعني ما زال، وتدل على استمرار الحال.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-541",
+   "kind": "single",
+   "text": "He was a good swimmer so he ——— swim to the river bank when the boat sank.",
+   "choices": [
+    "could",
+    "might",
+    "succeeded to",
+    "was able to"
+   ],
+   "answer": 3,
+   "why": "للنجاح في فعل محدد في الماضي نستعمل was able to لا could.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-542",
+   "kind": "single",
+   "text": "It's ten o'clock in the morning so he's still ———.",
+   "choices": [
+    "at the bed",
+    "at bed",
+    "in bed",
+    "in the bed"
+   ],
+   "answer": 2,
+   "why": "التعبير in bed بلا أداة يعني في الفراش نائما.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-543",
+   "kind": "single",
+   "text": "I was ——— tired that I had to rest.",
+   "choices": [
+    "so much",
+    "so",
+    "enough",
+    "too"
+   ],
+   "answer": 1,
+   "why": "التركيب so + صفة + that يعني لدرجة أن.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-544",
+   "kind": "single",
+   "text": "He was left alone, with ——— to look after him.",
+   "choices": [
+    "someone",
+    "anyone",
+    "not one",
+    "no one"
+   ],
+   "answer": 3,
+   "why": "التعبير no one يعني لا أحد، فقد ترك وحيدا.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-545",
+   "kind": "single",
+   "text": "I pulled the handle ——— I could.",
+   "choices": [
+    "so hardly as",
+    "as hardly as",
+    "so hard as",
+    "as hard as"
+   ],
+   "answer": 3,
+   "why": "المقارنة بالتساوي: as + ظرف + as، والظرف من hard هو hard.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-546",
+   "kind": "single",
+   "text": "Have you got a match? I've left my ——— at home.",
+   "choices": [
+    "cigarette lighter",
+    "cigarettes lighter",
+    "cigarette's lighter",
+    "lighter for cigarettes"
+   ],
+   "answer": 0,
+   "why": "الاسم المركب: الاسم الأول مفرد يعمل كصفة: cigarette lighter.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-547",
+   "kind": "single",
+   "text": "That's the dog ———.",
+   "choices": [
+    "we've been looking after",
+    "after which we've been looking",
+    "what we've been looking after",
+    "we've been taking care for"
+   ],
+   "answer": 0,
+   "why": "يمكن حذف الضمير الموصول المفعول: the dog we've been looking after.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-548",
+   "kind": "single",
+   "text": "Do what you think is right, ——— they say.",
+   "choices": [
+    "however",
+    "whatever",
+    "whichever",
+    "for all"
+   ],
+   "answer": 1,
+   "why": "الأداة whatever تعني مهما يقولون.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-549",
+   "kind": "single",
+   "text": "He'd done that before, ———?",
+   "choices": [
+    "wouldn't he",
+    "shouldn't he",
+    "hadn't he",
+    "didn't he"
+   ],
+   "answer": 2,
+   "why": "الفعل المساعد في الجملة had فيكون الذيل hadn't he.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-550",
+   "kind": "single",
+   "text": "——— of them understood him.",
+   "choices": [
+    "None",
+    "No one",
+    "anyone",
+    "someone"
+   ],
+   "answer": 0,
+   "why": "التعبير none of them يعني لا أحد منهم؛ no one لا يتبعه of.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-551",
+   "kind": "single",
+   "text": "He's ——— his sister.",
+   "choices": [
+    "much taller than",
+    "much taller that",
+    "much more tall than",
+    "much more tall that"
+   ],
+   "answer": 0,
+   "why": "المقارنة من tall هي taller ثم than، ونقويها بـ much.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-552",
+   "kind": "single",
+   "text": "He made me ———.",
+   "choices": [
+    "angry",
+    "be angry",
+    "to be angry",
+    "that I got angry"
+   ],
+   "answer": 0,
+   "why": "الفعل make + مفعول + صفة يعني جعله: made me angry.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-553",
+   "kind": "single",
+   "text": "A problem of fundamental ——— for the developing countries is that of slowing down population growth.",
+   "choices": [
+    "importance",
+    "vital",
+    "urgent",
+    "serious"
+   ],
+   "answer": 0,
+   "why": "بعد of fundamental نحتاج اسما: importance.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-554",
+   "kind": "single",
+   "text": "The weather changed ———. There was an ——— change in the weather.",
+   "choices": [
+    "unexpected / unexpectedly",
+    "unexpectancy / unexpected",
+    "unexpectedly / unexpected",
+    "unexpectedly / unexpectation"
+   ],
+   "answer": 2,
+   "why": "الفراغ الأول يصف الفعل فهو ظرف unexpectedly، والثاني يصف الاسم فهو صفة unexpected.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-555",
+   "kind": "single",
+   "text": "Her condition improved ———. There was a ——— improvement in her condition.",
+   "choices": [
+    "steady / steadiness",
+    "steadiness / steady",
+    "steady / steadily",
+    "steadily / steady"
+   ],
+   "answer": 3,
+   "why": "الفراغ الأول يصف الفعل فهو ظرف steadily، والثاني يصف الاسم فهو صفة steady.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-556",
+   "kind": "single",
+   "text": "A: Who told you they were moving? B: They told me ———.",
+   "choices": [
+    "by themselves",
+    "on their own",
+    "themselves",
+    "himself"
+   ],
+   "answer": 2,
+   "why": "الضمير المنعكس themselves يؤكد أنهم أخبروني بأنفسهم.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-557",
+   "kind": "single",
+   "text": "The toes of her shoes are open. She always wears open ——— shoes.",
+   "choices": [
+    "toe",
+    "toehold",
+    "tiptoe",
+    "toed"
+   ],
+   "answer": 3,
+   "why": "الصفة المركبة open-toed تعني مفتوح الأصابع.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-558",
+   "kind": "single",
+   "text": "Larry is a friendly person. He meets new people ——— he goes.",
+   "choices": [
+    "whenever",
+    "whatever",
+    "wherever",
+    "whoever"
+   ],
+   "answer": 2,
+   "why": "الأداة wherever تعني أينما.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-559",
+   "kind": "single",
+   "text": "Many lakes and rivers are being ——— polluted.",
+   "choices": [
+    "dangers",
+    "danger",
+    "dangerous",
+    "dangerously"
+   ],
+   "answer": 3,
+   "why": "نصف الصفة polluted بظرف: dangerously.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-560",
+   "kind": "single",
+   "text": "That is a beautiful dress you're wearing. Did you make it ———?",
+   "choices": [
+    "you",
+    "yourselves",
+    "yourself",
+    "herself"
+   ],
+   "answer": 2,
+   "why": "الضمير المنعكس yourself يعني بنفسك، والمخاطب واحد.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-561",
+   "kind": "single",
+   "text": "Fleming discovered penicillin ———.",
+   "choices": [
+    "accidentally",
+    "accidental",
+    "accident",
+    "on accident"
+   ],
+   "answer": 0,
+   "why": "الظرف accidentally يعني صدفة ويصف الفعل discovered.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-562",
+   "kind": "single",
+   "text": "The people who objected to the new road were told that since work had already started there was no point in ———.",
+   "choices": [
+    "contradicting",
+    "protesting",
+    "provoking",
+    "competing",
+    "refusing"
+   ],
+   "answer": 1,
+   "why": "الفعل protest يعني يحتج، وهو ما فعله المعترضون على الطريق.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-563",
+   "kind": "single",
+   "text": "Nursery schools can be enormously ——— to socially handicapped children.",
+   "choices": [
+    "admirable",
+    "beneficial",
+    "invaluable",
+    "meritorious",
+    "praiseworthy"
+   ],
+   "answer": 1,
+   "why": "التعبير beneficial to يعني مفيد لـ.",
+   "topic": "حروف الجر"
+  },
+  {
+   "id": "pt-564",
+   "kind": "single",
+   "text": "Have you heard the great news? The man, ——— refused your proposal last year, has been arrested.",
+   "choices": [
+    "that",
+    "whom",
+    "when",
+    "who"
+   ],
+   "answer": 3,
+   "why": "الضمير الموصول للعاقل الفاعل بعد الفاصلة who؛ that لا يأتي بعد الفاصلة.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-565",
+   "kind": "single",
+   "text": "Have you heard the great news? The man, ——— refused your proposal last year, has been arrested.",
+   "choices": [
+    "that",
+    "whom",
+    "who have repeatedly",
+    "whose daughter"
+   ],
+   "answer": 3,
+   "why": "الضمير whose للملكية: الرجل الذي رفضت ابنته عرضك.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-566",
+   "kind": "single",
+   "text": "I am simply surprised at your lack of authority over him. Why can't you ——— him eat his dinner?",
+   "choices": [
+    "force",
+    "make",
+    "tell",
+    "ask"
+   ],
+   "answer": 1,
+   "why": "الفعل make + مفعول + المصدر بلا to: make him eat.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-567",
+   "kind": "single",
+   "text": "As far as I am concerned, all he is good at ——— making up the most improbable excuses anyone has ever heard.",
+   "choices": [
+    "his",
+    "presently",
+    "is",
+    "he is"
+   ],
+   "answer": 2,
+   "why": "التركيب all he is good at is + ing: كل ما يجيده هو.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-568",
+   "kind": "single",
+   "text": "———, he went to collect his payment.",
+   "choices": [
+    "Having finished his work successfully",
+    "Although he had completed his work successfully",
+    "As long as the work is completed successfully",
+    "The work has been completed"
+   ],
+   "answer": 0,
+   "why": "التركيب having + التصريف الثالث يعبر عن سبب سابق: بعد أن أنهى عمله.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-569",
+   "kind": "single",
+   "text": "He is ——— when he is with you.",
+   "choices": [
+    "much happier",
+    "most happier",
+    "most happy",
+    "the most happiest"
+   ],
+   "answer": 0,
+   "why": "المقارنة من happy هي happier، ونقويها بـ much.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-570",
+   "kind": "single",
+   "text": "She ——— her father.",
+   "choices": [
+    "reminds me of",
+    "remembers me of",
+    "remembers of me",
+    "reminds of me"
+   ],
+   "answer": 0,
+   "why": "التعبير remind someone of يعني يذكره بـ.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-571",
+   "kind": "single",
+   "text": "English people always talk about ———.",
+   "choices": [
+    "weather",
+    "weathers",
+    "the weather",
+    "a weather"
+   ],
+   "answer": 2,
+   "why": "التعبير talk about the weather بأداة التعريف the.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-572",
+   "kind": "single",
+   "text": "He is due to arrive tomorrow, ———?",
+   "choices": [
+    "doesn't he?",
+    "isn't he?",
+    "didn't he?",
+    "hasn't he?"
+   ],
+   "answer": 1,
+   "why": "الجملة فيها is فيكون الذيل isn't he.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-573",
+   "kind": "single",
+   "text": "A: The doorbell is ringing. B: ———.",
+   "choices": [
+    "I am going to open the door.",
+    "I will open the door.",
+    "I will be opening the door.",
+    "Both a and b"
+   ],
+   "answer": 1,
+   "why": "القرار الفوري لحظة الكلام يكون بـ will؛ going to لخطة سابقة.",
+   "topic": "الأزمنة والأفعال",
+   "fixedOrder": true
+  },
+  {
+   "id": "pt-574",
+   "kind": "single",
+   "text": "——— before the conflict began, the army pulled down the border posts.",
+   "choices": [
+    "as soon as",
+    "shortly",
+    "briefly",
+    "when"
+   ],
+   "answer": 1,
+   "why": "قبل before نحتاج ظرفا: shortly before أي قبل ذلك بقليل.",
+   "topic": "اشتقاق الكلمات"
+  },
+  {
+   "id": "pt-575",
+   "kind": "single",
+   "text": "Hospitals that ignore the regulations are subject to sanctions and will not be ——— by insurance.",
+   "choices": [
+    "estimated",
+    "paid",
+    "reimbursed",
+    "satisfied"
+   ],
+   "answer": 2,
+   "why": "الفعل reimburse يعني يعوض التكاليف.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-576",
+   "kind": "single",
+   "text": "The students visited the museum and spent several hours with the ——— who was very helpful.",
+   "choices": [
+    "bursar",
+    "steward",
+    "curator",
+    "commissioner"
+   ],
+   "answer": 2,
+   "why": "الكلمة curator تعني أمين المتحف.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-577",
+   "kind": "single",
+   "text": "The government is trying hard to ——— public confidence in its management of the country's deteriorating economy.",
+   "choices": [
+    "restore",
+    "renovate",
+    "predict",
+    "concern"
+   ],
+   "answer": 0,
+   "why": "الفعل restore يعني يعيد الثقة.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-578",
+   "kind": "single",
+   "text": "The government should not raise income ——— in the year of election.",
+   "choices": [
+    "salary",
+    "tax",
+    "earn",
+    "wage"
+   ],
+   "answer": 1,
+   "why": "التعبير income tax يعني ضريبة الدخل.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-579",
+   "kind": "single",
+   "text": "I wonder how he can ——— such a luxurious car.",
+   "choices": [
+    "apply",
+    "ride",
+    "afford",
+    "deliver"
+   ],
+   "answer": 2,
+   "why": "الفعل afford يعني يقدر على ثمن الشيء.",
+   "topic": "المفردات"
+  },
+  {
+   "id": "pt-580",
+   "kind": "single",
+   "text": "In cold countries, people wear thick clothes ——— warm.",
+   "choices": [
+    "for keep",
+    "to keep",
+    "to keeping",
+    "keep"
+   ],
+   "answer": 1,
+   "why": "للتعبير عن الهدف نستعمل to + المصدر: to keep warm.",
+   "topic": "أدوات الربط"
+  },
+  {
+   "id": "pt-581",
+   "kind": "single",
+   "text": "He's come here, ———?",
+   "choices": [
+    "isn't he?",
+    "doesn't he?",
+    "hasn't he?",
+    "has he?"
+   ],
+   "answer": 2,
+   "why": "الاختصار he's هنا has لأن بعده come، فيكون الذيل hasn't he.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-582",
+   "kind": "single",
+   "text": "Kay and Sandy ——— the retirement dinner this year.",
+   "choices": [
+    "to organize",
+    "are organizing",
+    "organize",
+    "organizing"
+   ],
+   "answer": 1,
+   "why": "الخطة المرتبة في المستقبل: المضارع المستمر are organizing.",
+   "topic": "الأزمنة والأفعال"
+  },
+  {
+   "id": "pt-583",
+   "kind": "single",
+   "text": "Choose the correct statement.",
+   "choices": [
+    "Not until you finish your homework can you go outside.",
+    "Not until you finished your homework you can go outside.",
+    "Not until finished your homework you can go outside.",
+    "Not until finishing your homework can you going outside."
+   ],
+   "answer": 0,
+   "why": "بعد not until في أول الجملة نقدم الفعل المساعد على الفاعل: can you go.",
+   "topic": "تراكيب الجملة"
+  },
+  {
+   "id": "pt-584",
+   "kind": "single",
+   "text": "She ——— for this company for quite a long time before she left for another one.",
+   "choices": [
+    "worked",
+    "have worked",
+    "has been worked",
+    "has worked"
+   ],
+   "answer": 0,
+   "why": "حدث انتهى في الماضي فنستعمل الماضي البسيط worked.",
+   "topic": "الأزمنة والأفعال"
+  }
+ ]
+}
